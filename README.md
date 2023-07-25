@@ -4,7 +4,7 @@
 </p>
 
 <h3>Group Members:</h3>
-<table align="left">
+<table>
   <tr>
     <th>Name</th>
     <th>Seat Number</th>
