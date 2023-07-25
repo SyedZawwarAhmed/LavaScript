@@ -132,7 +132,7 @@ class Employee {
 ```
 <p>In the above code block, the Employee class has two attributes, <code>name</code> is a public attribute, <code>SSN</code> is a private attribute.</p>
 
-<p>The constructor method can be added by using the <code>constructor</code> keyword.</p>
+<p>A constructor is a function which is called at the time of creation of an object of the class. The constructor method can be added by using the <code>constructor</code> keyword.</p>
 
 ```
 class Employee {
