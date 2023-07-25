@@ -111,3 +111,89 @@ dynamic variables are changeable while static variable is unchangeable like <cod
 
   log isEven(23);
 ```
+<h2>Object Oriented Programing</h2>
+<h3>Classes</h3>
+<p>Classes can be created using <code>class</code> keyword.</p>
+
+```
+class Employee {
+  
+}
+```
+
+<p>Public attributes can be added by writing their identifier in the class definition. Private attributes can be added by writing their identifier in the class definition.</p>
+
+```
+class Employee {
+  name;
+  #SSN;
+}
+```
+<p>In the above code block, the Employee class has two attributes, name is a public attribute, SSN is a private attribute.</p>
+
+<p>The constructor method can be added by using the <code>constructor</code> keyword.</p>
+
+```
+class Employee {
+  name;
+  #SSN;
+
+  constructor(name, SSN) {
+    this.name = name;
+    this.SSN = SSN;
+  }
+} 
+```
+
+<p>The <code>this</code> keyword refers to the current instace of the class.</p>
+
+<p>Furthermore, simple methods can also be introduced by defining a function in the class definition with the <code>method</code> keyword. Again, class methods can also be made private by adding a # before the identifier.</p>
+
+
+```
+class Employee {
+  name;
+  #SSN;
+  #salary;
+
+  constructor(name, SSN, salary) {
+    this.name = name;
+    this.SSN = SSN;
+    this.salary = salary;
+  }
+
+  method #fire() {
+    log "Good bye! You've been promoted to a customer.";
+  }
+
+  method evalutate(performance) {
+    if (performance == 'good') {
+      this.salary = this.salary + 10000;
+    } else {
+      this.fire();
+    }
+  }
+} 
+```
+
+<p>In this example, evaluate is a public method while fire is a private method. Note that private methods can only be called inside the class.</p>
+
+<h3>Objects</h3>
+<p>Objects are instances of any LavaScript class. They can be created by using the <code>init</code> keyword followed by the name of the class, and passing the respective arguements as the parameters of the class constructor.</p>
+
+```
+dynamic employee1 = init Employee("Sheikh Abdullah", 123456789, 250000);
+```
+<p>In the above line of code an instance of the class Employee, employee 1 is created.</p>
+
+The object attributes and methods can be accessed using the <code>dot(.)</code> operator.
+
+```
+log employee1.name;
+```
+This line of code will print the name of the employee object, in this case "Sheikh Abdullah".
+
+```
+employee1.evaluate("good");
+```
+This will call the evaluate method of the Employee class for this object.
