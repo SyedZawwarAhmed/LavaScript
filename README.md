@@ -176,7 +176,7 @@ class Employee {
 } 
 ```
 
-<p>In this example, evaluate is a public method while fire is a private method. Note that private methods can only be called inside the class.</p>
+<p>In this example, evaluate is a public method while fire is a private method. Note that private methods can only be called inside of a class.</p>
 
 <h3>Objects</h3>
 <p>Objects are instances of any LavaScript class. They can be created by using the <code>init</code> keyword followed by the name of the class, and passing the respective arguements as the parameters of the class constructor.</p>
