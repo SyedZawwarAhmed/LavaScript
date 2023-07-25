@@ -1,5 +1,5 @@
-<h1 align="left">LavaScript</h1>
-<p align="left">
+<h1>LavaScript</h1>
+<p>
   <b>LavaScript is a language inspired by JavaScript.</b>
 </p>
 
@@ -24,10 +24,10 @@
 </table>
 
 <br>
-<h2 align="left">Language Specification</h2>
+<h2>Language Specification</h2>
 
-<h3 align="left">Variables</h3>
-<p align="left">Variables can be declared using <code>dynamic</code> and <code>static</code>.
+<h3>Variables</h3>
+<p>Variables can be declared using <code>dynamic</code> and <code>static</code>.
 dynamic variables are changeable while static variable is unchangeable like <code>const</code>.</p>
 
 ```
@@ -37,15 +37,15 @@ dynamic variables are changeable while static variable is unchangeable like <cod
   a = a + 3;
 ```
 
-<h3 align="left">Operators</h3>
-<p align="left">LavaScript has 2 types of operators.</p>
+<h3>Operators</h3>
+<p>LavaScript has 2 types of operators.</p>
   <h4>Mathematical Operators:</h4>
   <code> +, -, *, /, ^, %</code>
   <h4>Logical Operators:</h4>
   <code> ==, !=, >, <, >=, <=, &&, ||</code>
 
-<h3 align="left">Data Types</h3>
-<p align="left">We have 3 datatypes in LavaScript. Namely: string, number and boolean.</p>
+<h3>Data Types</h3>
+<p>We have 3 datatypes in LavaScript. Namely: string, number and boolean.</p>
 
 ```
   dynamic a = 10;
@@ -55,16 +55,16 @@ dynamic variables are changeable while static variable is unchangeable like <cod
   dynamic e = false && true;
 ```
 
-<h3 align="left">Built-ins</h3>
-<p align="left">Use <code>log</code> to print anything to console.</p>
+<h3>Built-ins</h3>
+<p>Use <code>log</code> to print anything to console.</p>
 
 ```
   log "Hello World";
   static foo = "I'm a Ubitian";
   log foo;
 ```
-<h3 align="left">Conditionals</h3>
-<p align="left">LavaScript supports if-else construct, <code>if</code> block will execute if condition is <code>true</code>, <code>else</code> block will execute if the above conditions is <code>false</code>. if-else blocks can be nested.
+<h3>Conditionals</h3>
+<p>LavaScript supports if-else construct, <code>if</code> block will execute if condition is <code>true</code>, <code>else</code> block will execute if the above conditions is <code>false</code>. if-else blocks can be nested.
 
 ```
   dynamic = 10;
@@ -79,8 +79,8 @@ dynamic variables are changeable while static variable is unchangeable like <cod
   }
 ```
 
-<h3 align="left">Loops</h3>
-<p align="left">Statements inside <code>until</code> blocks are executed as long as a specified condition evaluates to true. If the condition becomes <code>false</code>, statement within the loop stops executing and control passes to the statement following the loop. Use <code>exit</code> to break the loop and <code className="language-cpp">skip</code> to continue within loop.</p>
+<h3>Loops</h3>
+<p>Statements inside <code>until</code> blocks are executed as long as a specified condition evaluates to true. If the condition becomes <code>false</code>, statement within the loop stops executing and control passes to the statement following the loop. Use <code>exit</code> to break the loop and <code className="language-cpp">skip</code> to continue within loop.</p>
 
 
 ```
@@ -96,8 +96,8 @@ dynamic variables are changeable while static variable is unchangeable like <cod
   }
 ```
 
-<h3 align="left">Functions</h3>
-<p align="left">Function can be decalared using <code>proc</code>. A function can accept 0 to n parameters separated by comma. <code>return</code> keyword can be used in the body to exit from function with or without a value.</p>
+<h3>Functions</h3>
+<p>Function can be decalared using <code>proc</code>. A function can accept 0 to n parameters separated by comma. <code>return</code> keyword can be used in the body to exit from function with or without a value.</p>
 
 ```
   proc isEven(a, b) {
@@ -111,8 +111,9 @@ dynamic variables are changeable while static variable is unchangeable like <cod
 
   log isEven(23);
 ```
-<h2>Object Oriented Programing</h2>
-<h3>Classes</h3>
+<h3>Object Oriented Programing (OOP)</h2>
+<p>LavaScript also supports Object Oriented Programming. One can create classes of their own and then create instances namely objects of the classes created.</p>
+<h4>Classes</h3>
 <p>Classes can be created using <code>class</code> keyword.</p>
 
 ```
@@ -121,7 +122,7 @@ class Employee {
 }
 ```
 
-<p>Public attributes can be added by writing their identifier in the class definition. Private attributes can be added by writing their identifier in the class definition.</p>
+<p>Public attributes can be added by writing their identifier in the class definition. Private attributes can also be added by writing a <code>#</code> followed by their identifier in the class definition.</p>
 
 ```
 class Employee {
@@ -129,7 +130,7 @@ class Employee {
   #SSN;
 }
 ```
-<p>In the above code block, the Employee class has two attributes, name is a public attribute, SSN is a private attribute.</p>
+<p>In the above code block, the Employee class has two attributes, <code>name</code> is a public attribute, <code>SSN</code> is a private attribute.</p>
 
 <p>The constructor method can be added by using the <code>constructor</code> keyword.</p>
 
@@ -176,24 +177,24 @@ class Employee {
 } 
 ```
 
-<p>In this example, evaluate is a public method while fire is a private method. Note that private methods can only be called inside of a class.</p>
+<p>In this example, <code>evaluate</code> is a public method while <code>fire</code> is a private method. Note that private methods can only be called inside of a class.</p>
 
-<h3>Objects</h3>
+<h4>Objects</h3>
 <p>Objects are instances of any LavaScript class. They can be created by using the <code>init</code> keyword followed by the name of the class, and passing the respective arguements as the parameters of the class constructor.</p>
 
 ```
 dynamic employee1 = init Employee("Sheikh Abdullah", 123456789, 250000);
 ```
-<p>In the above line of code an instance of the class Employee, employee 1 is created.</p>
+<p>In the above line of code,  an instance of the class Employee is created and then assigned to a dynamic variable employee 1.</p>
 
 The object attributes and methods can be accessed using the <code>dot(.)</code> operator.
 
 ```
 log employee1.name;
 ```
-This line of code will print the name of the employee object, in this case "Sheikh Abdullah".
+This line of code will dislay the name of the <code>employee1</code> object in the terminal, in this case "Sheikh Abdullah".
 
 ```
 employee1.evaluate("good");
 ```
-This will call the evaluate method of the Employee class for this object.
+This will call the <code>evaluate</code> method of the <code>Employee</code> class for this object.
