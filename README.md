@@ -111,6 +111,15 @@ dynamic variables are changeable while static variable is unchangeable like <cod
 
   log isEven(23);
 ```
+<h3>Data Structures</h3>
+
+<h4>Arrays</h4>
+<p>LavaScript supports the array data structure. Arrays can be defined by using brackets <code>[]</code> with the collection of values inside of the brackets separated by commas.</p>
+
+```
+dynamic myArray = [1, 3.8, "Hello"]
+```
+
 <h3>Object Oriented Programing (OOP)</h2>
 <p>LavaScript also supports Object Oriented Programming. One can create classes of their own and then create instances namely objects of the classes created.</p>
 <h4>Classes</h3>
