@@ -207,3 +207,26 @@ This line of code will dislay the name of the <code>employee1</code> object in t
 employee1.evaluate("good");
 ```
 This will call the <code>evaluate</code> method of the <code>Employee</code> class for this object.
+
+<h2>Classification of Keywords</h2>
+<p>The keywords can be classified as follows:</p>
+<ul>
+<li><b>Initializers</b></li>
+<ul>
+<li>static</li>
+<li>dynamic</li>
+</ul>
+<li><b>Special Identifiers</b></li>
+<ul>
+<li>log</li>
+</ul>
+<li><b>Init</b></li>
+<li><b>if</b></li>
+<li><b>else</b></li>
+<li><b>until</b></li>
+<li><b>proc</b></li>
+<li><b>return</b></li>
+<li><b>class</b></li>
+<li><b>method</b></li>
+<li><b>this</b></li>
+</ul>
