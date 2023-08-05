@@ -7,7 +7,7 @@ WHITESPACE = [
 ]
 
 # Punctuation separators
-PUNCTUATION = [
+PUNCTUATORS = [
     ',',   # Comma
     ';',   # Semicolon
     '(',   # Left parenthesis
