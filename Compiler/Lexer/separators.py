@@ -1,5 +1,3 @@
-# lexer/separators.py
-
 # White-space separators
 WHITESPACE = [
     ' ',   # Space
