@@ -1,1 +1,6 @@
-log "Hello, world";
+dynamic x = 10;
+dynamic y = 20;
+until (x <= y) {
+  log x;
+  x = x + 1;
+}
