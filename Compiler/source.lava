@@ -1,1 +1,2 @@
-log "Hello, world";
+a >= b;
+log "Hello, World";
