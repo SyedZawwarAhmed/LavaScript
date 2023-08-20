@@ -113,7 +113,14 @@ def getWords(source_code: str):
                 tokens.append(current_token)
                 current_token = ''
             elif check_is_backslash(char):
-                current_token += next_char 
+                if next_char == 'n':
+                    current_token += '\n'
+                elif next_char == 't':
+                    current_token += '\t'
+                elif next_char == 'r':
+                    current_token == '\r'
+                else:
+                    current_token += next_char
                 i += 1
             else:
                 current_token += char

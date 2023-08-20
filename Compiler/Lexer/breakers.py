@@ -26,11 +26,11 @@ breakers = {
     ],
     QUOTES: [
         # '\'',  # Single quote
-        '\"',  # Double quote
+        '"',  # Double quote
     ],
-    SLASHES: [
-        '\\',  # Backward slash
-    ],
+    # SLASHES: [
+    #     '\\',  # Backward slash
+    # ],
     OPERATORS: [
         '+',   # Plus sign
         '-',   # Minus sign
