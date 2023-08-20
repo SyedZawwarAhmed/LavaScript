@@ -24,17 +24,13 @@ def check_is_breaker(char, next_char):
     return result
 
 def check_is_quote(char: str) -> bool:
-    if char in breakers[QUOTES]:
-        return True
-    return False
+    return char in breakers[QUOTES]
 
 def check_is_sign(char: str, last_token) -> bool:
     return
 
 def check_is_operator(word: str) -> bool:
-    if word in breakers[OPERATORS] or word in breakers[DOUBLE_CHAR_OPERATORS]:
-        return True
-    return False
+    return word in breakers[OPERATORS] or word in breakers[DOUBLE_CHAR_OPERATORS]
 
 def check_is_number(char: str) -> bool:
     return char.isnumeric()
@@ -44,6 +40,9 @@ def check_is_integer(string) -> bool:
 
 def check_is_dot(char: str) -> bool:
     return char == '.'
+
+def check_is_backslash(char: str) -> bool:
+    return char == '\\'
 
 def getWords(source_code: str):
     tokens = []
@@ -108,11 +107,17 @@ def getWords(source_code: str):
             else:
                 current_token += char
         elif is_string_constant:
-            current_token += char
             if check_is_quote(char):
+                current_token += char
                 is_string_constant = False
                 tokens.append(current_token)
                 current_token = ''
+            elif check_is_backslash(char):
+                current_token += next_char 
+                i += 1
+            else:
+                current_token += char
+
         elif is_single_line_comment:
             if char == '\n':
                 is_single_line_comment = False
