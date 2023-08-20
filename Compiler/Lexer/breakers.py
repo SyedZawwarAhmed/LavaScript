@@ -6,7 +6,11 @@ breakers = {
         '\t',  # Tab
         '\n',  # Newline (line feed)
         '\r',  # Carriage return
+        '/',   # Forward slash
     ],
+    # DOT: [
+    #     '.',   # Period
+    # ],
     PUNCTUATORS: [
         ';',   # Semicolon
         ',',   # Comma
@@ -19,18 +23,13 @@ breakers = {
         '[',   # Left square bracket
         ']',   # Right square bracket
         ':',   # Colon
-        '.',   # Period
     ],
     QUOTES: [
         # '\'',  # Single quote
         '\"',  # Double quote
     ],
-    OTHERS: [
-        '/',   # Forward slash
+    SLASHES: [
         '\\',  # Backward slash
-        '#',   # Hash (used for comments in some languages)
-        '|',   # Pipe
-        '&',   # Ampersand
     ],
     OPERATORS: [
         '+',   # Plus sign
@@ -42,6 +41,8 @@ breakers = {
         '>',   # Greater than sign
         '=',   # Equal sign
         '!',   # Exclamation mark
+        '&',   # Ampersand
+        '|',   # Pipe
     ],
     DOUBLE_CHAR_OPERATORS: [
         '==',  # Equal to operator
