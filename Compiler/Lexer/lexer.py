@@ -26,7 +26,7 @@ def check_is_breaker(char, next_char):
 def check_is_quote(char: str) -> bool:
     return char in breakers[QUOTES]
 
-def check_is_sign(char: str, last_token) -> bool:
+def check_is_sign(char: str, last_word) -> bool:
     return
 
 def check_is_operator(word: str) -> bool:
@@ -45,8 +45,8 @@ def check_is_backslash(char: str) -> bool:
     return char == '\\'
 
 def getWords(source_code: str):
-    tokens = []
-    current_token = ''
+    words = []
+    current_word = ''
     i = 0
     is_string_constant = False
     is_single_line_comment = False
@@ -57,29 +57,29 @@ def getWords(source_code: str):
         is_breaker = check_is_breaker(char, next_char)
         if not is_string_constant and not is_single_line_comment and not is_multi_line_comment: 
             if is_breaker[IS_BREAKER]:
-                if current_token:
-                    tokens.append(current_token)
-                    current_token = ''
+                if current_word:
+                    words.append(current_word)
+                    current_word = ''
                 if is_breaker[BREAKER_TYPE] != ONLY_BREAKERS:
                     if is_breaker[BREAKER_TYPE] != QUOTES and is_breaker[BREAKER_TYPE] != OPERATORS and is_breaker[BREAKER_TYPE] != DOT:
-                        tokens.append(is_breaker[VALUE])
+                        words.append(is_breaker[VALUE])
                     if is_breaker[BREAKER_TYPE] == DOUBLE_CHAR_OPERATORS:
                         i += 1
                     elif is_breaker[BREAKER_TYPE] == QUOTES:
                         is_string_constant = True
-                        current_token += char
+                        current_word += char
                     elif is_breaker[BREAKER_TYPE] == OPERATORS:
-                        if (is_breaker[VALUE] == '+' or is_breaker[VALUE] == '-') and current_token == '':
-                            if len(tokens) > 0:
-                                if check_is_operator(tokens[-1]) or tokens[-1] == ';':
+                        if (is_breaker[VALUE] == '+' or is_breaker[VALUE] == '-') and current_word == '':
+                            if len(words) > 0:
+                                if check_is_operator(words[-1]) or words[-1] == ';':
                                     is_number_constant = True
-                                    current_token += char
+                                    current_word += char
                                 else:
-                                    tokens.append(is_breaker[VALUE])
+                                    words.append(is_breaker[VALUE])
                             else:
-                                current_token += char 
+                                current_word += char 
                         else:
-                                tokens.append(is_breaker[VALUE])
+                                words.append(is_breaker[VALUE])
                 else:
                     if is_breaker[VALUE] == '/':
                         if next_char == '/':
@@ -87,43 +87,43 @@ def getWords(source_code: str):
                         elif next_char == '*':
                             is_multi_line_comment = True
                         else:
-                            current_token += char
+                            current_word += char
                         
             elif check_is_dot(char):
-                if check_is_integer(current_token):
-                    current_token += char
+                if check_is_integer(current_word):
+                    current_word += char
                 else:
-                    if current_token:
-                        tokens.append(current_token)
-                        current_token = char
-                        tokens.append(char)
-                        current_token = ''
+                    if current_word:
+                        words.append(current_word)
+                        current_word = char
+                        words.append(char)
+                        current_word = ''
                     else:
                         if check_is_number(next_char):
-                            current_token += char
+                            current_word += char
                         else:
-                            tokens.append(char)
-                            current_token = ''
+                            words.append(char)
+                            current_word = ''
             else:
-                current_token += char
+                current_word += char
         elif is_string_constant:
             if check_is_quote(char):
-                current_token += char
+                current_word += char
                 is_string_constant = False
-                tokens.append(current_token)
-                current_token = ''
+                words.append(current_word)
+                current_word = ''
             elif check_is_backslash(char):
                 if next_char == 'n':
-                    current_token += '\n'
+                    current_word += '\n'
                 elif next_char == 't':
-                    current_token += '\t'
+                    current_word += '\t'
                 elif next_char == 'r':
-                    current_token == '\r'
+                    current_word == '\r'
                 else:
-                    current_token += next_char
+                    current_word += next_char
                 i += 1
             else:
-                current_token += char
+                current_word += char
 
         elif is_single_line_comment:
             if char == '\n':
@@ -134,6 +134,10 @@ def getWords(source_code: str):
                 i += 1
 
         i += 1
-    if current_token != '':
-        tokens.append(current_token)
-    return tokens
+    if current_word != '':
+        words.append(current_word)
+    return words
+
+def get_tokens(words):
+    tokens = []
+    

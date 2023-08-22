@@ -4,9 +4,11 @@ breakers = {
     ONLY_BREAKERS: [
         ' ',   # Space
         '\t',  # Tab
-        '\n',  # Newline (line feed)
         '\r',  # Carriage return
         '/',   # Forward slash
+    ],
+    NEW_LINE: [
+        '\n'
     ],
     # DOT: [
     #     '.',   # Period
