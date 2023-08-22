@@ -111,13 +111,37 @@ dynamic variables are changeable while static variable is unchangeable like <cod
 
   log isEven(23);
 ```
+<h3>Comments</h3>
+<p>While code is for computer to understand, the comments are for humans. LavaScript supports two types of comments i.e single-line comment, starts with <code>#</code> and multi-line comment, wrapped by <code>@...@</code>.</p>
+
+```
+# This is a variable
+static f = 4;
+
+@
+  This function is used to calculate age
+  from date of birth.
+@
+proc calcAge(dob) {
+  ...
+}
+```
+
 <h3>Data Structures</h3>
 
 <h4>Arrays</h4>
-<p>LavaScript supports the array data structure. Arrays can be defined by using brackets <code>[]</code> with the collection of values inside of the brackets separated by commas.</p>
+<p>LavaScript supports the array data structure. Arrays can be defined by using brackets <code>[]</code> with the collection of values inside of the brackets separated by commas. Arrays can be multi-dimensional as well.</p>
 
 ```
-dynamic myArray = [1, 3.8, "Hello"]
+dynamic myArray = [1, 3.8, "Hello"];
+
+dynamic multiArray = [
+  [
+    ['a', 'b', 'c'], 
+    ['A', 'B', 'C']
+  ], 
+  [1, 2, 3]
+];
 ```
 
 <h3>Object Oriented Programing (OOP)</h2>
@@ -127,7 +151,7 @@ dynamic myArray = [1, 3.8, "Hello"]
 
 ```
 class Employee {
-  
+  ...
 }
 ```
 
@@ -188,7 +212,7 @@ class Employee {
 
 <p>In this example, <code>evaluate</code> is a public method while <code>fire</code> is a private method. Note that private methods can only be called inside of a class.</p>
 
-<h4>Objects</h3>
+<h4>Objects</h4>
 <p>Objects are instances of any LavaScript class. They can be created by using the <code>init</code> keyword followed by the name of the class, and passing the respective arguements as the parameters of the class constructor.</p>
 
 ```
@@ -208,6 +232,76 @@ employee1.evaluate("good");
 ```
 This will call the <code>evaluate</code> method of the <code>Employee</code> class for this object.
 
+<h4>Inheritance</h4>
+<p>In LavaScript, it is possible to inherit attributes and methods from one class to another.
+To inherit from a class, use the <code>extends</code> keyword.</p>
+
+```
+class SoftwareEngineer extends Employee {
+  level;
+
+  constructor(level, name, SSN) {
+    this.level = level;
+    super(name, SSN, this.level * 75000);
+  }
+}
+
+static emp = init SoftwareEngineer(3, "Sheikh Abdullah", 123456789, 74000); 
+log emp.name; // prints: Sheikh Abdullah
+```
+<p>The <code>super</code> keyword is a reference variable which is used to refer immediate parent class object.</p>
+<p>If you don't want a class to be extended, you can mark it with <code>sealed</code> keyword.</p>
+
+```
+sealed class Employee {
+  ...
+}
+```
+
+<h4>Interfaces</h4>
+<p>Interface is a blueprint of a class. It is used to achieve abstraction in LavaScript.
+In interfaces you can only define the method headers. The body will be described by the class that implements it. </p>
+
+```
+interface IShape {
+    method GetArea();
+}
+
+class Rectangle implements IShape {
+    #length;
+    #breadth;
+
+    method GetArea() {
+      return this.length * this.breadth;
+    }
+}
+```
+<p>Multi-Inheritance is supported in LavaScript through the use of interfaces.</p>
+
+```
+interface IShape {
+    method GetArea();
+}
+
+interface IColor {
+    method GetColor();
+}
+
+class Rectangle implements IShape, IColor {
+    #length;
+    #breadth;
+    #color;
+
+    method GetArea() {
+      return this.length * this.breadth;
+    }
+
+    method GetColor() {
+      return this.color;
+    }
+}
+```
+
 <h2>Classification of Keywords</h2>
 <p>The keywords can be classified as follows:</p>
 <ul>
@@ -220,7 +314,7 @@ This will call the <code>evaluate</code> method of the <code>Employee</code> cla
 <ul>
 <li>log</li>
 </ul>
-<li><b>Init</b></li>
+<li><b>init</b></li>
 <li><b>if</b></li>
 <li><b>else</b></li>
 <li><b>until</b></li>
@@ -229,4 +323,9 @@ This will call the <code>evaluate</code> method of the <code>Employee</code> cla
 <li><b>class</b></li>
 <li><b>method</b></li>
 <li><b>this</b></li>
+<li><b>interface</b></li>
+<li><b>extends</b></li>
+<li><b>implements</b></li>
+<li><b>super</b></li>
+<li><b>sealed</b></li>
 </ul>
