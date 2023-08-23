@@ -30,11 +30,6 @@ def check_is_breaker(char, next_char):
 def check_is_quote(char: str) -> bool:
     return char in breakers[QUOTES]
 
-
-def check_is_sign(char: str, last_word) -> bool:
-    return
-
-
 def check_is_operator(word: str) -> bool:
     return word in breakers[OPERATORS] or word in breakers[DOUBLE_CHAR_OPERATORS]
 
