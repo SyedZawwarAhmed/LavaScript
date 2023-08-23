@@ -87,13 +87,10 @@ def getWords(source_code: str):
                         else:
                             words.append(is_breaker[VALUE])
                 else:
-                    if is_breaker[VALUE] == '/':
-                        if next_char == '/':
-                            is_single_line_comment = True
-                        elif next_char == '*':
-                            is_multi_line_comment = True
-                        else:
-                            current_word += char
+                    if is_breaker[VALUE] == '?':
+                        is_single_line_comment = True
+                    elif is_breaker[VALUE] == '@':
+                        is_multi_line_comment = True
 
             elif check_is_dot(char):
                 if check_is_integer(current_word):
@@ -136,9 +133,10 @@ def getWords(source_code: str):
                 is_single_line_comment = False
                 words.append(char)
         elif is_multi_line_comment:
-            if next_char and char == '*' and next_char == '/':
+            if char == '\n':
+                words.append(char)
+            if char == '@':
                 is_multi_line_comment = False
-                i += 1
 
         i += 1
     if current_word != '':

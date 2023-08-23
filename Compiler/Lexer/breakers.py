@@ -5,7 +5,8 @@ breakers = {
         ' ',   # Space
         '\t',  # Tab
         '\r',  # Carriage return
-        '/',   # Forward slash
+        '?',   # Forward slash
+        '@'
     ],
     NEW_LINE: [
         '\n'
