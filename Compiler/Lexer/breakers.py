@@ -53,6 +53,11 @@ breakers = {
         '>=',  # Greater than or equal to operator
         '&&',  # Logical AND operator
         '||',  # Logical OR operator
+        '+=',
+        '-=',
+        '*=',
+        '/=',
+        '%=',
         '++',
         '--'
     ],

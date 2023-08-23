@@ -147,6 +147,28 @@ def find_word(input_string, word_dict):
             return word_category
     return None
 
+def check_is_identifier(word: str):
+    # Check if the identifier matches the valid identifier pattern
+    # Valid identifier pattern: starts with a letter or underscore, followed by letters, digits, or underscores
+    pattern = re.compile(r'^[a-zA-Z_][a-zA-Z0-9_]*$')
+    return pattern.match(word) is not None
+
+def check_is_string_constant(word: str):
+    return word[0] == '"' and word[-1] == '"'
+
+def check_is_integer_constant(word):
+    try:
+        int(word)  # Try to convert the string to an integer
+        return True
+    except ValueError:
+        return False
+
+def check_is_float_constant(word):
+    try:
+        float(word)  # Try to convert the string to a float
+        return True
+    except ValueError:
+        return False
 
 def get_tokens(words):
     tokens = []
@@ -155,13 +177,52 @@ def get_tokens(words):
     while i < len(words):
         # print(find_word(words[i], keywords))
         word = words[i]
-        is_keyword = find_word(word, keywords)
+        i += 1
         new_token = None
         if word == '\n':
             line_number += 1
-        if is_keyword:
-            new_token = Token(is_keyword, word, line_number)
+            continue
+        # is_keyword = find_word(word, keywords)
+        # if is_keyword:
+        #     new_token = Token(is_keyword, word, line_number)
+        #     tokens.append(new_token)
+        #     continue
+        # is_operator = find_word(word, operators)
+        # if is_operator:
+        #     new_token = Token(is_operator, word, line_number)
+        #     tokens.append(new_token)
+        #     continue
+        # is_punctuator = find_word(word, punctuators)
+        # if is_punctuator:
+        #     new_token = Token(is_punctuator, word, line_number)
+        #     tokens.append(new_token)
+        #     continue
+        for words_category, types in valid_words.items():
+            is_valid_word = find_word(word, valid_words[words_category])
+            if is_valid_word:
+                new_token = Token(is_valid_word, word, line_number)
+                break
+
+        if not new_token:
+            is_identifier = check_is_identifier(word)
+            if is_identifier:
+                new_token = Token(IDENTIFIER, word, line_number)
+        if not new_token:
+            is_string_constant = check_is_string_constant(word)
+            if is_string_constant:
+                new_token = Token(STRING_CONSTANT, word, line_number)
+        if not new_token:
+            is_integer_constant = check_is_integer_constant(word)
+            if is_integer_constant:
+                new_token = Token(INTEGER_CONSTANT, word, line_number)
+        if not new_token:
+            is_float_constant = check_is_float_constant(word)
+            if is_float_constant:
+                new_token = Token(FLOAT_CONSTANT, word, line_number)
+
+        if not new_token:
+            new_token = Token(INVALID_LEXEME, word, line_number)
+            
         tokens.append(new_token)
-        i += 1
 
     return tokens
