@@ -154,7 +154,7 @@ def find_word(input_string, word_dict):
 
 
 def check_is_identifier(word: str):
-    pattern = re.compile(r'^[a-zA-Z_][a-zA-Z0-9_]*$')
+    pattern = re.compile(r'^[a-zA-Z_#][a-zA-Z0-9_]*$')
     return pattern.match(word) is not None
 
 
