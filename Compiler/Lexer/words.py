@@ -86,6 +86,13 @@ valid_words = {
         ASSIGNMENT: [
             "=",
         ],
+        COMPOUNT_ASSIGNMENT: [
+            "+=",
+            "-=",
+            "*=",
+            "/=",
+            "%="
+        ],
         INCREMENT_DECREMENT: [
             "++",
             "--",
