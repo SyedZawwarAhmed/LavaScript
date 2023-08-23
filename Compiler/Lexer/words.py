@@ -46,5 +46,17 @@ keywords = {
     ],
     INIT: [
         "init"
+    ],
+    EXTENDS: [
+        "extends"
+    ],
+    SUPER: [
+        "super"
+    ],
+    SEALED: [
+        "sealed"
+    ],
+    INTERFACE: [
+        "interface"
     ]
 }

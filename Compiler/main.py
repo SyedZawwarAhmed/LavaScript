@@ -7,4 +7,5 @@ if __name__ == "__main__":
     words = getWords(file)
     print(words)
     tokens = get_tokens(words)
-    print([vars(token) for token in tokens])
+    for token in tokens:
+        print(token)

@@ -2,6 +2,8 @@ import re
 
 from Lexer.breakers import breakers
 from Lexer.constants import *
+from Lexer.words import *
+from Lexer.token import * 
 
 def check_is_breaker(char, next_char):
     result = {
@@ -128,6 +130,7 @@ def getWords(source_code: str):
         elif is_single_line_comment:
             if char == '\n':
                 is_single_line_comment = False
+                words.append(char)
         elif is_multi_line_comment:
             if next_char and char == '*' and next_char == '/':
                 is_multi_line_comment = False
@@ -138,6 +141,27 @@ def getWords(source_code: str):
         words.append(current_word)
     return words
 
+def find_word(input_string, keyword_dict):
+    for keyword_category, keywords_list in keyword_dict.items():
+        if input_string.lower() in keywords_list:
+            return keyword_category
+    return None
+
+
 def get_tokens(words):
     tokens = []
-    
+    i = 0
+    line_number = 1
+    while i < len(words):
+        # print(find_word(words[i], keywords))
+        word = words[i]
+        is_keyword = find_word(word, keywords)
+        new_token = None
+        if word == '\n':
+            line_number += 1
+        if is_keyword:
+            new_token = Token(is_keyword, word, line_number)
+        tokens.append(new_token)
+        i += 1
+
+    return tokens
