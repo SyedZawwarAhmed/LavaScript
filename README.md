@@ -112,10 +112,10 @@ dynamic variables are changeable while static variable is unchangeable like <cod
   log isEven(23);
 ```
 <h3>Comments</h3>
-<p>While code is for computer to understand, the comments are for humans. LavaScript supports two types of comments i.e single-line comment, starts with <code>#</code> and multi-line comment, wrapped by <code>@...@</code>.</p>
+<p>While code is for computer to understand, the comments are for humans. LavaScript supports two types of comments i.e single-line comment, starts with <code>?</code> and multi-line comment, wrapped by <code>@...@</code>.</p>
 
 ```
-# This is a variable
+? This is a variable
 static f = 4;
 
 @
