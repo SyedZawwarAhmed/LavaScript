@@ -144,9 +144,9 @@ def getWords(source_code: str):
     return words
 
 
-def find_word(input_string, word_dict):
+def find_word(word, word_dict):
     for word_category, words_list in word_dict.items():
-        if input_string in words_list:
+        if word in words_list:
             return word_category
     return None
 
