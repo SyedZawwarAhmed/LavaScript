@@ -3,13 +3,14 @@ import re
 from Lexer.breakers import breakers
 from Lexer.constants import *
 from Lexer.words import *
-from Lexer.token import * 
+from Lexer.token import *
+
 
 def check_is_breaker(char, next_char):
     result = {
         IS_BREAKER: False,
         BREAKER_TYPE: None,
-        VALUE: None 
+        VALUE: None
     }
     for breaker in list(breakers.keys()):
         breaker_list = breakers[breaker]
@@ -25,26 +26,34 @@ def check_is_breaker(char, next_char):
             break
     return result
 
+
 def check_is_quote(char: str) -> bool:
     return char in breakers[QUOTES]
+
 
 def check_is_sign(char: str, last_word) -> bool:
     return
 
+
 def check_is_operator(word: str) -> bool:
     return word in breakers[OPERATORS] or word in breakers[DOUBLE_CHAR_OPERATORS]
+
 
 def check_is_number(char: str) -> bool:
     return char.isnumeric()
 
+
 def check_is_integer(string) -> bool:
     return re.match(r'^[+-]?\d+$', string) is not None
+
 
 def check_is_dot(char: str) -> bool:
     return char == '.'
 
+
 def check_is_backslash(char: str) -> bool:
     return char == '\\'
+
 
 def getWords(source_code: str):
     words = []
@@ -57,7 +66,7 @@ def getWords(source_code: str):
         char = source_code[i]
         next_char = source_code[i + 1] if i < len(source_code) - 1 else None
         is_breaker = check_is_breaker(char, next_char)
-        if not is_string_constant and not is_single_line_comment and not is_multi_line_comment: 
+        if not is_string_constant and not is_single_line_comment and not is_multi_line_comment:
             if is_breaker[IS_BREAKER]:
                 if current_word:
                     words.append(current_word)
@@ -79,9 +88,9 @@ def getWords(source_code: str):
                                 else:
                                     words.append(is_breaker[VALUE])
                             else:
-                                current_word += char 
+                                current_word += char
                         else:
-                                words.append(is_breaker[VALUE])
+                            words.append(is_breaker[VALUE])
                 else:
                     if is_breaker[VALUE] == '/':
                         if next_char == '/':
@@ -90,7 +99,7 @@ def getWords(source_code: str):
                             is_multi_line_comment = True
                         else:
                             current_word += char
-                        
+
             elif check_is_dot(char):
                 if check_is_integer(current_word):
                     current_word += char
@@ -141,34 +150,38 @@ def getWords(source_code: str):
         words.append(current_word)
     return words
 
+
 def find_word(input_string, word_dict):
     for word_category, words_list in word_dict.items():
         if input_string.lower() in words_list:
             return word_category
     return None
 
+
 def check_is_identifier(word: str):
-    # Check if the identifier matches the valid identifier pattern
-    # Valid identifier pattern: starts with a letter or underscore, followed by letters, digits, or underscores
     pattern = re.compile(r'^[a-zA-Z_][a-zA-Z0-9_]*$')
     return pattern.match(word) is not None
+
 
 def check_is_string_constant(word: str):
     return word[0] == '"' and word[-1] == '"'
 
+
 def check_is_integer_constant(word):
     try:
-        int(word)  # Try to convert the string to an integer
+        int(word)
         return True
     except ValueError:
         return False
 
+
 def check_is_float_constant(word):
     try:
-        float(word)  # Try to convert the string to a float
+        float(word)
         return True
     except ValueError:
         return False
+
 
 def get_tokens(words):
     tokens = []
@@ -207,7 +220,7 @@ def get_tokens(words):
 
         if not new_token:
             new_token = Token(INVALID_LEXEME, word, line_number)
-            
+
         tokens.append(new_token)
 
     return tokens
