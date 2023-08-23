@@ -146,7 +146,7 @@ def getWords(source_code: str):
 
 def find_word(input_string, word_dict):
     for word_category, words_list in word_dict.items():
-        if input_string.lower() in words_list:
+        if input_string in words_list:
             return word_category
     return None
 
