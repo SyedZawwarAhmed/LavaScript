@@ -141,10 +141,10 @@ def getWords(source_code: str):
         words.append(current_word)
     return words
 
-def find_word(input_string, keyword_dict):
-    for keyword_category, keywords_list in keyword_dict.items():
-        if input_string.lower() in keywords_list:
-            return keyword_category
+def find_word(input_string, word_dict):
+    for word_category, words_list in word_dict.items():
+        if input_string.lower() in words_list:
+            return word_category
     return None
 
 
