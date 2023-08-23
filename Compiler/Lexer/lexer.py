@@ -182,21 +182,6 @@ def get_tokens(words):
         if word == '\n':
             line_number += 1
             continue
-        # is_keyword = find_word(word, keywords)
-        # if is_keyword:
-        #     new_token = Token(is_keyword, word, line_number)
-        #     tokens.append(new_token)
-        #     continue
-        # is_operator = find_word(word, operators)
-        # if is_operator:
-        #     new_token = Token(is_operator, word, line_number)
-        #     tokens.append(new_token)
-        #     continue
-        # is_punctuator = find_word(word, punctuators)
-        # if is_punctuator:
-        #     new_token = Token(is_punctuator, word, line_number)
-        #     tokens.append(new_token)
-        #     continue
         for words_category, types in valid_words.items():
             is_valid_word = find_word(word, valid_words[words_category])
             if is_valid_word:
