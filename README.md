@@ -97,10 +97,10 @@ dynamic variables are changeable while static variable is unchangeable like <cod
 ```
 
 <h3>Functions</h3>
-<p>Function can be decalared using <code>proc</code>. A function can accept 0 to n parameters separated by comma. <code>return</code> keyword can be used in the body to exit from function with or without a value.</p>
+<p>Function can be decalared using <code>proc</code>. A function can accept 0 to n parameters separated by comma. <code>return</code> keyword can be used in the body to exit from function with or without a value. You can optionally specify the return type of a function</p>
 
 ```
-  proc isEven(a, b) {
+  proc isEven(a, b): string {
     static rem = a % 2;
     if (rem == 0) {
       return "Number is even";
@@ -264,14 +264,14 @@ In interfaces you can only define the method headers. The body will be described
 
 ```
 interface IShape {
-    method GetArea();
+    method GetArea(): number;
 }
 
 class Rectangle implements IShape {
     #length;
     #breadth;
 
-    method GetArea() {
+    method GetArea(): number {
       return this.length * this.breadth;
     }
 }
@@ -280,11 +280,11 @@ class Rectangle implements IShape {
 
 ```
 interface IShape {
-    method GetArea();
+    method GetArea(): number;
 }
 
 interface IColor {
-    method GetColor();
+    method GetColor(): string;
 }
 
 class Rectangle implements IShape, IColor {
@@ -292,11 +292,11 @@ class Rectangle implements IShape, IColor {
     #breadth;
     #color;
 
-    method GetArea() {
+    method GetArea(): number {
       return this.length * this.breadth;
     }
 
-    method GetColor() {
+    method GetColor(): string {
       return this.color;
     }
 }
