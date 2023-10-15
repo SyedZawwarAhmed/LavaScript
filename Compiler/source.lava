@@ -11,9 +11,9 @@ until (a <==b!!!=+-**55 a - -9.6)
 class2a=[4, a, 4.2, [2,]]
 proc a(z, static, "dynamic").a
 #SSN
-class {
+Class {
     name;
     #;
     method()
-    sealed.
+    seAled.
 }
