@@ -216,4 +216,5 @@ def get_tokens(words):
 
         tokens.append(new_token)
 
+    tokens.append(Token(END_MARKER, '$', line_number))
     return tokens
