@@ -83,7 +83,7 @@ valid_words = {
             "||",
             "!",
         ],
-        ASSIGNMENT: [
+        ASSIGNMENT_OPERATOR: [
             "=",
         ],
         COMPOUND_ASSIGNMENT: [
