@@ -1,3 +1,4 @@
 __pycache__
 test.py
-.vscode*.pyc
+.vscode
+*.pyc
