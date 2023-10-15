@@ -2,14 +2,20 @@ from Lexer.constants import *
 
 valid_words = {
     KEYWORDS: {
-        DYNAMIC_STATIC: [
-            "dynamic",
-            "static",
+        DYNAMIC: [
+            "dynamic"
         ],
-        DATA_TYPES: [
-            "string",
-            "number",
-            "boolean"
+        STATIC:[
+            "static"
+        ],
+        NUMBER:[
+            'number'
+        ],
+        STRING : [
+            'string'
+        ],
+        BOOLEAN: [
+            'boolean'
         ],
         LOG: [
             "log"
@@ -23,9 +29,11 @@ valid_words = {
         UNTIL: [
             "until"
         ],
-        EXIT_SKIP: [
-            "exit",
-            "skip"
+        EXIT:[
+            'exit'
+        ],
+        SKIP:[
+            'skip'
         ],
         PROC: [
             "proc"
@@ -59,48 +67,88 @@ valid_words = {
         ],
         INTERFACE: [
             "interface"
+        ],
+        ASS: [
+            "ass:"
         ]
     },
 
     OPERATORS: {
-        ARITHMETIC: [
-            "+",
-            "-",
-            "*",
-            "/",
-            "%",
+        ADD: [
+            '+'
         ],
-        COMPARISON: [
-            "==",
-            "!=",
-            "<",
-            "<=",
-            ">",
-            ">=",
+        SUBTRACT:[
+            '-'
         ],
-        LOGICAL: [
-            "&&",
-            "||",
-            "!",
+        DIVIDE: [
+            '/'
+        ],
+        MULTIPLY: [
+            "*"
+        ],
+        MOD: [
+            "%"
+        ],
+        POWER: [
+            '^'
+        ],
+        EQUAL_TO: [
+            "=="
+        ],
+        LESS_THAN: [
+            "<"
+        ],
+        GREATER_THAN: [
+            ">"
+        ],
+        LESS_THAN_EQUAL: [
+            "<="
+        ],
+        GREATER_THAN_EQUAL: [
+            ">="
+        ],
+        NOT_EQUAL_TO: [
+            "!="
+        ],
+        AND: [
+            "&&"
+        ],
+        OR: [
+            "||"
+        ],
+        NOT: [
+            "!"
         ],
         ASSIGNMENT: [
             "=",
         ],
-        COMPOUND_ASSIGNMENT: [
-            "+=",
-            "-=",
-            "*=",
-            "/=",
+        ADD_EQUAL: [
+            "+="
+        ],
+        SUBTRACT_EQUAL: [
+            "-="
+        ],
+        MULTIPLY_EQUAL: [
+            "*="
+        ],
+        DIVIDE_EQUAL: [
+            "\="
+        ],
+        MOD_EQUAL: [
             "%="
         ],
-        INCREMENT_DECREMENT: [
-            "++",
-            "--",
+        INCREMENT: [
+            "++"
         ],
-        BITWISE: [
-            "&",
+        DECREMENT: [
+            "--"
+        ],
+        BITWISE_AND: [
+            "&"
+        ],
+        BITWISE_OR: [
             "|"
-        ],
+        ]
     },
 
     PUNCTUATORS: {
