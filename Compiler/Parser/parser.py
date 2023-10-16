@@ -20,6 +20,7 @@ def check_is_syntax_valid():
     if S():
         if tokens[i].token_type == END_MARKER:
             return True
+    print(f'Error at line number {tokens[i].line}')
     return False
 
 def S() -> bool:
