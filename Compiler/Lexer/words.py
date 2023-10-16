@@ -9,7 +9,11 @@ valid_words = {
         DATA_TYPES: [
             "string",
             "number",
-            "boolean"
+            "boolean",
+            "void"
+        ],
+        ASSIGN: [
+            "assign"
         ],
         LOG: [
             "log"
