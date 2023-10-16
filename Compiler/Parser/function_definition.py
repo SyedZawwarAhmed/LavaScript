@@ -14,7 +14,7 @@ def function_definition() -> bool:
                             if match_terminal(COLON):
                                 if match_terminal(DATA_TYPES):
                                     if match_terminal(OPENING_BRACE):
-                                        if match_terminal(MST):
+                                        if MST():
                                             if match_terminal(CLOSING_BRACE):
                                                 return True
     return False
