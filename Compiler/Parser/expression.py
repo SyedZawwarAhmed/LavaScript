@@ -41,7 +41,7 @@ def AE() -> bool:
 
 def OE1() -> bool:
     if select_rule([OR]):
-        if OP():
+        if match_terminal(OR):
             if AE():
                 if OE1():
                     return True
@@ -58,16 +58,13 @@ def RE() -> bool:
 
 def AE1() -> bool:
     if select_rule([AND]):
-        if AP():
+        if match_terminal(AND):
             if RE():
                 if AE1():
                     return True
     elif select_rule([follow_of_AE1]):
         return True
     return False
-
-def OP() -> bool:
-    raise NotImplementedError
 
 def E() -> bool:
     if select_rule(first_of_E):
@@ -97,9 +94,6 @@ def RE1() -> bool:
         return True
     return False
 
-def AP() -> bool:
-    raise NotImplementedError
-
 def T() -> bool:
     if select_rule(first_of_T):
         if F():
@@ -116,9 +110,6 @@ def T1() -> bool:
     elif select_rule(follow_of_T1):
         return True
     return False
-
-# def RO() -> bool:
-#     return False
 
 def F() -> bool:
     if select_rule([THIS, IDENTIFIER]):
@@ -186,6 +177,12 @@ def F2() -> bool:
     return False
 
 def AL() -> bool:
+    if select_rule(first_of_OE):
+        if arguement():
+            if next_arguement():
+                return True
+    elif select_rule([CLOSING_PARENTHESIS]):
+        return True
     return False
 
 def const() -> bool:
@@ -201,4 +198,19 @@ def const() -> bool:
     elif select_rule([BOOL_CONSTANT]):
         if match_terminal(BOOL_CONSTANT):
             return True
+    return False
+
+def arguement() -> bool:
+    if select_rule(first_of_OE):
+        if OE():
+            return True
+    return False
+
+def next_arguement() -> bool:
+    if select_rule([COMMA]):
+        if match_terminal(COMMA):
+            if OE():
+                return True
+    elif select_rule(first_of_OE):
+        return True
     return False
