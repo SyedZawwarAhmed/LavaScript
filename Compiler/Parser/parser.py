@@ -1,4 +1,7 @@
 from typing import List
+from Parser.function_definition import function_definition
+from Parser.if_statement import if_statement
+from Parser.loop import loop
 from Lexer.constants import *
 from Lexer.token import Token
 from Utils.select_rule import select_rule
@@ -52,14 +55,6 @@ def SST() -> bool:
             return True        
     return False
 
-def if_statement() -> bool:
-    return False
-
-def loop() -> bool:
-    return False
-
-def function_definition() -> bool:
-    return False
 
 def class_definition() -> bool:
     return False
