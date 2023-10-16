@@ -4,7 +4,7 @@ from Lexer.constants import *
 from Parser.expression import *
 from Parser.variable_declaration import expression_array
 
-def var_assignment() -> bool:    
+def variable_assignment() -> bool:    
     if select_rule([ASSIGN]):
         if left_side():
             if right_side():

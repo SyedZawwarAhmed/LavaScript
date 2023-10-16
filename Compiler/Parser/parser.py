@@ -1,12 +1,18 @@
+from main import tokens
 from typing import List
-from Parser.function_definition import function_definition
-from Parser.if_statement import if_statement
-from Parser.loop import loop
 from Lexer.constants import *
 from Lexer.token import Token
 from Utils.select_rule import select_rule
-from variable_declaration import var_declaration
-from main import tokens
+
+from Parser.variable_declaration import var_declaration
+from Parser.variable_assignment import variable_assignment
+from Parser.if_statement import if_statement
+from Parser.loop import loop
+from Parser.function_definition import function_definition
+from Parser.return_statement import return_statement
+from Parser.exit_skip import exit_skip
+from Parser.class_definition import class_definition
+from Parser.interface_definition import interface_defintion
 
 i = 0
 
@@ -17,7 +23,19 @@ def check_is_syntax_valid():
     return False
 
 def S() -> bool:
-    return MST()
+    if select_rule([]):
+        if MST():
+            if S():
+                return True
+    elif select_rule([SEALED, CLASS]):
+        if class_definition():
+            if S():
+                return True 
+    elif select_rule([INTERFACE]):
+        if interface_defintion():
+            if S():
+                return True 
+    return False
 
 def MST() -> bool:
     if SST():
@@ -38,12 +56,6 @@ def SST() -> bool:
     elif select_rule([PROC]):
         if function_definition():
             return True 
-    elif select_rule([SEALED, CLASS]):
-        if class_definition():
-            return True 
-    elif select_rule([INTERFACE]):
-        if interface_defintion():
-            return True 
     elif select_rule([RETURN]):
         if return_statement():
             return True
@@ -53,20 +65,4 @@ def SST() -> bool:
     elif select_rule([EXIT_SKIP]):
         if exit_skip():
             return True        
-    return False
-
-
-def class_definition() -> bool:
-    return False
-
-def interface_defintion() -> bool:
-    return False
-
-def return_statement() -> bool:
-    return False
-
-def variable_assignment() -> bool:
-    return False
-
-def exit_skip() -> bool:
     return False
