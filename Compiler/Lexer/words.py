@@ -59,13 +59,19 @@ valid_words = {
         ],
         INTERFACE: [
             "interface"
+        ],
+        BOOL_CONSTANT: [
+            "true",
+            "false"
         ]
     },
 
     OPERATORS: {
-        ARITHMETIC: [
+        PLUS_MINUS: [
             "+",
             "-",
+        ],
+        MULTIPLY_DIVIDE_MODULUS: [
             "*",
             "/",
             "%",
@@ -78,9 +84,13 @@ valid_words = {
             ">",
             ">=",
         ],
-        LOGICAL: [
+        AND: [
             "&&",
+        ],
+        OR: [
             "||",
+        ],
+        NOT: [
             "!",
         ],
         ASSIGNMENT_OPERATOR: [
