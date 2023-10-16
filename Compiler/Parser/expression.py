@@ -211,6 +211,6 @@ def next_arguement() -> bool:
         if match_terminal(COMMA):
             if OE():
                 return True
-    elif select_rule(first_of_OE):
+    elif select_rule([CLOSING_PARENTHESIS]):
         return True
     return False
