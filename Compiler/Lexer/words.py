@@ -100,7 +100,7 @@ valid_words = {
         ASSIGNMENT_OPERATOR: [
             "=",
         ],
-        COMPOUND_ASSIGNMENT: [
+        COMPOUND_ASSIGNMENT_OPERATOR: [
             "+=",
             "-=",
             "*=",
