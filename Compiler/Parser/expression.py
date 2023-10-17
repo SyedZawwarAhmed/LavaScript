@@ -61,7 +61,7 @@ def AE1() -> bool:
             if RE():
                 if AE1():
                     return True
-    elif select_rule([follow_of_AE1]):
+    elif select_rule(follow_of_AE1):
         return True
     return False
 

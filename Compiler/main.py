@@ -5,12 +5,12 @@ from typing import List
   
 from Parser.parser import check_is_syntax_valid
 file = read_file("source.lava")
-print(file)
+# print(file)
 words = getWords(file)
 print(words)
 tokens = get_tokens(words)
-for token in tokens:
-    print(token)
+# for token in tokens:
+#     print(token)
 
-is_syntax_valid = check_is_syntax_valid(tokens)
+is_syntax_valid = check_is_syntax_valid()
 print(f'\n================================\n{is_syntax_valid}')
