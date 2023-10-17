@@ -3,6 +3,7 @@ from typing import List
 from Lexer.constants import *
 from Lexer.token import Token
 from Utils.select_rule import select_rule
+from Utils.match_terminal import match_terminal
 
 from Parser.variable_declaration import var_declaration
 from Parser.variable_assignment import variable_assignment
@@ -47,7 +48,8 @@ def MST() -> bool:
 def SST() -> bool:
     if select_rule([DYNAMIC_STATIC]):
         if var_declaration():
-            return True
+            if match_terminal(SEMICOLON):
+                return True  
     elif select_rule([IF]):
         if if_statement():
             return True
@@ -59,11 +61,14 @@ def SST() -> bool:
             return True 
     elif select_rule([RETURN]):
         if return_statement():
-            return True
+            if match_terminal(SEMICOLON):
+                return True  
     elif select_rule([ASSIGNMENT]):
         if variable_assignment():
-            return True  
+            if match_terminal(SEMICOLON):
+                return True  
     elif select_rule([EXIT_SKIP]):
         if exit_skip():
-            return True        
+            if match_terminal(SEMICOLON):
+                return True        
     return False
