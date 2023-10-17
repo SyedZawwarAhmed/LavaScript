@@ -46,6 +46,9 @@ valid_words = {
         THIS: [
             "this"
         ],
+        HASH: [
+          "#"
+        ],
         METHOD: [
             "method"
         ],
@@ -54,6 +57,9 @@ valid_words = {
         ],
         EXTENDS: [
             "extends"
+        ],
+        IMPLEMENTS: [
+            "implements"
         ],
         SUPER: [
             "super"
