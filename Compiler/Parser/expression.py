@@ -9,7 +9,7 @@ first_of_RE = first_of_E
 first_of_AE = first_of_RE
 first_of_OE = first_of_AE
 
-follow_of_OE = [SEMICOLON, CLOSING_BRACKET, CLOSING_PARENTHESIS]
+follow_of_OE = [SEMICOLON, CLOSING_BRACKET, CLOSING_PARENTHESIS, COMMA]
 follow_of_OE1 = follow_of_OE
 follow_of_AE = follow_of_OE1
 follow_of_AE1 = follow_of_AE

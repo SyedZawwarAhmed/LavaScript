@@ -40,7 +40,7 @@ def array() -> bool:
 def array_element() -> bool:
     if select_rule([CLOSING_BRACKET]):
         return True
-    elif select_rule([SEMICOLON, CLOSING_BRACKET, CLOSING_PARENTHESIS, OPENING_BRACKET]):
+    elif select_rule([THIS, IDENTIFIER, INTEGER_CONSTANT, FLOAT_CONSTANT, STRING_CONSTANT, BOOL_CONSTANT, NOT, OPENING_BRACKET]):
         if expression_array():
             if next_element():
                 return True

@@ -13,7 +13,7 @@ from Parser.return_statement import return_statement
 from Parser.exit_skip import exit_skip
 from Parser.class_definition import class_definition
 from Parser.interface_definition import interface_defintion
-from Parser.expression import OE
+from Parser.expression import *
 
 i = 0
 
@@ -21,6 +21,7 @@ def check_is_syntax_valid():
     from main import tokens
     if S():
         if tokens[i].token_type == END_MARKER:
+            print("Syntax is Valid")
             return True
     print(f'Error at line number {tokens[i].line}')
     return False
@@ -72,7 +73,7 @@ def SST() -> bool:
         if exit_skip():
             if match_terminal(SEMICOLON):
                 return True   
-    elif select_rule([SEMICOLON, CLOSING_BRACKET, CLOSING_PARENTHESIS]):
+    elif select_rule(first_of_OE):
         if OE():
             if match_terminal(SEMICOLON):
                 return True     
