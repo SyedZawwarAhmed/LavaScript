@@ -13,6 +13,7 @@ from Parser.return_statement import return_statement
 from Parser.exit_skip import exit_skip
 from Parser.class_definition import class_definition
 from Parser.interface_definition import interface_defintion
+from Parser.expression import OE
 
 i = 0
 
@@ -25,7 +26,7 @@ def check_is_syntax_valid():
     return False
 
 def S() -> bool:
-    if select_rule([DYNAMIC_STATIC, IF, UNTIL, PROC, RETURN, ASSIGNMENT, EXIT_SKIP]):
+    if select_rule([DYNAMIC_STATIC, IF, UNTIL, PROC, RETURN, ASSIGNMENT, EXIT_SKIP, SEMICOLON, CLOSING_BRACKET, CLOSING_PARENTHESIS]):
         if MST():
             if S():
                 return True
@@ -70,5 +71,9 @@ def SST() -> bool:
     elif select_rule([EXIT_SKIP]):
         if exit_skip():
             if match_terminal(SEMICOLON):
-                return True        
+                return True   
+    elif select_rule([SEMICOLON, CLOSING_BRACKET, CLOSING_PARENTHESIS]):
+        if OE():
+            if match_terminal(SEMICOLON):
+                return True     
     return False
