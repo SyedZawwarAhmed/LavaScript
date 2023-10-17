@@ -11,7 +11,7 @@ def loop() -> bool:
                 if OE():
                     if match_terminal(CLOSING_PARENTHESIS):
                         if match_terminal(OPENING_BRACE):
-                            if MST():
+                            if parser.MST():
                                 if match_terminal(CLOSING_BRACE):
                                     return True
     return False
