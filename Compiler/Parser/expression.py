@@ -1,7 +1,6 @@
 from Utils.select_rule import select_rule
 from Utils.match_terminal import match_terminal
 from Lexer.constants import *
-from main import tokens
 
 first_of_F = [THIS, IDENTIFIER, INTEGER_CONSTANT, FLOAT_CONSTANT, STRING_CONSTANT, BOOL_CONSTANT, NOT]
 first_of_T = first_of_F
@@ -62,7 +61,7 @@ def AE1() -> bool:
             if RE():
                 if AE1():
                     return True
-    elif select_rule([follow_of_AE1]):
+    elif select_rule(follow_of_AE1):
         return True
     return False
 

@@ -1,4 +1,3 @@
-from main import tokens
 from typing import List
 from Lexer.constants import *
 from Lexer.token import Token
@@ -18,6 +17,7 @@ from Parser.interface_definition import interface_defintion
 i = 0
 
 def check_is_syntax_valid():
+    from main import tokens
     if S():
         if tokens[i].token_type == END_MARKER:
             return True
@@ -25,7 +25,7 @@ def check_is_syntax_valid():
     return False
 
 def S() -> bool:
-    if select_rule([]):
+    if select_rule([DYNAMIC_STATIC, IF, UNTIL, PROC, RETURN, ASSIGNMENT, EXIT_SKIP]):
         if MST():
             if S():
                 return True
@@ -63,7 +63,7 @@ def SST() -> bool:
         if return_statement():
             if match_terminal(SEMICOLON):
                 return True  
-    elif select_rule([ASSIGNMENT]):
+    elif select_rule([ASSIGN]):
         if variable_assignment():
             if match_terminal(SEMICOLON):
                 return True  
