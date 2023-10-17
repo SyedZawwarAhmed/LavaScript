@@ -1,5 +1,5 @@
 from Parser.expression import OE
-from Parser.parser import MST
+import Parser.parser as parser
 from Utils.select_rule import select_rule
 from Utils.match_terminal import match_terminal
 from Lexer.constants import *

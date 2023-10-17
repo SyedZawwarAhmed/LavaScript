@@ -1,4 +1,4 @@
-a >= b;
+dynamic a = a >= b;
 6// a.b;
 log "Hello, \\ World";
 void class A_B_C:35

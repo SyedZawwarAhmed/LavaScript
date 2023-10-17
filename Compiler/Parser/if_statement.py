@@ -1,5 +1,5 @@
 from Parser.expression import OE
-from Parser.parser import MST
+import Parser.parser as parser
 from Utils.select_rule import select_rule
 from Utils.match_terminal import match_terminal
 from Lexer.constants import *
@@ -11,7 +11,7 @@ def if_statement() -> bool:
                 if OE():
                     if match_terminal(CLOSING_PARENTHESIS):
                         if match_terminal(OPENING_BRACE):
-                            if MST():
+                            if parser.MST():
                                 if match_terminal(CLOSING_BRACE):
                                     if next():
                                         return True
@@ -21,7 +21,7 @@ def next() -> bool:
     if select_rule([ELSE]):
         if match_terminal(ELSE):
             if match_terminal(OPENING_BRACE):
-                if MST():
+                if parser.MST():
                     if match_terminal(CLOSING_BRACE):
                         return True
     elif select_rule([SEMICOLON]):

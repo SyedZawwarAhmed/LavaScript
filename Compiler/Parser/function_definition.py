@@ -1,5 +1,5 @@
 from Parser.expression import OE
-from Parser.parser import MST
+import Parser.parser as parser
 from Utils.select_rule import select_rule
 from Utils.match_terminal import match_terminal
 from Lexer.constants import *
@@ -14,7 +14,7 @@ def function_definition() -> bool:
                             if match_terminal(COLON):
                                 if match_terminal(DATA_TYPES):
                                     if match_terminal(OPENING_BRACE):
-                                        if MST():
+                                        if parser.MST():
                                             if match_terminal(CLOSING_BRACE):
                                                 return True
     return False

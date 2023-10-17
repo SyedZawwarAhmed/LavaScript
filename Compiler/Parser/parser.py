@@ -1,4 +1,3 @@
-from main import tokens
 from typing import List
 from Lexer.constants import *
 from Lexer.token import Token
@@ -17,7 +16,9 @@ from Parser.interface_definition import interface_defintion
 
 i = 0
 
-def check_is_syntax_valid():
+tokens = None
+def check_is_syntax_valid(tokenset):
+    tokens = tokenset
     if S():
         if tokens[i].token_type == END_MARKER:
             return True
