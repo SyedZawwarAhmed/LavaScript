@@ -20,7 +20,7 @@ follow_of_E1 = follow_of_E
 follow_of_T = follow_of_E1
 follow_of_T1 = follow_of_T
 
-follow_of_F = [MULTIPLY_DIVIDE_MODULUS, SEMICOLON, CLOSING_BRACKET, CLOSING_PARENTHESIS]
+follow_of_F = [MULTIPLY_DIVIDE_MODULUS, PLUS_MINUS, COMPARISON, AND, OR, SEMICOLON, CLOSING_BRACKET, CLOSING_PARENTHESIS, COMMA]
 follow_of_F1 = follow_of_F
 follow_of_F2 = follow_of_F1
 
