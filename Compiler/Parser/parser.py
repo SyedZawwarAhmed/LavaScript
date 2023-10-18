@@ -27,10 +27,10 @@ def check_is_syntax_valid():
     return False
 
 def S() -> bool:
-    if select_rule([DYNAMIC_STATIC, IF, UNTIL, PROC, RETURN, ASSIGNMENT, EXIT_SKIP, follow_of_OE, CLOSING_BRACE, END_MARKER]):
+    if select_rule([DYNAMIC_STATIC, IF, UNTIL, PROC, RETURN, ASSIGNMENT, EXIT_SKIP, follow_of_OE, CLOSING_BRACE]):
         if MST():
-            # if S():
-            return True
+            if S():
+                return True
     elif select_rule([SEALED, CLASS]):
         if class_definition():
             if S():
@@ -39,6 +39,8 @@ def S() -> bool:
         if interface_defintion():
             if S():
                 return True 
+    elif select_rule([END_MARKER]):
+        return True
     return False
 
 def MST() -> bool:

@@ -1,18 +1,3 @@
-until (a > 3) {}
-
-dynamic aafsdf = a.b.c[9].adf();
-dynamic a = [2, 2, 5, 24, 4];
-@proc my_func(a:boolean) : boolean {
-    a.b;
-   c="abc+=56"abc-d "checking new line \n character";
--9...5 .7787
-class2a=[4, a, 4.2, [2,]]
-proc a(z, static, "dynamic").a
-#SSN
+if (a>3) {until(fun()){}}
+class A extends B {
 }
-Class {
-    name;
-    #;
-    method()
-    seAled.
-}@

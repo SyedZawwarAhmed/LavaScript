@@ -60,7 +60,7 @@ def class_body() -> bool:
         if class_single_statement():
             if class_multi_statement():
                 return True
-    if select_rule([CLOSING_BRACE]):
+    elif select_rule([CLOSING_BRACE]):
         return True
 
 def class_single_statement() -> bool:

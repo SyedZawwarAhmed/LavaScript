@@ -25,6 +25,6 @@ def next() -> bool:
                 if parser.MST():
                     if match_terminal(CLOSING_BRACE):
                         return True
-    elif select_rule([DYNAMIC_STATIC, IF, UNTIL, PROC, RETURN, ASSIGN, EXIT_SKIP, THIS, IDENTIFIER, INTEGER_CONSTANT, FLOAT_CONSTANT, STRING_CONSTANT, BOOL_CONSTANT, NOT]):
+    elif select_rule([DYNAMIC_STATIC, IF, UNTIL, PROC, RETURN, ASSIGN, EXIT_SKIP, THIS, IDENTIFIER, INTEGER_CONSTANT, FLOAT_CONSTANT, STRING_CONSTANT, BOOL_CONSTANT, NOT, SEALED, CLASS, INTERFACE, END_MARKER]):
         return True
     return False
