@@ -23,11 +23,11 @@ def check_is_syntax_valid():
         if tokens[i].token_type == END_MARKER:
             print("Syntax is Valid")
             return True
-    print(f'Error at line number {tokens[i].line}')
+    print(f'Error at line number {tokens[i].line}, | class: {tokens[i].token_type} value: {tokens[i].lexeme}')
     return False
 
 def S() -> bool:
-    if select_rule([DYNAMIC_STATIC, IF, UNTIL, PROC, RETURN, ASSIGNMENT, EXIT_SKIP, follow_of_OE, CLOSING_BRACE]):
+    if select_rule([DYNAMIC_STATIC, IF, UNTIL, PROC, RETURN, ASSIGNMENT, EXIT_SKIP, *follow_of_OE]):
         if MST():
             if S():
                 return True
