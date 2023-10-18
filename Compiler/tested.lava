@@ -1,4 +1,4 @@
 if (a > 3) {}
 until (a > 3) {}
-
+b();
 dynamic aafsdf = a.b.c[9].adf();
