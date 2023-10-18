@@ -26,6 +26,7 @@ breakers = {
         '[',   # Left square bracket
         ']',   # Right square bracket
         ':',   # Colon
+        '#'
     ],
     QUOTES: [
         # '\'',  # Single quote
