@@ -42,7 +42,7 @@ def S() -> bool:
     return False
 
 def MST() -> bool:
-    if select_rule([DYNAMIC_STATIC, IF, UNTIL, PROC, RETURN, ASSIGN, EXIT_SKIP, first_of_OE]):
+    if select_rule([DYNAMIC_STATIC, IF, UNTIL, PROC, RETURN, ASSIGN, EXIT_SKIP, THIS, IDENTIFIER, INTEGER_CONSTANT, FLOAT_CONSTANT, STRING_CONSTANT, BOOL_CONSTANT, NOT]):
         if SST():
             if MST():
                 return True
