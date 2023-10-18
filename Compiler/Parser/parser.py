@@ -27,7 +27,7 @@ def check_is_syntax_valid():
     return False
 
 def S() -> bool:
-    if select_rule([DYNAMIC_STATIC, IF, UNTIL, PROC, RETURN, ASSIGNMENT, EXIT_SKIP, SEMICOLON, CLOSING_BRACKET, CLOSING_PARENTHESIS]):
+    if select_rule([DYNAMIC_STATIC, IF, UNTIL, PROC, RETURN, ASSIGNMENT, EXIT_SKIP, CLOSING_BRACE, follow_of_OE]):
         if MST():
             if S():
                 return True
@@ -42,9 +42,12 @@ def S() -> bool:
     return False
 
 def MST() -> bool:
-    if SST():
-        if MST():
-            return True
+    if select_rule([DYNAMIC_STATIC, IF, UNTIL, PROC, RETURN, ASSIGN, EXIT_SKIP, first_of_OE]):
+        if SST():
+            if MST():
+                return True
+    elif select_rule([CLOSING_BRACE]):
+        return True
     return False
 
 def SST() -> bool:
