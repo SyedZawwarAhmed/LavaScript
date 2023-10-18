@@ -2,22 +2,29 @@ from Utils.select_rule import select_rule
 from Utils.match_terminal import match_terminal
 from Lexer.constants import *
 
+def merge_two_lists(first_list, second_list):
+    return first_list + list(set(second_list) - set(first_list))
+
 first_of_F = [THIS, IDENTIFIER, INTEGER_CONSTANT, FLOAT_CONSTANT, STRING_CONSTANT, BOOL_CONSTANT, NOT]
 first_of_T = first_of_F
 first_of_E = first_of_T
 first_of_RE = first_of_E
 first_of_AE = first_of_RE
 first_of_OE = first_of_AE
+first_of_E1 = [PLUS_MINUS]
+first_of_OE1 = [OR]
+first_of_AE1 = [AND]
+first_of_RE1 = [COMPARISON]
 
 follow_of_OE = [SEMICOLON, CLOSING_BRACKET, CLOSING_PARENTHESIS, COMMA]
 follow_of_OE1 = follow_of_OE
-follow_of_AE = follow_of_OE1
+follow_of_AE = merge_two_lists(first_of_OE1, follow_of_OE)
 follow_of_AE1 = follow_of_AE
-follow_of_RE = follow_of_AE1
+follow_of_RE = merge_two_lists(first_of_AE1, follow_of_AE)
 follow_of_RE1 = follow_of_RE
-follow_of_E = follow_of_RE1
+follow_of_E = merge_two_lists(first_of_RE1, follow_of_RE)
 follow_of_E1 = follow_of_E
-follow_of_T = follow_of_E1
+follow_of_T = merge_two_lists(first_of_E1, follow_of_E)
 follow_of_T1 = follow_of_T
 
 follow_of_F = [MULTIPLY_DIVIDE_MODULUS, PLUS_MINUS, COMPARISON, AND, OR, SEMICOLON, CLOSING_BRACKET, CLOSING_PARENTHESIS, COMMA]

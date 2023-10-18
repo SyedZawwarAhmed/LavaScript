@@ -1,6 +1,6 @@
 from Parser.expression import OE
 from Parser.function_definition import params
-from Parser.parser import MST
+import Parser.parser as parser
 from Parser.variable_declaration import assignment_statement
 from Utils.select_rule import select_rule
 from Utils.match_terminal import match_terminal
@@ -71,7 +71,7 @@ def class_single_statement() -> bool:
     elif select_rule([METHOD]):
         if method():
             if match_terminal(OPENING_BRACE):
-                if MST():
+                if parser.MST():
                     if match_terminal(CLOSING_BRACE):
                         return True
     elif select_rule([CONSTRUCTOR]):
@@ -94,7 +94,7 @@ def method() -> bool:
     if select_rule([METHOD]):
         if method_header():
             if match_terminal(OPENING_BRACE):
-                if MST():
+                if parser.MST():
                     if match_terminal(CLOSING_BRACE):
                         return True
     return False
@@ -128,7 +128,7 @@ def constructor() -> bool:
                 if params():
                     if match_terminal(CLOSING_PARENTHESIS):
                         if match_terminal(OPENING_BRACE):
-                            if MST():
+                            if parser.MST():
                                 if match_terminal(CLOSING_BRACE):
                                     return True
     return False
