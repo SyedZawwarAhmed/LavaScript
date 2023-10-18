@@ -4,7 +4,7 @@ from Lexer.token import Token
 from typing import List
   
 from Parser.parser import check_is_syntax_valid
-file = read_file("tested.lava")
+file = read_file("source.lava")
 # print(file)
 words = getWords(file)
 # print(words)
