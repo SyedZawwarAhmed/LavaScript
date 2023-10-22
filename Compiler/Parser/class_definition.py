@@ -54,6 +54,7 @@ def inheritance_next() -> bool:
                     return True
     elif select_rule([OPENING_BRACE]):
         return True
+    return False
 
 def class_body() -> bool:
     if select_rule([IDENTIFIER, HASH, METHOD, CONSTRUCTOR]):
@@ -62,6 +63,7 @@ def class_body() -> bool:
                 return True
     elif select_rule([CLOSING_BRACE]):
         return True
+    return False
 
 def class_single_statement() -> bool:
     if select_rule([IDENTIFIER]):
@@ -77,6 +79,7 @@ def class_single_statement() -> bool:
     elif select_rule([CONSTRUCTOR]):
         if constructor():
             return True
+    return False
 
 def attribute() -> bool:
     if select_rule([IDENTIFIER]):
@@ -138,5 +141,6 @@ def class_multi_statement() -> bool:
         if class_single_statement():
             if class_multi_statement():
                 return True
-    if select_rule([CLOSING_BRACE]):
+    elif select_rule([CLOSING_BRACE]):
         return True
+    return False
