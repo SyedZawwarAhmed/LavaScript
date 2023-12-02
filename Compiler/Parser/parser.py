@@ -18,7 +18,7 @@ from Parser.expression import *
 i = 0
 
 def check_is_syntax_valid():
-    from main import tokens
+    from tokenset import tokens
     if S():
         if tokens[i].token_type == END_MARKER:
             print("Syntax is Valid")
