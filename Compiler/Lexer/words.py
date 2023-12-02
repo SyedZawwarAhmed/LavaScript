@@ -9,7 +9,11 @@ valid_words = {
         DATA_TYPES: [
             "string",
             "number",
-            "boolean"
+            "boolean",
+            "void"
+        ],
+        ASSIGN: [
+            "assign"
         ],
         LOG: [
             "log"
@@ -42,6 +46,9 @@ valid_words = {
         THIS: [
             "this"
         ],
+        HASH: [
+          "#"
+        ],
         METHOD: [
             "method"
         ],
@@ -51,6 +58,9 @@ valid_words = {
         EXTENDS: [
             "extends"
         ],
+        IMPLEMENTS: [
+            "implements"
+        ],
         SUPER: [
             "super"
         ],
@@ -59,13 +69,19 @@ valid_words = {
         ],
         INTERFACE: [
             "interface"
+        ],
+        BOOL_CONSTANT: [
+            "true",
+            "false"
         ]
     },
 
     OPERATORS: {
-        ARITHMETIC: [
+        PLUS_MINUS: [
             "+",
             "-",
+        ],
+        MULTIPLY_DIVIDE_MODULUS: [
             "*",
             "/",
             "%",
@@ -78,15 +94,19 @@ valid_words = {
             ">",
             ">=",
         ],
-        LOGICAL: [
+        AND: [
             "&&",
+        ],
+        OR: [
             "||",
+        ],
+        NOT: [
             "!",
         ],
-        ASSIGNMENT: [
+        ASSIGNMENT_OPERATOR: [
             "=",
         ],
-        COMPOUND_ASSIGNMENT: [
+        COMPOUND_ASSIGNMENT_OPERATOR: [
             "+=",
             "-=",
             "*=",

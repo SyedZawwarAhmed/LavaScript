@@ -1,0 +1,9 @@
+if (a>3) {
+  until(fun()) {
+    if (n*n == fun()) {
+    
+    }
+  }
+}
+class A extends B {
+}
