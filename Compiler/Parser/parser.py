@@ -46,7 +46,7 @@ def MST() -> bool:
         if SST():
             if MST():
                 return True
-    elif select_rule([CLOSING_BRACE, END_MARKER]):
+    elif select_rule([CLOSING_BRACE, END_MARKER, CLASS, SEALED, INTERFACE]):
         return True
     return False
 
