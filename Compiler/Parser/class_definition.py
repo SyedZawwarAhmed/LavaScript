@@ -6,6 +6,8 @@ from Utils.select_rule import select_rule
 from Utils.match_terminal import match_terminal
 from Lexer.constants import *
 
+from Semantic.helpers import *
+
 def class_definition() -> bool:
     if select_rule([SEALED]):
         if match_terminal(SEALED):
@@ -13,6 +15,9 @@ def class_definition() -> bool:
                 if match_terminal(IDENTIFIER):
                     if match_terminal(OPENING_BRACE):
                         if class_body():
+                            # new_data_table = create_data_table()
+                            # if not insert_main_table(name, type, category, parent, new_data_table):
+                            #     print("Redclaration Error")
                             if match_terminal(CLOSING_BRACE):
                                 return True
     elif select_rule([CLASS]):

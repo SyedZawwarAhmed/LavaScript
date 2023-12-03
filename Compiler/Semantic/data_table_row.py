@@ -1,4 +1,4 @@
-from enums import *
+from Semantic.enums import *
 
 class Data_Table_Row_Type:
     def __init__(self, type = None, parameter_list = None, return_type = None):

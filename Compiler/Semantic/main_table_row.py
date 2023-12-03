@@ -1,5 +1,5 @@
-from enums import *
-from data_table_row import Data_Table_Row
+from Semantic.enums import *
+from Semantic.data_table_row import Data_Table_Row
 from typing import List
 
 class Main_Table_Row:

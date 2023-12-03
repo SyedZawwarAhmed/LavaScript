@@ -1,9 +1,9 @@
 from typing import List
-from symbol_table import *
-from main_table_row import Main_Table_Row
-from function_table_row import Function_Table_Row
-from data_table_row import *
-from enums import *
+from Semantic.symbol_table import *
+from Semantic.main_table_row import Main_Table_Row
+from Semantic.function_table_row import Function_Table_Row
+from Semantic.data_table_row import *
+from Semantic.enums import *
 
 def create_data_table() -> List[Data_Table_Row]:
     new_table: List[Data_Table_Row] = []
