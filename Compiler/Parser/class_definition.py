@@ -45,6 +45,8 @@ def inheritable_class() -> bool:
         #     if match_terminal(IDENTIFIER):
         if inheritance():
             return True
+    elif select_rule([OPENING_BRACE]):
+        return True
     return False
 
 def inheritance() -> bool:
