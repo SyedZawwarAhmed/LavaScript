@@ -1,6 +1,7 @@
 from Utils.select_rule import select_rule
 from Utils.match_terminal import match_terminal
 from Lexer.constants import *
+from Semantic.symbol_table import *
 from Semantic.helpers import *
 
 def merge_two_lists(first_list, second_list):
@@ -31,6 +32,8 @@ follow_of_T1 = follow_of_T
 follow_of_F = [MULTIPLY_DIVIDE_MODULUS, PLUS_MINUS, COMPARISON, AND, OR, SEMICOLON, CLOSING_BRACKET, CLOSING_PARENTHESIS, COMMA]
 follow_of_F1 = follow_of_F
 follow_of_F2 = follow_of_F1
+
+primitive_data_types = ['string', 'number', 'boolean']
 
 def OE():
     if select_rule(first_of_OE):
@@ -125,9 +128,12 @@ def F() -> bool:
             if(this_check == "this"):
                 name = match_terminal(IDENTIFIER)
                 if name:
-                    
-                    if F1():
+                    if F1(name, current_class_data_table):
                         return True
+            else:
+                lookup_funtion_table()
+                if F1(name, current_class_data_table):
+                    return True
     elif select_rule([INTEGER_CONSTANT, STRING_CONSTANT, FLOAT_CONSTANT, BOOL_CONSTANT]):
         if const():
             return True
@@ -147,52 +153,91 @@ def P() -> bool:
         return True
     return False
 
-def F1() -> bool:
+def F1(name_type: str, data_table: List[Data_Table_Row]) -> bool:
     if select_rule(follow_of_F1):
         return True
     elif select_rule([OPENING_BRACKET]):
+        data_table_row = lookup_attribute_data_table(name_type, data_table)
+        if not data_table_row:
+            print(f"{name_type} does not exist")
+            return False
         if match_terminal(OPENING_BRACKET):
-            if OE():
+            type_of_expression = OE()
+            if type_of_expression:
+                if type_of_expression != 'number':
+                    print("index must be of type number.")
+                    return False
                 if match_terminal(CLOSING_BRACKET):
-                    if F1():
+                    data_table_row = data_table_row
+                    if data_table_row.type in primitive_data_types:
+                        print("cannot access primitives data types")
+                        return False
+                    main_table_row = lookup_main_table(data_table_row.type)
+                    if F1(main_table_row.name ,main_table_row.link):
                         return True
     elif select_rule([OPENING_PARENTHESIS]):
         if match_terminal(OPENING_PARENTHESIS):
-            if AL():
+            argument_list = AL()
+            if argument_list:
                 if match_terminal(CLOSING_PARENTHESIS):
-                    if F2():
+                    function_data_table_row = lookup_function_data_table(name_type, argument_list, data_table)
+                    if not function_data_table_row:
+                        print(f"{name_type} does not exist")
+                        return False
+                    if F2(function_data_table_row.type):
                         return True
     elif select_rule([DOT]):
         if match_terminal(DOT):
+            if name_type in primitive_data_types:
+                print("cannot access primitives data types")
+                return False
+            main_table_row = lookup_main_table(name_type)
             if match_terminal(IDENTIFIER):
-                if F1():
+                if F1(main_table_row.name, main_table_row.link):
                     return True
     elif select_rule([INCREMENT_DECREMENT]):
-        if match_terminal(INCREMENT_DECREMENT):
+        operator = match_terminal(INCREMENT_DECREMENT)
+        if operator:
+            if not compatibility_for_single_operand(name_type, operator):
+                print(f"{name_type} is not compatible with {operator}")
             return True
     return False
 
-def F2() -> bool:
+def F2(name_type: str) -> bool:
     if select_rule([DOT]):
         if match_terminal(DOT):
+            if name_type in primitive_data_types:
+                print("cannot access primitives data types")
+                return False
+            main_table_row = lookup_main_table(name_type)
             if match_terminal(IDENTIFIER):
-                if F1():
+                if F1(main_table_row.name, main_table_row.link):
                     return True
     elif select_rule([OPENING_BRACKET]):
         if match_terminal(OPENING_BRACKET):
-            if OE():
+            type_of_expression = OE()
+            if type_of_expression:
+                if type_of_expression != 'number':
+                    print("index must be of type number.")
+                    return False
                 if match_terminal(CLOSING_BRACKET):
-                    if F1():
+                    data_table_row = data_table_row
+                    if data_table_row.type in primitive_data_types:
+                        print("cannot access primitives data types")
+                        return False
+                    main_table_row = lookup_main_table(data_table_row.type)
+                    if F1(main_table_row.name ,main_table_row.link):
                         return True
     elif select_rule(follow_of_F2):
         return True
     return False
 
 def AL() -> bool:
+    argument_list:List[str] = [] 
     if select_rule(first_of_OE):
-        if arguement():
-            if next_arguement():
-                return True
+        if arguement(argument_list):
+            if next_arguement(argument_list):
+                return argument_list
     elif select_rule([CLOSING_PARENTHESIS]):
         return True
     return False
@@ -212,17 +257,22 @@ def const() -> bool:
             return True
     return False
 
-def arguement() -> bool:
+def arguement(argument_list: List[str]) -> bool:
     if select_rule(first_of_OE):
-        if OE():
+        type_of_expression = OE()
+        if type_of_expression:
+            argument_list.append(type_of_expression)
             return True
     return False
 
-def next_arguement() -> bool:
+def next_arguement(argument_list: List[str]) -> bool:
     if select_rule([COMMA]):
         if match_terminal(COMMA):
-            if OE():
+            type_of_expression = OE()
+            if type_of_expression:
+                argument_list.append(type_of_expression)
                 return True
     elif select_rule([CLOSING_PARENTHESIS]):
         return True
     return False
+

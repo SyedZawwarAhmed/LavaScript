@@ -5,10 +5,12 @@ from Parser.variable_declaration import assignment_statement
 from Utils.select_rule import select_rule
 from Utils.match_terminal import match_terminal
 from Lexer.constants import *
+from Semantic.symbol_table import current_class_data_table
 
 from Semantic.helpers import *
 
 def class_definition() -> bool:
+    global current_class_data_table
     if select_rule([SEALED, CLASS]):
         access_modifier = Main_Table_Access_Modifier.GENERAL
         parent = None
@@ -22,6 +24,7 @@ def class_definition() -> bool:
                         if match_terminal(OPENING_BRACE):
                             if class_body():
                                 new_data_table = create_data_table()
+                                current_class_data_table = new_data_table
                                 if not insert_main_table(name, type, access_modifier, category, parent, new_data_table):
                                     print(f"Class {name} is already declared.")
                                     return False

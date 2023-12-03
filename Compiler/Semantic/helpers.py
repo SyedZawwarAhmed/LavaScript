@@ -55,6 +55,7 @@ def lookup_function_data_table(name: str, parameter_list: List[str], data_table:
             return row
 
 def lookup_funtion_table(name: str):
+    
     for row in function_table:
         if row.name == name:
             return row
