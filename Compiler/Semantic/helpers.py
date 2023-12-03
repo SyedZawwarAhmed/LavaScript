@@ -3,16 +3,17 @@ from symbol_table import *
 from main_table_row import Main_Table_Row
 from function_table_row import Function_Table_Row
 from data_table_row import *
+from enums import *
 
 def create_data_table() -> List[Data_Table_Row]:
     new_table: List[Data_Table_Row] = []
     return new_table
 
-def insert_main_table(name: str, type: str, access_modifier: str, type_modifier: str, category: str, parent: str, link: List[Data_Table_Row]) -> bool:
+def insert_main_table(name: str, type: Main_Table_Type, access_modifier: Main_Table_Access_Modifier, category: Main_Table_Category, parent: str, link: List[Data_Table_Row]) -> bool:
     for row in main_table:
         if row.name == name:
             return False
-    new_row = Main_Table_Row(name, type, access_modifier, type_modifier, category, parent, link)
+    new_row = Main_Table_Row(name, type, access_modifier, category, parent, link)
     main_table.append(new_row)
     return True
 
@@ -24,7 +25,7 @@ def insert_function_table(name: str, type: str, scope: int) -> bool:
     function_table.append(new_row)
     return True
 
-def insert_data_table(name: str, type: Data_Table_Row_Type, access_modifier: str, type_modifier: str, data_table: List[Data_Table_Row]) -> bool:
+def insert_data_table(name: str, type: Data_Table_Row_Type, access_modifier: Data_Table_Access_Modifier, type_modifier: str, data_table: List[Data_Table_Row]) -> bool:
     for row in data_table:
         if row.name == name:
             return False
