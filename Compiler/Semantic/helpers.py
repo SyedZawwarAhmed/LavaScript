@@ -89,8 +89,6 @@ def compatibility_for_two_operands(left_operand_type: str, right_operand_type: s
             return left_operand_type
         else:
             return
-    else:
-        return
 
 def compatibility_for_single_operand(operand_type: str, operator: str):
     compatibility_rules = {
@@ -104,16 +102,12 @@ def compatibility_for_single_operand(operand_type: str, operator: str):
             return operand_type
         else:
             return
-    else:
-        return
 
 
 def create_scope():
     global current_scope
     current_scope += 1
     scope_stack.append(current_scope)
-    return
 
 def destroy_scope():
     scope_stack.pop()
-    return
