@@ -21,7 +21,7 @@ def check_is_syntax_valid():
         if tokens[i].token_type == END_MARKER:
             print("Syntax is Valid")
             return True
-    print(f'Error at line number {tokens[i].line}, | class: {tokens[i].token_type} value: {tokens[i].lexeme}')
+    print(f'Error at line number {tokens[i].line}')
     return False
 
 def S() -> bool:

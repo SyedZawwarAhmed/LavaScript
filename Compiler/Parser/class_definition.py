@@ -24,7 +24,7 @@ def class_definition() -> bool:
                             if class_body():
                                 new_data_table = create_data_table()
                                 if not insert_main_table(name, type, access_modifier, category, parent, new_data_table):
-                                    print("Redclaration Error")
+                                    print(f"Class {name} is already declared.")
                                     return False
                                 destroy_scope()
                                 if match_terminal(CLOSING_BRACE):
