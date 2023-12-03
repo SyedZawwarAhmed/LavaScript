@@ -6,7 +6,10 @@ if (a>3) {
   }
 }
 
-class B {}
+interface B {
+    method GetArea(): number;
+}
 
-class A extends B {
+
+class A implements B {
 }

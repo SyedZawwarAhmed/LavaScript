@@ -11,7 +11,7 @@ from Semantic.helpers import *
 def class_definition() -> bool:
     if select_rule([SEALED, CLASS]):
         access_modifier = Main_Table_Access_Modifier.GENERAL
-        parent = None
+        parent = []
         category = class_category()
         if category:
             if match_terminal(CLASS):
@@ -40,7 +40,7 @@ def class_category():
     return False
 
 def inheritable_class() -> bool:
-    if select_rule([EXTENDS]):
+    if select_rule([EXTENDS, IMPLEMENTS]):
         # if match_terminal(CLASS):
         #     if match_terminal(IDENTIFIER):
         if inheritance():
@@ -65,6 +65,8 @@ def inheritance() -> bool:
                     if row.category == Main_Table_Category.SEALED:
                         print(f"{name} cannot extend a Sealed Class")
                         return False
+                    row.parent.append(name)
+                    return True
                 else:
                     print(f"{name} Class not found")
                     return False
@@ -78,14 +80,13 @@ def inheritance() -> bool:
                     if row.type == Main_Table_Type.CLASS:
                         print(f"{name} cannot implement a Class")
                         return False
-                    if row.access_modifier == Main_Table_Access_Modifier.PRIVATE:
-                        print(f"{name} cannot implement a Private Interface")
-                        return False
+                    row.parent.append(name)
+                    if inheritance_next():
+                        return True
                 else:
-                    print(f"{name} Interface not found")
+                    print(f"Interface {name} not found")
                     return False
-                if inheritance_next():
-                    return True
+
     elif select_rule([OPENING_BRACE]):
         return True
 
@@ -98,21 +99,20 @@ def inheritance_next() -> bool:
             if name:
                 row = lookup_main_table(name)
                 if row:
-                    if row.type == Main_Table_Type.INTERFACE:
-                        print(f"{name} cannot extend an Interface")
+                    if row.type == Main_Table_Type.CLASS:
+                        print(f"Cannot implement {name}, which is a class")
                         return False
-                    if row.access_modifier == Main_Table_Access_Modifier.PRIVATE:
-                        print(f"{name} cannot extend a Private Class")
+                    if name in row.parent:
+                        print(f"Interface {name} already implemented")
                         return False
-                    if row.category == Main_Table_Category.SEALED:
-                        print(f"{name} cannot extend a Sealed Class")
-                        return False
+                    if inheritance_next():
+                        return True
                 else:
-                    print(f"{name} Class not found")
+                    print(f"Interface {name} definition not found")
                     return False
-                if inheritance_next():
-                    return True
+
     elif select_rule([OPENING_BRACE]):
+        create_scope()
         return True
     return False
 
@@ -122,6 +122,7 @@ def class_body() -> bool:
             if class_multi_statement():
                 return True
     elif select_rule([CLOSING_BRACE]):
+        destroy_scope()
         return True
     return False
 
