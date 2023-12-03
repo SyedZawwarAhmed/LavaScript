@@ -8,7 +8,11 @@ def loop() -> bool:
     if select_rule([UNTIL]):
         if match_terminal(UNTIL):
             if match_terminal(OPENING_PARENTHESIS):
-                if OE():
+                type_of_expression = OE()
+                if type_of_expression:
+                    if type_of_expression != 'boolean':
+                        print("Loop condition must be of type boolean.")
+                        return False
                     if match_terminal(CLOSING_PARENTHESIS):
                         if match_terminal(OPENING_BRACE):
                             if parser.MST():
