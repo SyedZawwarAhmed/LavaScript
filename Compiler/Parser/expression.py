@@ -32,7 +32,7 @@ follow_of_F = [MULTIPLY_DIVIDE_MODULUS, PLUS_MINUS, COMPARISON, AND, OR, SEMICOL
 follow_of_F1 = follow_of_F
 follow_of_F2 = follow_of_F1
 
-def OE() -> bool:
+def OE():
     if select_rule(first_of_OE):
         if AE():
             if OE1():
