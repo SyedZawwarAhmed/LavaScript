@@ -52,11 +52,38 @@ def inheritable_class() -> bool:
 def inheritance() -> bool:
     if select_rule([EXTENDS]):
         if match_terminal(EXTENDS):
-            if match_terminal(IDENTIFIER):
-                return True
+            name = match_terminal(IDENTIFIER)
+            if name:
+                row = lookup_main_table(name)
+                if row:
+                    if row.type == Main_Table_Type.INTERFACE:
+                        print(f"{name} cannot extend an Interface")
+                        return False
+                    if row.access_modifier == Main_Table_Access_Modifier.PRIVATE:
+                        print(f"{name} cannot extend a Private Class")
+                        return False
+                    if row.category == Main_Table_Category.SEALED:
+                        print(f"{name} cannot extend a Sealed Class")
+                        return False
+                else:
+                    print(f"{name} Class not found")
+                    return False
+                
     elif select_rule([IMPLEMENTS]):
         if match_terminal(IMPLEMENTS):
-            if match_terminal(IDENTIFIER):
+            name = match_terminal(IDENTIFIER)
+            if name:
+                row = lookup_main_table(name)
+                if row:
+                    if row.type == Main_Table_Type.CLASS:
+                        print(f"{name} cannot implement a Class")
+                        return False
+                    if row.access_modifier == Main_Table_Access_Modifier.PRIVATE:
+                        print(f"{name} cannot implement a Private Interface")
+                        return False
+                else:
+                    print(f"{name} Interface not found")
+                    return False
                 if inheritance_next():
                     return True
     elif select_rule([OPENING_BRACE]):
@@ -67,7 +94,22 @@ def inheritance() -> bool:
 def inheritance_next() -> bool:
     if select_rule([COMMA]):
         if match_terminal(COMMA):
-            if match_terminal(IDENTIFIER):
+            name = match_terminal(IDENTIFIER)
+            if name:
+                row = lookup_main_table(name)
+                if row:
+                    if row.type == Main_Table_Type.INTERFACE:
+                        print(f"{name} cannot extend an Interface")
+                        return False
+                    if row.access_modifier == Main_Table_Access_Modifier.PRIVATE:
+                        print(f"{name} cannot extend a Private Class")
+                        return False
+                    if row.category == Main_Table_Category.SEALED:
+                        print(f"{name} cannot extend a Sealed Class")
+                        return False
+                else:
+                    print(f"{name} Class not found")
+                    return False
                 if inheritance_next():
                     return True
     elif select_rule([OPENING_BRACE]):
