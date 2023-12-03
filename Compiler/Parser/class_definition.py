@@ -20,13 +20,11 @@ def class_definition() -> bool:
                 if inheritable_class():
                     if name:
                         if match_terminal(OPENING_BRACE):
-                            create_scope()
                             if class_body():
                                 new_data_table = create_data_table()
                                 if not insert_main_table(name, type, access_modifier, category, parent, new_data_table):
                                     print(f"Class {name} is already declared.")
                                     return False
-                                destroy_scope()
                                 if match_terminal(CLOSING_BRACE):
                                     return True
     return False
