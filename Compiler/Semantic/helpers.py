@@ -59,49 +59,44 @@ def lookup_funtion_table(name: str):
             return row
 
 def compatibility_for_two_operands(left_operand_type: str, right_operand_type: str, operator: str):
-    # Define compatibility rules based on data types
     compatibility_rules = {
-        '+': ['number', 'string'],    # Addition is compatible with numbers and strings
-        '-': ['number'],               # Subtraction is compatible with numbers
-        '*': ['number'],    # Multiplication is compatible with numbers and strings
-        '/': ['number'],               # Division is compatible with numbers
-        '%': ['number'],               # Modulo is compatible with numbers
-        '<': ['number', 'string'],    # Less than is compatible with numbers and strings
-        '>': ['number', 'string'],    # Greater than is compatible with numbers and strings
-        '=': ['string', 'number', 'boolean'],  # Assignment is compatible with all types
-        '!': ['boolean'],             # Exclamation mark (logical NOT) is compatible with booleans
-        '&': ['boolean'],             # Ampersand (bitwise AND) is compatible with booleans
-        '|': ['boolean'],             # Pipe (bitwise OR) is compatible with booleans
-        '==': ['string', 'number', 'boolean'],  # Equal to is compatible with all types
-        '!=': ['string', 'number', 'boolean'],  # Not equal to is compatible with all types
-        '<=': ['number', 'string'],   # Less than or equal to is compatible with numbers and strings
-        '>=': ['number', 'string'],   # Greater than or equal to is compatible with numbers and strings
-        '&&': ['boolean'],            # Logical AND is compatible with booleans
-        '||': ['boolean'],            # Logical OR is compatible with booleans
-        '+=': ['number', 'string'],   # Addition assignment is compatible with numbers and strings
-        '-=': ['number'],              # Subtraction assignment is compatible with numbers
-        '*=': ['number'],   # Multiplication assignment is compatible with numbers and strings
-        '/=': ['number'],              # Division assignment is compatible with numbers
-        '%=': ['number']               # Modulo assignment is compatible with numbers
+        '+': ['number', 'string'],
+        '-': ['number'],
+        '*': ['number'],
+        '/': ['number'],
+        '%': ['number'],
+        '<': ['number', 'string'],
+        '>': ['number', 'string'],
+        '=': ['string', 'number', 'boolean'],
+        '!': ['boolean'],
+        '&': ['boolean'],
+        '|': ['boolean'],
+        '==': ['string', 'number', 'boolean'],
+        '!=': ['string', 'number', 'boolean'],
+        '<=': ['number', 'string'],
+        '>=': ['number', 'string'],
+        '&&': ['boolean'],
+        '||': ['boolean'],
+        '+=': ['number', 'string'],
+        '-=': ['number'],
+        '*=': ['number'],
+        '/=': ['number'],
+        '%=': ['number']
     }
 
-    # Check if the operator is in the compatibility_rules dictionary
     if operator in compatibility_rules:
-        # Check if both left and right operand types are compatible with the operator
         if left_operand_type == right_operand_type and left_operand_type in compatibility_rules[operator] and right_operand_type in compatibility_rules[operator]:
             return left_operand_type
         else:
             return
     else:
-        # Operator not found in compatibility rules
         return
 
 def compatibility_for_single_operand(operand_type: str, operator: str):
-    # Define compatibility rules based on data types
     compatibility_rules = {
-        '!': ['boolean'],   
-        '++': ['number'],              # Increment is compatible with numbers
-        '--': ['number'],              # Decrement is compatible with numbers
+        '!': ['boolean'],
+        '++': ['number'],
+        '--': ['number'],
     }
 
     if operator in compatibility_rules:
@@ -110,8 +105,8 @@ def compatibility_for_single_operand(operand_type: str, operator: str):
         else:
             return
     else:
-        # Operator not found in compatibility rules
         return
+
 
 def create_scope():
     global current_scope
