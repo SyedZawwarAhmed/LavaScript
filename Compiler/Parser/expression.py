@@ -127,6 +127,7 @@ def F() -> bool:
         if this_check:
             if(this_check == "this"):
                 name = match_terminal(IDENTIFIER)
+                # this need to be done
                 if name:
                     if F1(name, current_class_data_table):
                         return True
@@ -137,20 +138,22 @@ def F() -> bool:
                     return False
                 if primitive_data_types in function_table_row.type:
                     if F1(function_table_row.type, current_class_data_table):
-                        return True
+                        return function_table_row.type
                 else:
                     main_table_row = lookup_main_table(function_table_row.type)
                     if not main_table_row:
                         print(f"{function_table_row.type} is not defined")
                         return False
                     if F1(main_table_row.name ,main_table_row.link):
-                        return True
+                        return main_table_row.name
                     
     elif select_rule([INTEGER_CONSTANT, STRING_CONSTANT, FLOAT_CONSTANT, BOOL_CONSTANT]):
-        if const():
-            return True
+        constant_type = const()
+        if constant_type:
+            return constant_type
     elif select_rule([NOT]):
         if match_terminal(NOT):
+            
             if F():
                 return True
     return False
@@ -186,7 +189,7 @@ def F1(name_type: str, data_table: List[Data_Table_Row]) -> bool:
                         return False
                     main_table_row = lookup_main_table(data_table_row.type)
                     if F1(main_table_row.name ,main_table_row.link):
-                        return True
+                        return main_table_row.name
     elif select_rule([OPENING_PARENTHESIS]):
         if match_terminal(OPENING_PARENTHESIS):
             argument_list = AL()
@@ -196,8 +199,10 @@ def F1(name_type: str, data_table: List[Data_Table_Row]) -> bool:
                     if not function_data_table_row:
                         print(f"{name_type} does not exist")
                         return False
-                    if F2(function_data_table_row.type):
-                        return True
+                    data_type = F2(function_data_table_row.type)
+                    if data_type:
+                        if type(data_type) == str:
+                            return data_type
     elif select_rule([DOT]):
         if match_terminal(DOT):
             if name_type in primitive_data_types:
@@ -206,13 +211,15 @@ def F1(name_type: str, data_table: List[Data_Table_Row]) -> bool:
             main_table_row = lookup_main_table(name_type)
             if match_terminal(IDENTIFIER):
                 if F1(main_table_row.name, main_table_row.link):
-                    return True
+                    return main_table_row.name
     elif select_rule([INCREMENT_DECREMENT]):
         operator = match_terminal(INCREMENT_DECREMENT)
         if operator:
-            if not compatibility_for_single_operand(name_type, operator):
+            compatibility_type = compatibility_for_single_operand(name_type, operator)
+            if not compatibility_type:
                 print(f"{name_type} is not compatible with {operator}")
-            return True
+                return False
+            return compatibility_type
     return False
 
 def F2(name_type: str) -> bool:
@@ -224,7 +231,7 @@ def F2(name_type: str) -> bool:
             main_table_row = lookup_main_table(name_type)
             if match_terminal(IDENTIFIER):
                 if F1(main_table_row.name, main_table_row.link):
-                    return True
+                    return main_table_row.name
     elif select_rule([OPENING_BRACKET]):
         if match_terminal(OPENING_BRACKET):
             type_of_expression = OE()
@@ -239,7 +246,7 @@ def F2(name_type: str) -> bool:
                         return False
                     main_table_row = lookup_main_table(data_table_row.type)
                     if F1(main_table_row.name ,main_table_row.link):
-                        return True
+                        return main_table_row.name
     elif select_rule(follow_of_F2):
         return True
     return False
@@ -257,16 +264,16 @@ def AL() -> bool:
 def const() -> bool:
     if select_rule([INTEGER_CONSTANT]):
         if match_terminal(INTEGER_CONSTANT):
-            return True
+            return 'number'
     elif select_rule([FLOAT_CONSTANT]):
         if match_terminal(FLOAT_CONSTANT):
-            return True
+            return 'number'
     elif select_rule([STRING_CONSTANT]):
         if match_terminal(STRING_CONSTANT):
-            return True
+            return 'string'
     elif select_rule([BOOL_CONSTANT]):
         if match_terminal(BOOL_CONSTANT):
-            return True
+            return 'boolean'
     return False
 
 def arguement(argument_list: List[str]) -> bool:
