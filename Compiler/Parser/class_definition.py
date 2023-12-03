@@ -40,11 +40,11 @@ def class_category():
     return False
 
 def inheritable_class() -> bool:
-    if select_rule([CLASS]):
-        if match_terminal(CLASS):
-            if match_terminal(IDENTIFIER):
-                if inheritance():
-                    return True
+    if select_rule([EXTENDS]):
+        # if match_terminal(CLASS):
+        #     if match_terminal(IDENTIFIER):
+        if inheritance():
+            return True
     return False
 
 def inheritance() -> bool:
