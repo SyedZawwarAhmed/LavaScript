@@ -9,23 +9,34 @@ from Lexer.constants import *
 from Semantic.helpers import *
 
 def class_definition() -> bool:
+    if select_rule([SEALED, CLASS]):
+        access_modifier = Main_Table_Access_Modifier.GENERAL
+        parent = None
+        category = class_category()
+        if category:
+            if match_terminal(CLASS):
+                type = Main_Table_Type.CLASS
+                name = match_terminal(IDENTIFIER)
+                if inheritable_class():
+                    if name:
+                        if match_terminal(OPENING_BRACE):
+                            create_scope()
+                            if class_body():
+                                new_data_table = create_data_table()
+                                if not insert_main_table(name, type, access_modifier, category, parent, new_data_table):
+                                    print("Redclaration Error")
+                                    return False
+                                destroy_scope()
+                                if match_terminal(CLOSING_BRACE):
+                                    return True
+    return False
+
+def class_category():
     if select_rule([SEALED]):
         if match_terminal(SEALED):
-            if match_terminal(CLASS):
-                if match_terminal(IDENTIFIER):
-                    if match_terminal(OPENING_BRACE):
-                        if class_body():
-                            # new_data_table = create_data_table()
-                            # if not insert_main_table(name, type, category, parent, new_data_table):
-                            #     print("Redclaration Error")
-                            if match_terminal(CLOSING_BRACE):
-                                return True
+            return Main_Table_Category.SEALED
     elif select_rule([CLASS]):
-        if inheritable_class():
-             if match_terminal(OPENING_BRACE):
-                if class_body():
-                    if match_terminal(CLOSING_BRACE):
-                        return True
+        return Main_Table_Category.DEFAULT
     return False
 
 def inheritable_class() -> bool:

@@ -5,11 +5,13 @@ class Main_Table_Type(Enum):
     INTERFACE = "INTERFACE"
 
 class Main_Table_Access_Modifier(Enum):
-    DEFAULT = "DEFAULT"
-    SEALED = "SEALED"
+    GENERAL = "GENERAL"
+    PRIVATE = "PRIVATE"
+    PUBLIC = "PUBLIC"
 
 class Main_Table_Category(Enum):
-    GENERAL = "GENERAL"
+    DEFAULT = "DEFAULT"
+    SEALED = "SEALED"
 
 class Data_Table_Access_Modifier(Enum):
     PRIVATE = "PRIVATE"
