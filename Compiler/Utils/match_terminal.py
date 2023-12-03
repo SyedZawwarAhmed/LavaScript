@@ -1,5 +1,3 @@
-from typing import List
-from Lexer.lexer import Token
 import Parser.parser as parser
 
 def match_terminal(terminal: str) -> bool:
