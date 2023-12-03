@@ -131,9 +131,21 @@ def F() -> bool:
                     if F1(name, current_class_data_table):
                         return True
             else:
-                lookup_funtion_table()
-                if F1(name, current_class_data_table):
-                    return True
+                function_table_row = lookup_funtion_table(name)
+                if not function_table_row:
+                    print(f"{name} is not defined")
+                    return False
+                if primitive_data_types in function_table_row.type:
+                    if F1(function_table_row.type, current_class_data_table):
+                        return True
+                else:
+                    main_table_row = lookup_main_table(function_table_row.type)
+                    if not main_table_row:
+                        print(f"{function_table_row.type} is not defined")
+                        return False
+                    if F1(main_table_row.name ,main_table_row.link):
+                        return True
+                    
     elif select_rule([INTEGER_CONSTANT, STRING_CONSTANT, FLOAT_CONSTANT, BOOL_CONSTANT]):
         if const():
             return True
