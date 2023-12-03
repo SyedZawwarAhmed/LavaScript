@@ -1,6 +1,7 @@
 from Utils.select_rule import select_rule
 from Utils.match_terminal import match_terminal
 from Lexer.constants import *
+from Semantic.helpers import *
 
 def merge_two_lists(first_list, second_list):
     return first_list + list(set(second_list) - set(first_list))
@@ -119,10 +120,14 @@ def T1() -> bool:
 
 def F() -> bool:
     if select_rule([THIS, IDENTIFIER]):
-        if P():
-            if match_terminal(IDENTIFIER):
-                if F1():
-                    return True
+        this_check = P()
+        if this_check:
+            if(this_check == "this"):
+                name = match_terminal(IDENTIFIER)
+                if name:
+                    
+                    if F1():
+                        return True
     elif select_rule([INTEGER_CONSTANT, STRING_CONSTANT, FLOAT_CONSTANT, BOOL_CONSTANT]):
         if const():
             return True
@@ -134,9 +139,10 @@ def F() -> bool:
 
 def P() -> bool:
     if select_rule([THIS]):
-        if match_terminal(THIS):
+        name = match_terminal(THIS)
+        if name:
             if match_terminal(DOT):
-                return True
+                return name
     elif select_rule([IDENTIFIER]):
         return True
     return False
