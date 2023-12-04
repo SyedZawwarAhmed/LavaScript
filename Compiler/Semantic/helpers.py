@@ -17,11 +17,11 @@ def insert_main_table(name: str, type: Main_Table_Type, access_modifier: Main_Ta
     main_table.append(new_row)
     return True
 
-def insert_function_table(name: str, type: str, scope: int) -> bool:
+def insert_function_table(name: str, type: str) -> bool:
     for row in function_table:
-        if row.name == name and row.scope == scope:
+        if row.name == name and row.scope == current_scope:
             return False
-    new_row = Function_Table_Row(name, type, scope)
+    new_row = Function_Table_Row(name, type, current_scope)
     function_table.append(new_row)
     return True
 
