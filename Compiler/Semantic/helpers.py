@@ -17,11 +17,11 @@ def insert_main_table(name: str, type: Main_Table_Type, access_modifier: Main_Ta
     main_table.append(new_row)
     return True
 
-def insert_function_table(name: str, type: str, scope: int) -> bool:
+def insert_function_table(name: str, type: str) -> bool:
     for row in function_table:
-        if row.name == name and row.scope == scope:
+        if row.name == name and row.scope == current_scope:
             return False
-    new_row = Function_Table_Row(name, type, scope)
+    new_row = Function_Table_Row(name, type, current_scope)
     function_table.append(new_row)
     return True
 
@@ -55,9 +55,13 @@ def lookup_function_data_table(name: str, parameter_list: List[str], data_table:
             return row
 
 def lookup_funtion_table(name: str):
-    for row in function_table:
-        if row.name == name:
-            return row
+    i = 0
+    while i >= 0:
+        scope = scope_stack[i]
+        for row in function_table:
+            if row.name == name and row.scope == scope:
+                return row
+        i -= 1
 
 def compatibility_for_two_operands(left_operand_type: str, right_operand_type: str, operator: str):
     compatibility_rules = {
@@ -85,8 +89,12 @@ def compatibility_for_two_operands(left_operand_type: str, right_operand_type: s
         '%=': ['number']
     }
 
+    relational_operators = ['>', '<', '>=', '<=', '==', '!=', '&&', '||']
+
     if operator in compatibility_rules:
         if left_operand_type == right_operand_type and left_operand_type in compatibility_rules[operator] and right_operand_type in compatibility_rules[operator]:
+            if operator in relational_operators:
+                return 'boolean'
             return left_operand_type
         else:
             return
