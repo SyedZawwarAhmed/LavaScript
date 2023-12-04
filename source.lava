@@ -1,15 +1,21 @@
-if (a>3) {
+@ if (a>3) {
   until(fun()) {
     if (n*n == fun()) {
     
     }
   }
-}
+} @
 
 interface B {
     method GetArea(): number;
 }
 
+interface E {
+    method GetArea(): number;
+}
 
-class A implements B {
+class C {}
+class D {}
+
+class A implements B, E {
 }

@@ -110,7 +110,6 @@ def inheritance_next() -> bool:
                     return False
 
     elif select_rule([OPENING_BRACE]):
-        create_scope()
         return True
     return False
 
@@ -120,7 +119,6 @@ def class_body() -> bool:
             if class_multi_statement():
                 return True
     elif select_rule([CLOSING_BRACE]):
-        destroy_scope()
         return True
     return False
 
