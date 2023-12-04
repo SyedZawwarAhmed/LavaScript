@@ -1,7 +1,8 @@
 from Semantic.enums import *
+from typing import List
 
 class Data_Table_Row_Type:
-    def __init__(self, type = None, parameter_list = None, return_type = None):
+    def __init__(self, type = None, parameter_list: List[str] | None = None, return_type = None):
         self.type = type
         self.parameter_list = parameter_list
         self.return_type = return_type
