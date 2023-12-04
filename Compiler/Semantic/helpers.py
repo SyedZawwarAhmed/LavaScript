@@ -1,7 +1,7 @@
 from typing import List
 from Semantic.symbol_table import *
 from Semantic.main_table_row import Main_Table_Row
-from Semantic.function_table_row import Function_Table_Row
+from Semantic.function_table_row import *
 from Semantic.data_table_row import *
 from Semantic.enums import *
 
@@ -17,7 +17,7 @@ def insert_main_table(name: str, type: Main_Table_Type, access_modifier: Main_Ta
     main_table.append(new_row)
     return True
 
-def insert_function_table(name: str, type: str) -> bool:
+def insert_function_table(name: str, type: Function_Table_Row_Type) -> bool:
     for row in function_table:
         if row.name == name and row.scope == current_scope:
             return False
