@@ -89,8 +89,12 @@ def compatibility_for_two_operands(left_operand_type: str, right_operand_type: s
         '%=': ['number']
     }
 
+    relational_operators = ['>', '<', '>=', '<=', '==', '!=', '&&', '||']
+
     if operator in compatibility_rules:
         if left_operand_type == right_operand_type and left_operand_type in compatibility_rules[operator] and right_operand_type in compatibility_rules[operator]:
+            if operator in relational_operators:
+                return 'boolean'
             return left_operand_type
         else:
             return
