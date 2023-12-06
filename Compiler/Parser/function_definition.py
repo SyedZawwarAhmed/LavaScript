@@ -14,12 +14,14 @@ def function_definition() -> bool:
                     parameter_type_list = params()
                     if parameter_type_list:
                         if match_terminal(CLOSING_PARENTHESIS):
-                            return_type = data_type()
-                            if return_type:
-                                if match_terminal(OPENING_BRACE, False):
-                                    if parser.MST():
-                                        if match_terminal(CLOSING_BRACE):
-                                            return True
+                            type_and_array_dimensions = data_type()
+                            if type_and_array_dimensions:
+                                [return_type, array_dimensions] = type_and_array_dimensions
+                                if return_type:
+                                    if match_terminal(OPENING_BRACE, False):
+                                        if parser.MST():
+                                            if match_terminal(CLOSING_BRACE):
+                                                return True
     return False
 
 def params():
@@ -46,12 +48,14 @@ def parameter(parameter_type_list: List[str]):
     if select_rule([IDENTIFIER]):
         parameter_name = match_terminal(IDENTIFIER)
         if parameter_name:
-            parameter_type = data_type()
-            if parameter_type:
-               new_type = Function_Table_Row_Type(parameter_type)
-               if not insert_function_table(parameter_name, new_type):
-                   print(f"Parameter {parameter_name} is already declared.")
-                   return False
-               parameter_type_list.append(parameter_type)
-               return True
+            type_and_array_dimensions = data_type()
+            if type_and_array_dimensions:
+                [parameter_type, array_dimensions] = type_and_array_dimensions
+                if parameter_type:
+                    new_type = Function_Table_Row_Type(parameter_type, [], None, array_dimensions)
+                    if not insert_function_table(parameter_name, new_type):
+                        print(f"Parameter {parameter_name} is already declared.")
+                        return False
+                parameter_type_list.append(parameter_type)
+                return True
     return False
