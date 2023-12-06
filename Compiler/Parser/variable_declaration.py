@@ -28,7 +28,7 @@ def data_type():
             if type_of_variable:
                 dimensions = 0
                 new_dimenisons = array_def(dimensions)
-                if new_dimenisons:
+                if new_dimenisons >= 0 and type(new_dimenisons) == int:
                     return [type_of_variable, new_dimenisons]
     return False
 
