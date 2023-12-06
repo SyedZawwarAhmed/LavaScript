@@ -184,10 +184,25 @@ def P() -> bool:
     #     array_dimension: ,
     # }
     
+    # this.a().b.c[]
+    # c.d.a()[]
 
-def F1(name:str, name_type: str, data_table: List[Data_Table_Row] | List[Function_Table_Row], is_object: bool) -> bool:
+def F1(name:str, name_type: str | None, data_table: List[Data_Table_Row] | List[Function_Table_Row], is_object: bool) -> bool | str:
     if select_rule(follow_of_F1):
-        return True
+        if not name_type:
+            if is_object:
+                data_table_row = lookup_attribute_data_table(name, data_table)
+                if data_table_row:
+                    if data_table_row.access_modifier == Data_Table_Access_Modifier.PRIVATE:
+                        print(f"Can not Access ${name}")
+                        return False
+                    name_type = data_table_row.type.type
+            else:
+                name_type = lookup_funtion_table(name).type.type
+            if not name_type: 
+                print(f"{name} does not exist")
+                return False
+        return name_type
     elif select_rule([OPENING_BRACKET]): # suppose type of array is stored like this int[][]
         data_table_row = None
         if is_object:
@@ -222,7 +237,7 @@ def F1(name:str, name_type: str, data_table: List[Data_Table_Row] | List[Functio
                         data_type = F1(data_table_row.name, data_table_row.type ,main_table_row.link, False)
                         if data_type:
                             return data_type
-    elif select_rule([OPENING_PARENTHESIS]): # this.a()
+    elif select_rule([OPENING_PARENTHESIS]):
         if match_terminal(OPENING_PARENTHESIS):
             argument_list = AL()
             if argument_list:
@@ -244,20 +259,31 @@ def F1(name:str, name_type: str, data_table: List[Data_Table_Row] | List[Functio
                         return main_table_row.name
                     if return_type:
                         return return_type
-    elif select_rule([DOT]): # this.a.b this.a().b this.a[].b
+    elif select_rule([DOT]):
         data_table_row = None
-        if is_object:
-            data_table_row = lookup_attribute_data_table(name, data_table)
-        else:
-            data_table_row = lookup_funtion_table(name)
+        if not name_type:
+            if is_object:
+                data_table_row = lookup_attribute_data_table(name, data_table)
+            else:
+                data_table_row = lookup_funtion_table(name)
+                
+            if not data_table_row:
+                print(f"{name} does not exist")
+                return False
+            if not is_object and data_table_row.access_modifier == Data_Table_Access_Modifier.PRIVATE:
+                print(f"Can not Access ${name}")
+                return False
+            name_type = data_table_row.type.type
         if match_terminal(DOT):
             if name_type in primitive_data_types:
                 print("cannot access primitives data types")
                 return False
             main_table_row = lookup_main_table(name_type)
-            if match_terminal(IDENTIFIER):
-                if F1(main_table_row.name, main_table_row.link):
-                    return main_table_row.name
+            Name = match_terminal(IDENTIFIER)
+            if Name:
+                object_type = F1(Name, None, main_table_row.link, True)
+                if object_type:
+                    return object_type
     elif select_rule([INCREMENT_DECREMENT]):
         operator = match_terminal(INCREMENT_DECREMENT)
         if operator:
@@ -268,16 +294,24 @@ def F1(name:str, name_type: str, data_table: List[Data_Table_Row] | List[Functio
             return compatibility_type
     return False
 
-def F2(name_type: str) -> bool:
+def F2(name_type: str | Function_Table_Row_Type) -> bool:
     if select_rule([DOT]):
+        if not name_type:
+            print("Function does not return a type")
+            return False
         if match_terminal(DOT):
             if name_type in primitive_data_types:
                 print("cannot access primitives data types")
                 return False
             main_table_row = lookup_main_table(name_type)
-            if match_terminal(IDENTIFIER):
-                if F1(main_table_row.name, main_table_row.link):
-                    return main_table_row.name
+            if not main_table_row:
+                print(f"{name_type} does not exist")
+                return False
+            Name = match_terminal(IDENTIFIER)
+            if Name:
+                object_type = F1(Name, None, main_table_row.link, True)
+                if object_type:
+                    return object_type
     elif select_rule([OPENING_BRACKET]):
         if match_terminal(OPENING_BRACKET):
             type_of_expression = OE()
@@ -286,13 +320,19 @@ def F2(name_type: str) -> bool:
                     print("index must be of type number.")
                     return False
                 if match_terminal(CLOSING_BRACKET):
-                    data_table_row = data_table_row
-                    if data_table_row.type in primitive_data_types:
-                        print("cannot access primitives data types")
-                        return False
-                    main_table_row = lookup_main_table(data_table_row.type)
-                    if F1(main_table_row.name ,main_table_row.link):
-                        return main_table_row.name
+                    if name_type.array_dimension:
+                        if name_type.type not in primitive_data_types:
+                            # if data_table_row.type is an object list case
+                            main_table_row = lookup_main_table(name_type.type)
+                            if not main_table_row:
+                                print(f"{name_type.type} does not exist")
+                                return False
+                            
+                            return name_type.type
+        
+                        data_type = F1(data_table_row.name, data_table_row.type ,main_table_row.link, False)
+                        if data_type:
+                            return data_type
     elif select_rule(follow_of_F2):
         return name_type
     return False
