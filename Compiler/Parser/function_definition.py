@@ -20,7 +20,7 @@ def function_definition() -> bool:
                                 [return_type, array_dimensions] = type_and_array_dimensions
                                 if return_type:
                                     new_type = Function_Table_Row_Type(None, parameter_type_list, return_type, array_dimensions)
-                                    if not insert_function_table(name, new_type):
+                                    if not insert_function_table(name, new_type, current_scope - 1):
                                         print(f"{name} is already declared")
                                         return False
                                     if match_terminal(OPENING_BRACE, False):
