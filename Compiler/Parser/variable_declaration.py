@@ -12,7 +12,8 @@ def var_declaration() -> bool:
             if name:
                 variable_type = data_type()
                 if variable_type:
-                    if not insert_function_table(name, variable_type):
+                    new_type = Function_Table_Row_Type(variable_type)
+                    if not insert_function_table(name, new_type):
                         print(f"{name} is already declared.")
                         return False
                     if assignment_statement(variable_type):

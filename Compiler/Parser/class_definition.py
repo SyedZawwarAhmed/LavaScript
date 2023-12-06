@@ -13,7 +13,7 @@ def class_definition() -> bool:
     global current_class_data_table
     if select_rule([SEALED, CLASS]):
         access_modifier = Main_Table_Access_Modifier.GENERAL
-        parent = None
+        parent = []
         category = class_category()
         if category:
             if match_terminal(CLASS):
@@ -147,7 +147,7 @@ def attribute() -> bool:
             attribute_type = data_type()
             if attribute_type:
                 new_data_type = Data_Table_Row_Type(attribute_type)
-                if not insert_data_table(name, new_data_type, Data_Table_Access_Modifier.PUBLIC, None, current_class_data_table):
+                if not insert_data_table(name, new_data_type, Data_Table_Access_Modifier.PUBLIC, '', current_class_data_table):
                     print(f"Attribute {name} is already declared.")
                     return False
                 if assignment_statement(attribute_type):
@@ -159,7 +159,7 @@ def attribute() -> bool:
                 attribute_type = data_type()
                 if attribute_type:
                     new_data_type = Data_Table_Row_Type(attribute_type)
-                    if not insert_data_table(name, new_data_type, Data_Table_Access_Modifier.PRIVATE, None, current_class_data_table):
+                    if not insert_data_table(name, new_data_type, Data_Table_Access_Modifier.PRIVATE, '', current_class_data_table):
                         print(f"Attribute {name} is already declared.")
                         return False
                     if assignment_statement(attribute_type):

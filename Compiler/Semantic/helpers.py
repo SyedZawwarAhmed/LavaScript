@@ -9,7 +9,7 @@ def create_data_table() -> List[Data_Table_Row]:
     new_table: List[Data_Table_Row] = []
     return new_table
 
-def insert_main_table(name: str, type: Main_Table_Type, access_modifier: Main_Table_Access_Modifier, category: Main_Table_Category, parent: List[str], link: List[Data_Table_Row]) -> bool:
+def insert_main_table(name: str, type: Main_Table_Type, access_modifier: Main_Table_Access_Modifier, category: Main_Table_Category, parent: List[str], link: List[Data_Table_Row] | None) -> bool:
     for row in main_table:
         if row.name == name:
             return False
@@ -25,13 +25,15 @@ def insert_function_table(name: str, type: Function_Table_Row_Type) -> bool:
     function_table.append(new_row)
     return True
 
-def insert_data_table(name: str, type: Data_Table_Row_Type, access_modifier: Data_Table_Access_Modifier, type_modifier: str, data_table: List[Data_Table_Row]) -> bool:
-    for row in data_table:
-        if row.name == name:
-            return False
-    new_row = Data_Table_Row(name, type, access_modifier, type_modifier)
-    data_table.append(new_row)
-    return True
+def insert_data_table(name: str, type: Data_Table_Row_Type, access_modifier: Data_Table_Access_Modifier, type_modifier: str, data_table: List[Data_Table_Row] | None) -> bool:
+    if data_table:
+        for row in data_table:
+            if row.name == name:
+                return False
+        new_row = Data_Table_Row(name, type, access_modifier, type_modifier)
+        data_table.append(new_row)
+        return True
+    return False
 
 def lookup_main_table(name: str):
     for row in main_table:
