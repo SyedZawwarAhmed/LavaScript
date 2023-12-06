@@ -10,9 +10,10 @@ def var_declaration() -> bool:
         if match_terminal(DYNAMIC_STATIC):
             name = match_terminal(IDENTIFIER)
             if name:
-                variable_type = data_type()
-                if variable_type:
-                    new_type = Function_Table_Row_Type(variable_type)
+                type_and_array_dimensions = data_type()
+                if type_and_array_dimensions:
+                    [variable_type, array_dimensions] = type_and_array_dimensions
+                    new_type = Function_Table_Row_Type(variable_type, [], None, array_dimensions)
                     if not insert_function_table(name, new_type):
                         print(f"{name} is already declared.")
                         return False
@@ -25,7 +26,10 @@ def data_type():
         if match_terminal(COLON):
             type_of_variable = type_name()
             if type_of_variable:
-                return type_of_variable
+                dimensions = 0
+                new_dimenisons = array_def(dimensions)
+                if new_dimenisons:
+                    return [type_of_variable, new_dimenisons]
     return False
 
 def type_name():
@@ -40,7 +44,21 @@ def type_name():
             if not main_table_row:
                 print(f"Type {type_of_object} does not exist.")
                 return False
+            elif main_table_row.type == Main_Table_Type.INTERFACE:
+                print(f"Object of interface can not be made.")
+                return False
             return type_of_object
+    return False
+
+def array_def(dimensions: int):
+    if select_rule([OPENING_BRACKET]):
+        if match_terminal(OPENING_BRACKET):
+            if match_terminal(CLOSING_BRACKET):
+                new_dimensions = array_def(dimensions + 1)
+                if new_dimensions:
+                    return new_dimensions
+    elif select_rule([SEMICOLON, ASSIGNMENT_OPERATOR]):
+        return dimensions
     return False
 
 def assignment_statement(variable_type: str) -> bool:
