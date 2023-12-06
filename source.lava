@@ -1,12 +1,25 @@
-if (a>3) {
+@ if (a>3) {
   until(fun()) {
     if (n*n == fun()) {
     
     }
   }
+} @
+
+
+interface B {
+    method GetArea(c: string): number;
 }
 
-class B {}
+interface E {
+    method GetArea(): number;
+} 
 
-class A extends B {
+dynamic c: number;
+
+proc abc(a: string, a: string): string {
+  dynamic c: number = 5 + 8;
 }
+
+class C {}
+class D {}

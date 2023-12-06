@@ -9,7 +9,7 @@ def create_data_table() -> List[Data_Table_Row]:
     new_table: List[Data_Table_Row] = []
     return new_table
 
-def insert_main_table(name: str, type: Main_Table_Type, access_modifier: Main_Table_Access_Modifier, category: Main_Table_Category, parent: str | None, link: List[Data_Table_Row]) -> bool:
+def insert_main_table(name: str, type: Main_Table_Type, access_modifier: Main_Table_Access_Modifier, category: Main_Table_Category, parent: List[str], link: List[Data_Table_Row]) -> bool:
     for row in main_table:
         if row.name == name:
             return False

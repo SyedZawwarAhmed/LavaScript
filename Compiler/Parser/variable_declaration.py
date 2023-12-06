@@ -37,7 +37,7 @@ def type_name():
         if type_of_object:
             main_table_row = lookup_main_table(type_of_object)
             if not main_table_row:
-                print(f"{type_of_object} does not exist.")
+                print(f"Type {type_of_object} does not exist.")
                 return False
             return type_of_object
     return False
@@ -51,7 +51,7 @@ def assignment_statement(variable_type: str) -> bool:
                 if not compatibility_for_two_operands(variable_type, type_of_expression_array, operator):
                     print(f"expression of type {type_of_expression_array} cannot be assigned to variable of type {variable_type}")
                     return False
-                return True
+            return True
     elif select_rule([SEMICOLON]):
         return True
     return False
