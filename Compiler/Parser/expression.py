@@ -181,13 +181,14 @@ def P() -> bool:
     # Array Type
     # {
     #     type: ,
-    #     array_dim: ,
+    #     array_dimension: ,
     # }
+    
 
 def F1(name:str, name_type: str, data_table: List[Data_Table_Row] | List[Function_Table_Row], is_object: bool) -> bool:
     if select_rule(follow_of_F1):
         return True
-    elif select_rule([OPENING_BRACKET]): # suppose type of array is stored like this int[][] this.a[5]
+    elif select_rule([OPENING_BRACKET]): # suppose type of array is stored like this int[][]
         data_table_row = None
         if is_object:
             data_table_row = lookup_attribute_data_table(name, data_table)
@@ -207,35 +208,48 @@ def F1(name:str, name_type: str, data_table: List[Data_Table_Row] | List[Functio
                 if match_terminal(CLOSING_BRACKET):
                     data_table_row = data_table_row
                     # if data_table_row.type is type list, case is missing
-
-                    if data_table_row.type not in primitive_data_types:
-                        # if data_table_row.type is an object list case
-                        main_table_row = lookup_main_table(data_table_row.type)
-                        if not main_table_row:
-                            # search in function table
-                            function_table_row = lookup_function_table(data_table_row.type)
-                            if not function_table_row: 
+                    
+                    if data_table_row.type.array_dimension:
+                        if data_table_row.type not in primitive_data_types:
+                            # if data_table_row.type is an object list case
+                            main_table_row = lookup_main_table(data_table_row.type)
+                            if not main_table_row:
                                 print(f"{data_table_row.type} does not exist")
                                 return False
-                            return function_table_row.type.return_type
-                    # data_table_row.type = data_table_row.type.slice(0, -2)
-                    data_type = F1(data_table_row.name, data_table_row.type ,main_table_row.link)
-                    if data_type:
-                        return data_type
-    elif select_rule([OPENING_PARENTHESIS]):
+                            
+                            return main_table_row.name
+        
+                        data_type = F1(data_table_row.name, data_table_row.type ,main_table_row.link, False)
+                        if data_type:
+                            return data_type
+    elif select_rule([OPENING_PARENTHESIS]): # this.a()
         if match_terminal(OPENING_PARENTHESIS):
             argument_list = AL()
             if argument_list:
                 if match_terminal(CLOSING_PARENTHESIS):
-                    function_data_table_row = lookup_function_data_table(name, argument_list, data_table)
+                    function_data_table_row = None
+                    if is_object:
+                        function_data_table_row = lookup_function_data_table(name, argument_list, data_table)
+                    else:
+                        function_data_table_row = lookup_funtion_table(name, argument_list)
                     if not function_data_table_row:
                         print(f"{name_type} does not exist")
                         return False
-                    data_type = F2(function_data_table_row.type)
-                    if data_type:
-                        if type(data_type) == str:
-                            return data_type
-    elif select_rule([DOT]):
+                    return_type = F2(function_data_table_row.type.return_type)
+                    if return_type not in primitive_data_types:
+                        main_table_row = lookup_main_table(return_type)
+                        if not main_table_row:
+                            print(f"{return_type} does not exist")
+                            return False
+                        return main_table_row.name
+                    if return_type:
+                        return return_type
+    elif select_rule([DOT]): # this.a.b this.a().b this.a[].b
+        data_table_row = None
+        if is_object:
+            data_table_row = lookup_attribute_data_table(name, data_table)
+        else:
+            data_table_row = lookup_funtion_table(name)
         if match_terminal(DOT):
             if name_type in primitive_data_types:
                 print("cannot access primitives data types")
@@ -280,7 +294,7 @@ def F2(name_type: str) -> bool:
                     if F1(main_table_row.name ,main_table_row.link):
                         return main_table_row.name
     elif select_rule(follow_of_F2):
-        return True
+        return name_type
     return False
 
 def AL() -> bool:
@@ -290,7 +304,7 @@ def AL() -> bool:
             if next_arguement(argument_list):
                 return argument_list
     elif select_rule([CLOSING_PARENTHESIS]):
-        return True
+        return argument_list
     return False
 
 def const() -> bool:
