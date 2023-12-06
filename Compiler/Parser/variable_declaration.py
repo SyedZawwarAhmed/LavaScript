@@ -68,7 +68,7 @@ def assignment_statement(variable_type: str, array_dimensions: int) -> bool:
         if operator:
             type_of_expression_array = expression_array()
             if type_of_expression_array and type(type_of_expression_array) == str:
-                if not compatibility_for_two_operands(variable_type, array_dimensions, type_of_expression_array, operator):
+                if not compatibility_for_two_operands(variable_type, type_of_expression_array, operator):
                     print(f"expression of type {type_of_expression_array} cannot be assigned to variable of type {variable_type}")
                     return False
             return True

@@ -8,7 +8,8 @@ from Parser.variable_declaration import *
 def function_definition() -> bool:    
     if select_rule([PROC]):
         if match_terminal(PROC):
-            if match_terminal(IDENTIFIER):
+            name = match_terminal(IDENTIFIER)
+            if name:
                 if match_terminal(OPENING_PARENTHESIS):
                     create_scope()
                     parameter_type_list = params()
@@ -18,6 +19,10 @@ def function_definition() -> bool:
                             if type_and_array_dimensions:
                                 [return_type, array_dimensions] = type_and_array_dimensions
                                 if return_type:
+                                    new_type = Function_Table_Row_Type(None, parameter_type_list, return_type, array_dimensions)
+                                    if not insert_function_table(name, new_type):
+                                        print(f"{name} is already declared")
+                                        return False
                                     if match_terminal(OPENING_BRACE, False):
                                         if parser.MST():
                                             if match_terminal(CLOSING_BRACE):
