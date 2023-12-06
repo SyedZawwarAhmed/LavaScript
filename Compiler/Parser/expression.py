@@ -171,12 +171,25 @@ def P() -> bool:
         return True
     return False
 
-def F1(name:str, name_type: str, data_table: List[Data_Table_Row] | List[Function_Table_Row], isThis: bool) -> bool:
+    # Function type
+    # {
+    #     type: ,
+    #     return_type: ,
+    #     parameter_list: ,
+    # }
+    
+    # Array Type
+    # {
+    #     type: ,
+    #     array_dim: ,
+    # }
+
+def F1(name:str, name_type: str, data_table: List[Data_Table_Row] | List[Function_Table_Row], is_object: bool) -> bool:
     if select_rule(follow_of_F1):
         return True
-    elif select_rule([OPENING_BRACKET]): # suppose type of array is stored like this int[][]
+    elif select_rule([OPENING_BRACKET]): # suppose type of array is stored like this int[][] this.a[5]
         data_table_row = None
-        if isThis:
+        if is_object:
             data_table_row = lookup_attribute_data_table(name, data_table)
         else:
             data_table_row = lookup_funtion_table(name)
@@ -199,8 +212,12 @@ def F1(name:str, name_type: str, data_table: List[Data_Table_Row] | List[Functio
                         # if data_table_row.type is an object list case
                         main_table_row = lookup_main_table(data_table_row.type)
                         if not main_table_row:
-                            print(f"{data_table_row.type} does not exist")
-                            return False
+                            # search in function table
+                            function_table_row = lookup_function_table(data_table_row.type)
+                            if not function_table_row: 
+                                print(f"{data_table_row.type} does not exist")
+                                return False
+                            return function_table_row.type.return_type
                     # data_table_row.type = data_table_row.type.slice(0, -2)
                     data_type = F1(data_table_row.name, data_table_row.type ,main_table_row.link)
                     if data_type:
