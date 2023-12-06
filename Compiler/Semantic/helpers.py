@@ -1,7 +1,7 @@
 from typing import List
 from Semantic.symbol_table import *
 from Semantic.main_table_row import Main_Table_Row
-from Semantic.function_table_row import Function_Table_Row
+from Semantic.function_table_row import *
 from Semantic.data_table_row import *
 from Semantic.enums import *
 
@@ -9,7 +9,7 @@ def create_data_table() -> List[Data_Table_Row]:
     new_table: List[Data_Table_Row] = []
     return new_table
 
-def insert_main_table(name: str, type: Main_Table_Type, access_modifier: Main_Table_Access_Modifier, category: Main_Table_Category, parent: str | None, link: List[Data_Table_Row]) -> bool:
+def insert_main_table(name: str, type: Main_Table_Type, access_modifier: Main_Table_Access_Modifier, category: Main_Table_Category, parent: List[str], link: List[Data_Table_Row]) -> bool:
     for row in main_table:
         if row.name == name:
             return False
@@ -17,11 +17,11 @@ def insert_main_table(name: str, type: Main_Table_Type, access_modifier: Main_Ta
     main_table.append(new_row)
     return True
 
-def insert_function_table(name: str, type: str, scope: int) -> bool:
+def insert_function_table(name: str, type: Function_Table_Row_Type) -> bool:
     for row in function_table:
-        if row.name == name and row.scope == scope:
+        if row.name == name and row.scope == current_scope:
             return False
-    new_row = Function_Table_Row(name, type, scope)
+    new_row = Function_Table_Row(name, type, current_scope)
     function_table.append(new_row)
     return True
 
@@ -89,8 +89,12 @@ def compatibility_for_two_operands(left_operand_type: str, right_operand_type: s
         '%=': ['number']
     }
 
+    relational_operators = ['>', '<', '>=', '<=', '==', '!=', '&&', '||']
+
     if operator in compatibility_rules:
         if left_operand_type == right_operand_type and left_operand_type in compatibility_rules[operator] and right_operand_type in compatibility_rules[operator]:
+            if operator in relational_operators:
+                return 'boolean'
             return left_operand_type
         else:
             return

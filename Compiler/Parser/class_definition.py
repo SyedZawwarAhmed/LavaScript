@@ -5,7 +5,7 @@ from Parser.variable_declaration import assignment_statement
 from Utils.select_rule import select_rule
 from Utils.match_terminal import match_terminal
 from Lexer.constants import *
-from Semantic.symbol_table import current_class_data_table
+from Parser.variable_declaration import *
 
 from Semantic.helpers import *
 
@@ -23,9 +23,8 @@ def class_definition() -> bool:
                     if name:
                         if match_terminal(OPENING_BRACE):
                             if class_body():
-                                new_data_table = create_data_table()
-                                current_class_data_table = new_data_table
-                                if not insert_main_table(name, type, access_modifier, category, parent, new_data_table):
+                                current_class_data_table = create_data_table()
+                                if not insert_main_table(name, type, access_modifier, category, parent, current_class_data_table):
                                     print(f"Class {name} is already declared.")
                                     return False
                                 if match_terminal(CLOSING_BRACE):
@@ -41,7 +40,7 @@ def class_category():
     return False
 
 def inheritable_class() -> bool:
-    if select_rule([EXTENDS]):
+    if select_rule([EXTENDS, IMPLEMENTS]):
         # if match_terminal(CLASS):
         #     if match_terminal(IDENTIFIER):
         if inheritance():
@@ -53,13 +52,41 @@ def inheritable_class() -> bool:
 def inheritance() -> bool:
     if select_rule([EXTENDS]):
         if match_terminal(EXTENDS):
-            if match_terminal(IDENTIFIER):
-                return True
+            name = match_terminal(IDENTIFIER)
+            if name:
+                row = lookup_main_table(name)
+                if row:
+                    if row.type == Main_Table_Type.INTERFACE:
+                        print(f"{name} cannot extend an Interface")
+                        return False
+                    if row.access_modifier == Main_Table_Access_Modifier.PRIVATE:
+                        print(f"{name} cannot extend a Private Class")
+                        return False
+                    if row.category == Main_Table_Category.SEALED:
+                        print(f"{name} cannot extend a Sealed Class")
+                        return False
+                    row.parent.append(name)
+                    return True
+                else:
+                    print(f"{name} Class not found")
+                    return False
+                
     elif select_rule([IMPLEMENTS]):
         if match_terminal(IMPLEMENTS):
-            if match_terminal(IDENTIFIER):
-                if inheritance_next():
-                    return True
+            name = match_terminal(IDENTIFIER)
+            if name:
+                row = lookup_main_table(name)
+                if row:
+                    if row.type == Main_Table_Type.CLASS:
+                        print(f"{name} cannot implement a Class")
+                        return False
+                    row.parent.append(name)
+                    if inheritance_next():
+                        return True
+                else:
+                    print(f"Interface {name} not found")
+                    return False
+
     elif select_rule([OPENING_BRACE]):
         return True
 
@@ -68,9 +95,22 @@ def inheritance() -> bool:
 def inheritance_next() -> bool:
     if select_rule([COMMA]):
         if match_terminal(COMMA):
-            if match_terminal(IDENTIFIER):
-                if inheritance_next():
-                    return True
+            name = match_terminal(IDENTIFIER)
+            if name:
+                row = lookup_main_table(name)
+                if row:
+                    if row.type == Main_Table_Type.CLASS:
+                        print(f"Cannot implement {name}, which is a class")
+                        return False
+                    if name in row.parent:
+                        print(f"Interface {name} already implemented")
+                        return False
+                    if inheritance_next():
+                        return True
+                else:
+                    print(f"Interface {name} definition not found")
+                    return False
+
     elif select_rule([OPENING_BRACE]):
         return True
     return False
@@ -85,7 +125,7 @@ def class_body() -> bool:
     return False
 
 def class_single_statement() -> bool:
-    if select_rule([IDENTIFIER]):
+    if select_rule([IDENTIFIER, HASH]):
         if attribute():
             if match_terminal(SEMICOLON):
                 return True
@@ -102,20 +142,34 @@ def class_single_statement() -> bool:
 
 def attribute() -> bool:
     if select_rule([IDENTIFIER]):
-        if match_terminal(IDENTIFIER):
-            if assignment_statement():
-                return True
+        name = match_terminal(IDENTIFIER)
+        if name:
+            attribute_type = data_type()
+            if attribute_type:
+                new_data_type = Data_Table_Row_Type(attribute_type)
+                if not insert_data_table(name, new_data_type, Data_Table_Access_Modifier.PUBLIC, None, current_class_data_table):
+                    print(f"Attribute {name} is already declared.")
+                    return False
+                if assignment_statement(attribute_type):
+                    return True
     elif select_rule([HASH]):
         if match_terminal(HASH):
-            if match_terminal(IDENTIFIER):
-                if assignment_statement():
-                    return True
+            name = match_terminal(IDENTIFIER)
+            if name:
+                attribute_type = data_type()
+                if attribute_type:
+                    new_data_type = Data_Table_Row_Type(attribute_type)
+                    if not insert_data_table(name, new_data_type, Data_Table_Access_Modifier.PRIVATE, None, current_class_data_table):
+                        print(f"Attribute {name} is already declared.")
+                        return False
+                    if assignment_statement(attribute_type):
+                        return True
     return False
 
 def method() -> bool:
     if select_rule([METHOD]):
         if method_header():
-            if match_terminal(OPENING_BRACE):
+            if match_terminal(OPENING_BRACE, False):
                 if parser.MST():
                     if match_terminal(CLOSING_BRACE):
                         return True
@@ -126,16 +180,18 @@ def method_header() -> bool:
         if match_terminal(METHOD):
             if method_next():
                 if match_terminal(OPENING_PARENTHESIS):
+                    create_scope()
                     if params():
+                        destroy_scope()
                         if match_terminal(CLOSING_PARENTHESIS):
-                            if match_terminal(COLON):
-                                if match_terminal(DATA_TYPES):
-                                    return True
+                            if data_type():
+                                return True
     return False
 
 def method_next() -> bool:
     if select_rule([IDENTIFIER]):
-        if match_terminal(IDENTIFIER):
+        name = match_terminal(IDENTIFIER)
+        if name:
             return True
     elif select_rule([HASH]):
         if match_terminal(HASH):

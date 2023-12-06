@@ -195,14 +195,12 @@ def F1(name:str, name_type: str, data_table: List[Data_Table_Row] | List[Functio
                     data_table_row = data_table_row
                     # if data_table_row.type is type list, case is missing
 
-                    if data_table_row.type in primitive_data_types:
-                        print("cannot access primitives data types")
-                        return False
-                    # if data_table_row.type is an object list case
-                    main_table_row = lookup_main_table(data_table_row.type)
-                    if not main_table_row:
-                        print(f"{data_table_row.type} does not exist")
-                        return False
+                    if data_table_row.type not in primitive_data_types:
+                        # if data_table_row.type is an object list case
+                        main_table_row = lookup_main_table(data_table_row.type)
+                        if not main_table_row:
+                            print(f"{data_table_row.type} does not exist")
+                            return False
                     # data_table_row.type = data_table_row.type.slice(0, -2)
                     data_type = F1(data_table_row.name, data_table_row.type ,main_table_row.link)
                     if data_type:
