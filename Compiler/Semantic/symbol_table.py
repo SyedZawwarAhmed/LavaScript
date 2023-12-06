@@ -7,4 +7,4 @@ main_table: List[Main_Table_Row] = []
 function_table: List[Function_Table_Row] = []
 current_scope = 0
 scope_stack = [0]
-current_class_data_table: List[Data_Table_Row] = None
+current_class_data_table: List[Data_Table_Row] | None = None
