@@ -65,7 +65,7 @@ def lookup_funtion_table(name: str):
                 return row
         i -= 1
 
-def compatibility_for_two_operands(left_operand_type: str, right_operand_type: str, operator: str):
+def compatibility_for_two_operands(left_operand_type: str, left_operand_dimensions: int, right_operand_type: str, right_operand_dimensions: int, operator: str):
     compatibility_rules = {
         '+': ['number', 'string'],
         '-': ['number'],

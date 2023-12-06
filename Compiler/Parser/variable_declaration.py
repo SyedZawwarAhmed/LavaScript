@@ -18,7 +18,7 @@ def var_declaration() -> bool:
                         if not insert_function_table(name, new_type):
                             print(f"{name} is already declared.")
                             return False
-                        if assignment_statement(variable_type):
+                        if assignment_statement(variable_type, array_dimensions):
                             return True
     return False
 
@@ -62,13 +62,13 @@ def array_def(dimensions: int):
         return dimensions
     return False
 
-def assignment_statement(variable_type: str) -> bool:
+def assignment_statement(variable_type: str, array_dimensions: int) -> bool:
     if select_rule([ASSIGNMENT_OPERATOR]):
         operator = match_terminal(ASSIGNMENT_OPERATOR)
         if operator:
             type_of_expression_array = expression_array()
             if type_of_expression_array and type(type_of_expression_array) == str:
-                if not compatibility_for_two_operands(variable_type, type_of_expression_array, operator):
+                if not compatibility_for_two_operands(variable_type, array_dimensions, type_of_expression_array, operator):
                     print(f"expression of type {type_of_expression_array} cannot be assigned to variable of type {variable_type}")
                     return False
             return True

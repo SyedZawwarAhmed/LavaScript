@@ -148,11 +148,11 @@ def attribute() -> bool:
             if type_and_array_dimensions:
                 [attribute_type, array_dimensions] = type_and_array_dimensions
                 if attribute_type:
-                    new_data_type = Data_Table_Row_Type(attribute_type)
+                    new_data_type = Data_Table_Row_Type(attribute_type, [], None, array_dimensions)
                     if not insert_data_table(name, new_data_type, Data_Table_Access_Modifier.PUBLIC, '', current_class_data_table):
                         print(f"Attribute {name} is already declared.")
                         return False
-                    if assignment_statement(attribute_type):
+                    if assignment_statement(attribute_type, array_dimensions):
                         return True
     elif select_rule([HASH]):
         if match_terminal(HASH):
@@ -162,11 +162,11 @@ def attribute() -> bool:
                 if type_and_array_dimensions:
                     [attribute_type, array_dimensions] = type_and_array_dimensions
                     if attribute_type:
-                        new_data_type = Data_Table_Row_Type(attribute_type)
+                        new_data_type = Data_Table_Row_Type(attribute_type, [], None, array_dimensions)
                         if not insert_data_table(name, new_data_type, Data_Table_Access_Modifier.PRIVATE, '', current_class_data_table):
                             print(f"Attribute {name} is already declared.")
                             return False
-                        if assignment_statement(attribute_type):
+                        if assignment_statement(attribute_type, array_dimensions):
                             return True
     return False
 

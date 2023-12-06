@@ -21,11 +21,13 @@ def left_side() -> bool:
 
 def right_side() -> bool:
     if select_rule([ASSIGNMENT_OPERATOR]):
-        if expression_array():
-            return True
+        if match_terminal(ASSIGNMENT_OPERATOR):
+            if expression_array():
+                return True
     elif select_rule([COMPOUND_ASSIGNMENT_OPERATOR]):
-        if OE():
-            return True
+        if match_terminal(ASSIGNMENT_OPERATOR):
+            if OE():
+                return True
     return False
 
 def A2() -> bool:
