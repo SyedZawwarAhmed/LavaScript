@@ -19,7 +19,7 @@ proc abc(a: string): string {
   dynamic c: number[];
 }
 
-proc abc(): string {
+proc abcd(): string {
   dynamic c: number[];
 }
 

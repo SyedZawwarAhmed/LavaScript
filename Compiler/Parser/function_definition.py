@@ -17,10 +17,9 @@ def function_definition() -> bool:
                         if match_terminal(CLOSING_PARENTHESIS):
                             type_and_array_dimensions = data_type()
                             if type_and_array_dimensions:
-                                [return_type, array_dimensions] = type_and_array_dimensions
+                                return_type = type_and_array_dimensions.type
                                 if return_type:
-                                    new_type = Function_Table_Row_Type(None, parameter_type_list, return_type, array_dimensions)
-                                    if not insert_function_table(name, new_type, current_scope - 1):
+                                    if not insert_function_table(name, type_and_array_dimensions, current_scope - 1):
                                         print(f"{name} is already declared")
                                         return False
                                     if match_terminal(OPENING_BRACE, False):
@@ -40,7 +39,7 @@ def params():
         return True
     return False
 
-def next_parameter(parameter_type_list: List[str]):
+def next_parameter(parameter_type_list: List[Function_Table_Row_Type]):
     if select_rule([COMMA]):
         if match_terminal(COMMA):
             if parameter(parameter_type_list):
@@ -49,18 +48,17 @@ def next_parameter(parameter_type_list: List[str]):
         return True
     return False
 
-def parameter(parameter_type_list: List[str]):
+def parameter(parameter_type_list: List[Function_Table_Row_Type]):
     if select_rule([IDENTIFIER]):
         parameter_name = match_terminal(IDENTIFIER)
         if parameter_name:
             type_and_array_dimensions = data_type()
             if type_and_array_dimensions:
-                [parameter_type, array_dimensions] = type_and_array_dimensions
+                parameter_type = type_and_array_dimensions.type
                 if parameter_type:
-                    new_type = Function_Table_Row_Type(parameter_type, [], None, array_dimensions)
-                    if not insert_function_table(parameter_name, new_type):
+                    if not insert_function_table(parameter_name, type_and_array_dimensions):
                         print(f"Parameter {parameter_name} is already declared.")
                         return False
-                parameter_type_list.append(parameter_type)
+                parameter_type_list.append(type_and_array_dimensions)
                 return True
     return False
