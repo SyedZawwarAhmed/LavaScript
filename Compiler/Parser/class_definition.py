@@ -147,7 +147,7 @@ def attribute() -> bool:
             type_and_array_dimensions = data_type()
             if type_and_array_dimensions:
                 attribute_type = type_and_array_dimensions.type
-                array_dimensions = type_and_array_dimensions.array_dimension
+                array_dimensions = type_and_array_dimensions.array_dimensions
                 if attribute_type:
                     new_data_type = Data_Table_Row_Type(attribute_type, [], None, array_dimensions)
                     if not insert_data_table(name, new_data_type, Data_Table_Access_Modifier.PUBLIC, '', current_class_data_table):
@@ -162,7 +162,7 @@ def attribute() -> bool:
                 type_and_array_dimensions = data_type()
                 if type_and_array_dimensions:
                     attribute_type = type_and_array_dimensions.type
-                    array_dimensions = type_and_array_dimensions.array_dimension
+                    array_dimensions = type_and_array_dimensions.array_dimensions
                     if attribute_type:
                         new_data_type = Data_Table_Row_Type(attribute_type, [], None, array_dimensions)
                         if not insert_data_table(name, new_data_type, Data_Table_Access_Modifier.PRIVATE, '', current_class_data_table):

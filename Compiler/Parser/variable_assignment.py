@@ -31,7 +31,7 @@ def right_side() -> bool:
     return False
 
 def A2() -> bool:
-    if select_rule([ASSIGNMENT_OPERATOR, COMPOUND_ASSIGNMENT_OPERATOR, ]):
+    if select_rule([ASSIGNMENT_OPERATOR, COMPOUND_ASSIGNMENT_OPERATOR]):
         return True
     elif select_rule([DOT]):
         if match_terminal(DOT):

@@ -15,8 +15,8 @@
     method GetArea(): number;
 }@ 
 
-proc abc(a: string): string {
-  dynamic c: number[];
+proc abc(a: string): number {
+  dynamic c: number[][];
 }
 
 proc abcd(): string {

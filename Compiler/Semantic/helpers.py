@@ -17,13 +17,13 @@ def insert_main_table(name: str, type: Main_Table_Type, access_modifier: Main_Ta
     main_table.append(new_row)
     return True
 
-def insert_function_table(name: str, type: Function_Table_Row_Type, scope = current_scope) -> bool:
+def insert_function_table(name: str, type: Function_Table_Row_Type):
     for row in function_table:
-        if row.name == name and row.scope == scope:
+        if row.name == name and row.scope == current_scope:
             return False
-    new_row = Function_Table_Row(name, type, scope)
+    new_row = Function_Table_Row(name, type, current_scope)
     function_table.append(new_row)
-    return True
+    return new_row
 
 def insert_data_table(name: str, type: Data_Table_Row_Type, access_modifier: Data_Table_Access_Modifier, type_modifier: str, data_table: List[Data_Table_Row] | None) -> bool:
     if data_table:
@@ -67,9 +67,9 @@ def lookup_funtion_table(name: str):
 
 def compatibility_for_two_operands(left_operand_type_and_dimensions: Function_Table_Row_Type, right_operand_type_and_dimensions: Function_Table_Row_Type, operator: str):
     left_operand_type = left_operand_type_and_dimensions.type
-    left_operand_dimensions = left_operand_type_and_dimensions.array_dimension
+    left_operand_dimensions = left_operand_type_and_dimensions.array_dimensions
     right_operand_type = right_operand_type_and_dimensions.type
-    right_operand_dimensions = right_operand_type_and_dimensions.array_dimension
+    right_operand_dimensions = right_operand_type_and_dimensions.array_dimensions
     
     compatibility_rules = {
         '+': ['number', 'string'],

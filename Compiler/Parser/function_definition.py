@@ -10,6 +10,10 @@ def function_definition() -> bool:
         if match_terminal(PROC):
             name = match_terminal(IDENTIFIER)
             if name:
+                new_type: Function_Table_Row_Type = Function_Table_Row_Type()
+                if not insert_function_table(name, new_type):
+                    print(f"{name} is already declared")
+                    return False
                 if match_terminal(OPENING_PARENTHESIS):
                     create_scope()
                     parameter_type_list = params()
@@ -19,9 +23,8 @@ def function_definition() -> bool:
                             if type_and_array_dimensions:
                                 return_type = type_and_array_dimensions.type
                                 if return_type:
-                                    if not insert_function_table(name, type_and_array_dimensions, current_scope - 1):
-                                        print(f"{name} is already declared")
-                                        return False
+                                    new_type.parameter_list = parameter_type_list
+                                    new_type.return_type = return_type
                                     if match_terminal(OPENING_BRACE, False):
                                         if parser.MST():
                                             if match_terminal(CLOSING_BRACE):
