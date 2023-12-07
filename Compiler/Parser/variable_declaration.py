@@ -68,7 +68,7 @@ def assignment_statement(variable_type: str, array_dimensions: int) -> bool:
         if operator:
             type_of_expression_array = expression_array()
             if type_of_expression_array and type(type_of_expression_array) == str:
-                if not compatibility_for_two_operands(variable_type, type_of_expression_array, operator):
+                if not compatibility_for_two_operands(Function_Table_Row_Type(variable_type, [], None, array_dimensions), type_of_expression_array, operator):
                     print(f"expression of type {type_of_expression_array} cannot be assigned to variable of type {variable_type}")
                     return False
             return True
@@ -76,11 +76,12 @@ def assignment_statement(variable_type: str, array_dimensions: int) -> bool:
         return True
     return False
 
-def expression_array() -> bool:
+def expression_array():
     if select_rule(first_of_OE):
         type_of_expression = OE()
         if type_of_expression:
-            return type_of_expression
+            new_type = Function_Table_Row_Type(type_of_expression)
+            return new_type
     elif select_rule([OPENING_BRACKET]):
         if array():
             return True

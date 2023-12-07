@@ -65,7 +65,12 @@ def lookup_funtion_table(name: str):
                 return row
         i -= 1
 
-def compatibility_for_two_operands(left_operand_type: str, right_operand_type: str, operator: str):
+def compatibility_for_two_operands(left_operand_type_and_dimensions: Function_Table_Row_Type, right_operand_type_and_dimensions: Function_Table_Row_Type, operator: str):
+    left_operand_type = left_operand_type_and_dimensions.type
+    left_operand_dimensions = left_operand_type_and_dimensions.array_dimension
+    right_operand_type = right_operand_type_and_dimensions.type
+    right_operand_dimensions = right_operand_type_and_dimensions.array_dimension
+    
     compatibility_rules = {
         '+': ['number', 'string'],
         '-': ['number'],
@@ -92,6 +97,12 @@ def compatibility_for_two_operands(left_operand_type: str, right_operand_type: s
     }
 
     relational_operators = ['>', '<', '>=', '<=', '==', '!=', '&&', '||']
+
+    if left_operand_dimensions > 0 or right_operand_dimensions > 0:
+        if operator != '=':
+            return
+        if left_operand_dimensions != right_operand_dimensions:
+            return
 
     if operator in compatibility_rules:
         if left_operand_type == right_operand_type and left_operand_type in compatibility_rules[operator] and right_operand_type in compatibility_rules[operator]:
