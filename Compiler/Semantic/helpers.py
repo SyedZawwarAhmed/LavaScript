@@ -17,13 +17,21 @@ def insert_main_table(name: str, type: Main_Table_Type, access_modifier: Main_Ta
     main_table.append(new_row)
     return True
 
-def insert_function_table(name: str, type: Function_Table_Row_Type):
+def insert_function_table(name: str, type: Function_Table_Row_Type, is_function: bool = False):
+    if not is_function:
+        for row in function_table:
+            if row.name == name and row.scope == current_scope:
+                return False
+        new_row = Function_Table_Row(name, type, current_scope)
+        function_table.append(new_row)
+        return new_row
     for row in function_table:
-        if row.name == name and row.scope == current_scope:
+        if row.name == name and row.scope == scope_stack[-1]:
             return False
     new_row = Function_Table_Row(name, type, current_scope)
     function_table.append(new_row)
     return new_row
+    
 
 def insert_data_table(name: str, type: Data_Table_Row_Type, access_modifier: Data_Table_Access_Modifier, type_modifier: str, data_table: List[Data_Table_Row] | None) -> bool:
     if data_table:

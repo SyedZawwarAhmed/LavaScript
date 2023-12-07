@@ -19,9 +19,14 @@ proc abc(a: string): number {
   dynamic c: number[][];
 }
 
-proc abcd(): string {
+proc bc(): string {
   dynamic c: number[];
 }
+
+proc bc(): string {
+  dynamic c: number[];
+}
+
 
 class C {}
 class D {}

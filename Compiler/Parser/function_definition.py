@@ -11,7 +11,7 @@ def function_definition() -> bool:
             name = match_terminal(IDENTIFIER)
             if name:
                 new_type: Function_Table_Row_Type = Function_Table_Row_Type()
-                if not insert_function_table(name, new_type):
+                if not insert_function_table(name, new_type, True):
                     print(f"{name} is already declared")
                     return False
                 if match_terminal(OPENING_PARENTHESIS):
