@@ -7,18 +7,16 @@
 } @
 
 
-interface B {
+@interface B {
     method GetArea(c: string): number;
-}
+}@
 
-interface E {
+@interface E {
     method GetArea(): number;
-} 
-
-dynamic c: number;
+}@ 
 
 proc abc(a: string, a: string): string {
-  dynamic c: number = 5 + 8;
+  dynamic c: number[];
 }
 
 class C {}

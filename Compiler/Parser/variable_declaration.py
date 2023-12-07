@@ -13,12 +13,13 @@ def var_declaration() -> bool:
                 type_and_array_dimensions = data_type()
                 if type_and_array_dimensions:
                     [variable_type, array_dimensions] = type_and_array_dimensions
-                    new_type = Function_Table_Row_Type(variable_type, [], None, array_dimensions)
-                    if not insert_function_table(name, new_type):
-                        print(f"{name} is already declared.")
-                        return False
-                    if assignment_statement(variable_type):
-                        return True
+                    if variable_type:
+                        new_type = Function_Table_Row_Type(variable_type, [], None, array_dimensions)
+                        if not insert_function_table(name, new_type):
+                            print(f"{name} is already declared.")
+                            return False
+                        if assignment_statement(variable_type):
+                            return True
     return False
 
 def data_type():
@@ -28,7 +29,7 @@ def data_type():
             if type_of_variable:
                 dimensions = 0
                 new_dimenisons = array_def(dimensions)
-                if new_dimenisons:
+                if new_dimenisons >= 0 and type(new_dimenisons) == int:
                     return [type_of_variable, new_dimenisons]
     return False
 
@@ -57,7 +58,7 @@ def array_def(dimensions: int):
                 new_dimensions = array_def(dimensions + 1)
                 if new_dimensions:
                     return new_dimensions
-    elif select_rule([SEMICOLON, ASSIGNMENT_OPERATOR]):
+    elif select_rule([SEMICOLON, ASSIGNMENT_OPERATOR, COMMA, OPENING_BRACE, CLOSING_PARENTHESIS]):
         return dimensions
     return False
 
