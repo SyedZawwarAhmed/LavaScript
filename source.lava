@@ -15,9 +15,18 @@
     method GetArea(): number;
 }@ 
 
-proc abc(a: string, a: string): string {
+proc abc(a: string): number {
+  dynamic c: number[][];
+}
+
+proc bc(): string {
   dynamic c: number[];
 }
+
+proc bc(): string {
+  dynamic c: number[];
+}
+
 
 class C {}
 class D {}
