@@ -17,20 +17,14 @@ def insert_main_table(name: str, type: Main_Table_Type, access_modifier: Main_Ta
     main_table.append(new_row)
     return True
 
-def insert_function_table(name: str, type: Function_Table_Row_Type, is_function: bool = False):
-    if not is_function:
-        for row in function_table:
-            if row.name == name and row.scope == current_scope:
-                return False
-        new_row = Function_Table_Row(name, type, current_scope)
-        function_table.append(new_row)
-        return new_row
+def insert_function_table(name: str, type: Function_Table_Row_Type):
     for row in function_table:
         if row.name == name and row.scope == scope_stack[-1]:
             return False
-    new_row = Function_Table_Row(name, type, current_scope)
+    new_row = Function_Table_Row(name, type, scope_stack[-1])
     function_table.append(new_row)
     return new_row
+
     
 
 def insert_data_table(name: str, type: Data_Table_Row_Type, access_modifier: Data_Table_Access_Modifier, type_modifier: str, data_table: List[Data_Table_Row] | None) -> bool:
@@ -65,14 +59,20 @@ def lookup_function_data_table(name: str, parameter_list: List[str], data_table:
             return row
 
 def lookup_funtion_table(name: str):
-    i = 0
-    while i >= 0:
+    for i in range(len(scope_stack), -1, -1):
         scope = scope_stack[i]
         for row in function_table:
             if row.name == name and row.scope == scope:
                 return row
-        i -= 1
 
+def search_function_in_function_table():
+    for i in range(len(scope_stack)-2, -1, -1):
+        scope = scope_stack[i]
+        for j in range(len(scope_stack)-1, -1, -1):
+            row = function_table[j]
+            if row.scope == scope and row.type.return_type:
+                return row
+            
 def compatibility_for_two_operands(left_operand_type_and_dimensions: Function_Table_Row_Type, right_operand_type_and_dimensions: Function_Table_Row_Type, operator: str):
     left_operand_type = left_operand_type_and_dimensions.type
     left_operand_dimensions = left_operand_type_and_dimensions.array_dimensions

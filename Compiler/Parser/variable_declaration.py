@@ -10,10 +10,10 @@ def var_declaration() -> bool:
         if match_terminal(DYNAMIC_STATIC):
             name = match_terminal(IDENTIFIER)
             if name:
-                type_and_array_dimensions = data_type()
+                type_and_array_dimensions = variable_type()
                 if type_and_array_dimensions:
-                    variable_type = type_and_array_dimensions.type
-                    if variable_type:
+                    variable_type_name = type_and_array_dimensions.type
+                    if variable_type_name:
                         if not insert_function_table(name, type_and_array_dimensions):
                             print(f"{name} is already declared.")
                             return False
@@ -21,7 +21,8 @@ def var_declaration() -> bool:
                             return True
     return False
 
-def data_type():
+
+def variable_type():
     if select_rule([COLON]):
         if match_terminal(COLON):
             type_of_variable = type_name()
@@ -50,7 +51,7 @@ def type_name():
             return type_of_object
     return False
 
-def array_def(dimensions: int):
+def array_def(dimensions: int = 0):
     if select_rule([OPENING_BRACKET]):
         if match_terminal(OPENING_BRACKET):
             if match_terminal(CLOSING_BRACKET):

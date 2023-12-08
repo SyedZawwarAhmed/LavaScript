@@ -1,6 +1,5 @@
-from typing import List
 class Function_Table_Row_Type:
-    def __init__(self, type = None, parameter_list = [], return_type = None, array_dimensions = 0):
+    def __init__(self, type: str | None = None, parameter_list = [], return_type = None, array_dimensions = 0):
         self.type = type
         self.parameter_list = parameter_list
         self.return_type = return_type

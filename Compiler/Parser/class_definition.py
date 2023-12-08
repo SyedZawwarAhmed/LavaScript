@@ -6,6 +6,7 @@ from Utils.select_rule import select_rule
 from Utils.match_terminal import match_terminal
 from Lexer.constants import *
 from Parser.variable_declaration import *
+from Parser.function_definition import *
 
 from Semantic.helpers import *
 
@@ -131,10 +132,7 @@ def class_single_statement() -> bool:
                 return True
     elif select_rule([METHOD]):
         if method():
-            if match_terminal(OPENING_BRACE):
-                if parser.MST():
-                    if match_terminal(CLOSING_BRACE):
-                        return True
+           return True
     elif select_rule([CONSTRUCTOR]):
         if constructor():
             return True
@@ -144,7 +142,7 @@ def attribute() -> bool:
     if select_rule([IDENTIFIER]):
         name = match_terminal(IDENTIFIER)
         if name:
-            type_and_array_dimensions = data_type()
+            type_and_array_dimensions = variable_type()
             if type_and_array_dimensions:
                 attribute_type = type_and_array_dimensions.type
                 array_dimensions = type_and_array_dimensions.array_dimensions
@@ -159,7 +157,7 @@ def attribute() -> bool:
         if match_terminal(HASH):
             name = match_terminal(IDENTIFIER)
             if name:
-                type_and_array_dimensions = data_type()
+                type_and_array_dimensions = variable_type()
                 if type_and_array_dimensions:
                     attribute_type = type_and_array_dimensions.type
                     array_dimensions = type_and_array_dimensions.array_dimensions
@@ -190,7 +188,7 @@ def method_header() -> bool:
                     if params():
                         destroy_scope()
                         if match_terminal(CLOSING_PARENTHESIS):
-                            if data_type():
+                            if return_type():
                                 return True
     return False
 
