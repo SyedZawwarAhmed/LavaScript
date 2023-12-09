@@ -67,20 +67,20 @@ def assignment_statement(variable_type: Function_Table_Row_Type) -> bool:
         operator = match_terminal(ASSIGNMENT_OPERATOR)
         if operator:
             type_of_expression_array = expression_array()
-            if type_of_expression_array and type(type_of_expression_array) == str:
+            if type_of_expression_array and type(type_of_expression_array) == Function_Table_Row_Type:
                 if not compatibility_for_two_operands(variable_type, type_of_expression_array, operator):
-                    print(f"expression of type {type_of_expression_array} cannot be assigned to variable of type {variable_type}")
+                    print(f"expression of type {type_of_expression_array.type} cannot be assigned to variable of type {variable_type.type}")
                     return False
-            return True
+                return True
     elif select_rule([SEMICOLON]):
         return True
     return False
 
-def expression_array():
+def expression_array() -> Function_Table_Row_Type | bool:
     if select_rule(first_of_OE):
         type_of_expression = OE()
         if type_of_expression:
-            new_type = Function_Table_Row_Type(type_of_expression)
+            new_type = type_of_expression
             return new_type
     elif select_rule([OPENING_BRACKET]):
         if array():
