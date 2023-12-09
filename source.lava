@@ -37,12 +37,12 @@ until (a) {
 
 }
 
-class Cars {
+class Car {
   numberOfWheels: number;
 }
 
 dynamic newCar: Car;
-?dynamic b: number = newCar.numberOfWheels;
+dynamic b: number = newCar.numberOfWheels;
 
 if (c > d) {  
   ?return;
