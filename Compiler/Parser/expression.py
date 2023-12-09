@@ -191,11 +191,12 @@ def F() -> bool | str:
                         data_type = F1(name, function_table_row.type, function_table, False)
                         return data_type
 
-                    if function_table_row.type in primitive_data_types:
-                        if not current_class_data_table:
-                            print("this must be used inside a class")
-                            return False
-                        data_type = F1(name, function_table_row.type, current_class_data_table, False)
+                    if function_table_row.type.type in primitive_data_types:
+                        # if not current_class_data_table:
+                        #     print("this must be used inside a class")
+                        #     return False
+                        # data_type = F1(name, function_table_row.type, current_class_data_table, False)
+                        data_type = function_table_row.type.type
                         if data_type:
                             return data_type
                     else:

@@ -25,17 +25,19 @@ proc bc(): void {
 }
 
 dynamic a: number;
+dynamic c: string = "a" + "b";
+static d: number;
 
 proc abcd(): void {
   dynamic a: number;
   return;
 }
 
-dynamic b: string = a;
+dynamic b: number = c + d;
 
-@if (a > 3) {  
+if (c > d) {  
   return;
-}@
+}
 
 @class C {
   method abc(a: string): void {return;}
