@@ -324,7 +324,7 @@ def F1(name:str, name_type: str | Function_Table_Row_Type | Data_Table_Row_Type 
     elif select_rule([OPENING_PARENTHESIS]):
         if match_terminal(OPENING_PARENTHESIS):
             argument_list = AL()
-            if argument_list and type(argument_list) == List[str]:
+            if argument_list != None and type(argument_list) == list:
                 if match_terminal(CLOSING_PARENTHESIS):
                     function_data_table_row = None
                     if is_object and type(data_table) == Data_Table_Row:
