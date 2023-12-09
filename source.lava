@@ -27,6 +27,7 @@ proc bc(): void {
 dynamic a: number;
 
 proc abcd(): void {
+  dynamic a: number;
   return;
 }
 
