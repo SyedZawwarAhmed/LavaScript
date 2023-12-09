@@ -22,12 +22,14 @@ def class_definition() -> bool:
                 name = match_terminal(IDENTIFIER)
                 if inheritable_class():
                     if name:
+                        new_data_table = create_data_table()
+                        current_class_data_table = new_data_table
+                        if not insert_main_table(name, type, access_modifier, category, parent, current_class_data_table):
+                            print(f"Class {name} is already declared.")
+                            return False
                         if match_terminal(OPENING_BRACE):
                             if class_body():
-                                current_class_data_table = create_data_table()
-                                if not insert_main_table(name, type, access_modifier, category, parent, current_class_data_table):
-                                    print(f"Class {name} is already declared.")
-                                    return False
+                                current_class_data_table = None
                                 if match_terminal(CLOSING_BRACE):
                                     return True
     return False
