@@ -35,81 +35,119 @@ follow_of_F2 = follow_of_F1
 
 primitive_data_types = ['string', 'number', 'boolean']
 
-def OE():
+def OE() -> bool | Function_Table_Row_Type:
     if select_rule(first_of_OE):
-        if AE():
-            if OE1():
-                return True
+        first_operand_return_type = AE()
+        if first_operand_return_type and type(first_operand_return_type) == str:
+            resultant_type = OE1(first_operand_return_type)
+            if resultant_type and type(resultant_type) == str:
+                final_type = Function_Table_Row_Type(resultant_type)
+                return final_type
     return False
 
-def AE() -> bool:
+def AE() -> bool | str:
     if select_rule(first_of_AE):
-        if RE():
-            if AE1():
-                return True
+        first_operand_return_type = RE()
+        if first_operand_return_type and type(first_operand_return_type) == str:
+            resultant_type = AE1(first_operand_return_type)
+            if resultant_type:
+                return resultant_type
     return False
 
-def OE1() -> bool:
+def OE1(first_operand_type: str) -> bool | str:
     if select_rule([OR]):
-        if match_terminal(OR):
-            if AE():
-                if OE1():
-                    return True
+        operator = match_terminal(OR)
+        if operator:
+            second_operand_return_type = AE()
+            if second_operand_return_type and type(second_operand_return_type) == str:
+                resultant_type = compatibility_for_two_operands(Function_Table_Row_Type(first_operand_type), Function_Table_Row_Type(second_operand_return_type), operator)
+                if not resultant_type:
+                    print(f"{first_operand_type} is not compatible with {second_operand_return_type} on {operator} operator")
+                    return False
+                remaining_operand_return_type = OE1(resultant_type)
+                if remaining_operand_return_type:
+                    return remaining_operand_return_type
     elif select_rule(follow_of_OE1):
-        return True
+        return first_operand_type
     return False
 
-def RE() -> bool:
+def RE() -> bool | str:
     if select_rule(first_of_RE):
-        if E():
-            if RE1():
-                return True
+        first_operand_return_type = E()
+        if first_operand_return_type and type(first_operand_return_type) == str:
+            resultant_type = RE1(first_operand_return_type)
+            if resultant_type:
+                return resultant_type
     return False
 
-def AE1() -> bool:
+def AE1(first_operand_type: str) -> bool | str:
     if select_rule([AND]):
-        if match_terminal(AND):
-            if RE():
-                if AE1():
-                    return True
+        operator = match_terminal(AND)
+        if operator:
+            second_operand_return_type = RE()
+            if second_operand_return_type and type(second_operand_return_type) == str:
+                resultant_type = compatibility_for_two_operands(Function_Table_Row_Type(first_operand_type), Function_Table_Row_Type(second_operand_return_type), operator)
+                if not resultant_type:
+                    print(f"{first_operand_type} is not compatible with {second_operand_return_type} on {operator} operator")
+                    return False
+                remaining_operand_return_type = AE1(resultant_type)
+                if remaining_operand_return_type:
+                    return remaining_operand_return_type
     elif select_rule(follow_of_AE1):
-        return True
+        return first_operand_type
     return False
 
-def E() -> bool:
+def E() -> bool | str:
     if select_rule(first_of_E):
-        if T():
-            if E1():
-                return True
+        first_operand_return_type = T()
+        if first_operand_return_type and type(first_operand_return_type) == str:
+            resultant_type = E1(first_operand_return_type)
+            if resultant_type:
+                return resultant_type
     return False
 
-def E1() -> bool:
+def E1(first_operand_type: str) -> bool | str:
     if select_rule([PLUS_MINUS]):
-        if match_terminal(PLUS_MINUS):
-            if T():
-                if E1():
-                    return True
+        operator = match_terminal(PLUS_MINUS)
+        if operator:
+            second_operand_return_type = T()
+            if second_operand_return_type and type(second_operand_return_type) == str:
+                resultant_type = compatibility_for_two_operands(Function_Table_Row_Type(first_operand_type), Function_Table_Row_Type(second_operand_return_type), operator)
+                if not resultant_type:
+                    print(f"{first_operand_type} is not compatible with {second_operand_return_type} on {operator} operator")
+                    return False
+                remaining_operand_return_type = T1(resultant_type)
+                if remaining_operand_return_type:
+                    return remaining_operand_return_type
     elif select_rule(follow_of_E1):
-        return True
+        return first_operand_type
     return False
 
 
-def RE1() -> bool:
+def RE1(first_operand_type: str) -> bool | str:
     if select_rule([COMPARISON]):
-        if match_terminal(COMPARISON):
-            if E():
-                if RE1():
-                    return True
+        operator = match_terminal(COMPARISON)
+        if operator:
+            second_operand_return_type = E()
+            if second_operand_return_type and type(second_operand_return_type) == str:
+                resultant_type = compatibility_for_two_operands(Function_Table_Row_Type(first_operand_type), Function_Table_Row_Type(second_operand_return_type), operator)
+                if not resultant_type:
+                    print(f"{first_operand_type} is not compatible with {second_operand_return_type} on {operator} operator")
+                    return False
+                remaining_operand_return_type = RE1(resultant_type)
+                if remaining_operand_return_type:
+                    return remaining_operand_return_type
     elif select_rule(follow_of_RE1):
-        return True
+        return first_operand_type
     return False
 
-def T() -> bool: # a * b * c
+def T() -> bool | str: # a * b * c
     if select_rule(first_of_T):
         first_operand_return_type = F()
         if first_operand_return_type and type(first_operand_return_type) == str:
-            if T1(first_operand_return_type):
-                return True
+            resultant_type = T1(first_operand_return_type)
+            if resultant_type:
+                return resultant_type
     return False
 
 def T1(first_operand_type: str) -> bool | str: 
