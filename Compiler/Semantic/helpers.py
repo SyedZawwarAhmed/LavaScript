@@ -28,7 +28,7 @@ def insert_function_table(name: str, type: Function_Table_Row_Type):
     
 
 def insert_data_table(name: str, type: Data_Table_Row_Type, access_modifier: Data_Table_Access_Modifier, type_modifier: str, data_table: List[Data_Table_Row] | None) -> bool:
-    if data_table:
+    if data_table != None:
         for row in data_table:
             if row.name == name:
                 return False
