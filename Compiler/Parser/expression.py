@@ -1,6 +1,8 @@
 from Utils.select_rule import select_rule
 from Utils.match_terminal import match_terminal
 from Lexer.constants import *
+from Semantic.symbol_table import *
+from Semantic.helpers import *
 
 def merge_two_lists(first_list, second_list):
     return first_list + list(set(second_list) - set(first_list))
@@ -30,6 +32,8 @@ follow_of_T1 = follow_of_T
 follow_of_F = [MULTIPLY_DIVIDE_MODULUS, PLUS_MINUS, COMPARISON, AND, OR, SEMICOLON, CLOSING_BRACKET, CLOSING_PARENTHESIS, COMMA]
 follow_of_F1 = follow_of_F
 follow_of_F2 = follow_of_F1
+
+primitive_data_types = ['string', 'number', 'boolean']
 
 def OE():
     if select_rule(first_of_OE):
@@ -100,123 +104,369 @@ def RE1() -> bool:
         return True
     return False
 
-def T() -> bool:
+def T() -> bool: # a * b * c
     if select_rule(first_of_T):
-        if F():
-            if T1():
+        first_operand_return_type = F()
+        if first_operand_return_type and type(first_operand_return_type) == str:
+            if T1(first_operand_return_type):
                 return True
     return False
 
-def T1() -> bool:
+def T1(first_operand_type: str) -> bool | str: 
     if select_rule([MULTIPLY_DIVIDE_MODULUS]):
-        if match_terminal(MULTIPLY_DIVIDE_MODULUS):
-            if F():
-                if T1():
-                    return True
+        operator = match_terminal(MULTIPLY_DIVIDE_MODULUS)
+        if operator:
+            second_operand_return_type = F()
+            if second_operand_return_type and type(second_operand_return_type) == str:
+                resultant_type = compatibility_for_two_operands(Function_Table_Row_Type(first_operand_type), Function_Table_Row_Type(second_operand_return_type), operator)
+                if not resultant_type:
+                    print(f"{first_operand_type} is not compatible with {second_operand_return_type} on {operator} operator")
+                    return False
+                remaining_operand_return_type = T1(resultant_type)
+                if remaining_operand_return_type:
+                    return remaining_operand_return_type
     elif select_rule(follow_of_T1):
-        return True
+        return first_operand_type
     return False
 
-def F() -> bool:
+def F() -> bool | str:
     if select_rule([THIS, IDENTIFIER]):
-        if P():
-            if match_terminal(IDENTIFIER):
-                if F1():
-                    return True
+        this_check = P()
+        if this_check:
+            if(this_check == "this"):
+                name = match_terminal(IDENTIFIER)
+                if name:
+                    if not current_class_data_table:
+                        print("this must be used inside a class")
+                        return False
+                    data_type = F1(name, None, current_class_data_table, True)
+                    if data_type:
+                        return data_type
+            else:
+                name = match_terminal(IDENTIFIER) #a
+                if name:
+                    function_table_row = lookup_funtion_table(name)
+                    if not function_table_row:
+                        print(f"{name} is not defined")
+                        return False
+                    if not function_table_row.type.type:
+                        data_type = F1(name, function_table_row.type, function_table, False)
+                        return data_type
+
+                    if function_table_row.type in primitive_data_types:
+                        if not current_class_data_table:
+                            print("this must be used inside a class")
+                            return False
+                        data_type = F1(name, function_table_row.type, current_class_data_table, False)
+                        if data_type:
+                            return data_type
+                    else:
+                        main_table_row = lookup_main_table(function_table_row.type.type)
+                        if not main_table_row:
+                            print(f"{function_table_row.type} is not defined")
+                            return False
+                        if not main_table_row.link:
+                            print("data table not found")
+                            return False
+                        data_type = F1(name, main_table_row.name ,main_table_row.link, True)
+                        if data_type:
+                            return data_type
+                    
     elif select_rule([INTEGER_CONSTANT, STRING_CONSTANT, FLOAT_CONSTANT, BOOL_CONSTANT]):
-        if const():
-            return True
+        constant_type = const()
+        if constant_type:
+            return constant_type
     elif select_rule([NOT]):
-        if match_terminal(NOT):
-            if F():
-                return True
+        operator = match_terminal(NOT)
+        if operator:
+            return_type = F()
+            if return_type and type(return_type) == str:
+                if not compatibility_for_single_operand(return_type, operator):
+                    print("Type of operand must be a boolean")
+                    return False
+                return return_type
     return False
 
-def P() -> bool:
+def P() -> bool | str:
     if select_rule([THIS]):
-        if match_terminal(THIS):
+        name = match_terminal(THIS)
+        if name:
             if match_terminal(DOT):
-                return True
+                return name
     elif select_rule([IDENTIFIER]):
         return True
     return False
 
-def F1() -> bool:
+    # Function type
+    # {
+    #     type: ,
+    #     return_type: ,
+    #     parameter_list: ,
+    # }
+    
+    # Array Type
+    # {
+    #     type: ,
+    #     array_dimension: ,
+    # }
+    
+    # this.a().b.c[]
+    # c.d.a()[]
+    # c[].b().a
+
+def F1(name:str, name_type: str | Function_Table_Row_Type | Data_Table_Row_Type | None, data_table: List[Data_Table_Row] | List[Function_Table_Row], is_object: bool) -> bool | str:
     if select_rule(follow_of_F1):
-        return True
-    elif select_rule([OPENING_BRACKET]):
+        if not name_type:
+            if is_object and type(data_table) == Data_Table_Row:
+                data_table_row = lookup_attribute_data_table(name, data_table)
+                if data_table_row:
+                    if data_table_row.access_modifier == Data_Table_Access_Modifier.PRIVATE:
+                        print(f"Can not Access ${name}")
+                        return False
+                    name_type = data_table_row.type.type
+            else:
+                function_table_row = lookup_funtion_table(name)
+                if not function_table_row:
+                    print(f"{name} does not exist")
+                    return False
+                name_type = function_table_row.type.type
+            if not name_type: 
+                print(f"{name} does not exist")
+                return False
+        if type(name_type) == Function_Table_Row_Type or type(name_type) == Data_Table_Row_Type:
+            if not name_type.type and name_type.return_type:
+                return name_type.return_type
+            if name_type.type:
+                return name_type.type
+        if type(name_type) == str:
+            return name_type
+    elif select_rule([OPENING_BRACKET]): # suppose type of array is stored like this int[][]
+        data_table_row = None
+        if is_object and type(data_table) == Data_Table_Row:
+            data_table_row = lookup_attribute_data_table(name, data_table)
+        else:
+            data_table_row = lookup_funtion_table(name)
+        if not data_table_row:
+            print(f"{name} does not exist")
+            return False
         if match_terminal(OPENING_BRACKET):
-            if OE():
+            # if !(name_type contains []):
+                # print("Dimension Error")
+            type_of_expression = OE()
+            if type_of_expression:
+                if type_of_expression != 'number':
+                    print("index must be of type number.")
+                    return False
                 if match_terminal(CLOSING_BRACKET):
-                    if F1():
-                        return True
+                    data_table_row = data_table_row
+                    # if data_table_row.type is type list, case is missing
+                    
+                    if not data_table_row.type.array_dimensions:
+                        print(f"${name} is not of Array type")
+                        return False
+                    if data_table_row.type.type not in primitive_data_types:
+                        # if data_table_row.type is an object list case
+                        if not data_table_row.type.type:
+                            print("type is undefined")
+                            return False
+                        main_table_row = lookup_main_table(data_table_row.type.type)
+                        if not main_table_row:
+                            print(f"{data_table_row.type} does not exist")
+                            return False
+                        if not main_table_row.link:
+                            print("data table undefined")
+                            return False
+                        data_type = F1(main_table_row.name, data_table_row.type.type ,main_table_row.link, True)
+                        if data_type:
+                            return data_type
+                    data_type = F1(data_table_row.name, data_table_row.type.type ,data_table, False)
+                    if data_type:
+                        return data_type
     elif select_rule([OPENING_PARENTHESIS]):
         if match_terminal(OPENING_PARENTHESIS):
-            if AL():
+            argument_list = AL()
+            if argument_list and type(argument_list) == List[str]:
                 if match_terminal(CLOSING_PARENTHESIS):
-                    if F2():
-                        return True
+                    function_data_table_row = None
+                    if is_object and type(data_table) == Data_Table_Row:
+                        function_data_table_row = lookup_function_data_table(name, argument_list, data_table)
+                    else:
+                        function_data_table_row = lookup_funtion_table(name)
+                    if not function_data_table_row:
+                        print(f"{name} does not exist")
+                        return False
+                    if not function_data_table_row.type.return_type:
+                        print("not a function")
+                        return False
+                    return_type = F2(function_data_table_row.name, function_data_table_row.type, data_table)
+                    if return_type and type(return_type) == str:
+                        if return_type not in primitive_data_types:
+                            main_table_row = lookup_main_table(return_type)
+                            if not main_table_row:
+                                print(f"{return_type} does not exist")
+                                return False
+                            return main_table_row.name
+                        return return_type
     elif select_rule([DOT]):
+        data_table_row = None
+        if not name_type:
+            if is_object and type(data_table) == Data_Table_Row:
+                data_table_row = lookup_attribute_data_table(name, data_table)
+                if data_table_row and data_table_row.access_modifier == Data_Table_Access_Modifier.PRIVATE:
+                    print(f"Can not Access ${name}")
+                    return False     
+            else:
+                data_table_row = lookup_funtion_table(name)
+            if not data_table_row:
+                print(f"{name} does not exist")
+                return False
         if match_terminal(DOT):
-            if match_terminal(IDENTIFIER):
-                if F1():
-                    return True
+            if not name_type:
+                if not data_table_row:
+                    print(f"{name} does not exist")
+                    return False
+                if not data_table_row.type.type:
+                    print("type undefined")
+                    return False
+                main_table_row = lookup_main_table(data_table_row.type.type)
+                if not main_table_row:
+                    print(f"${data_table_row.type.type} does not exist")
+                    return False
+                if not main_table_row.link:
+                    print("data table undefined")
+                    return False
+                data_table = main_table_row.link
+            if name_type in primitive_data_types:
+                print("cannot access primitives data types")
+                return False
+            Name = match_terminal(IDENTIFIER)
+            if Name:
+                object_type = F1(Name, None, data_table, True)
+                if object_type:
+                    return object_type
     elif select_rule([INCREMENT_DECREMENT]):
-        if match_terminal(INCREMENT_DECREMENT):
-            return True
+        operator = match_terminal(INCREMENT_DECREMENT)
+        if operator:
+            if not name_type:
+                print("type undefined")
+                return False
+            if type(name_type) == Function_Table_Row_Type or type(name_type) == Data_Table_Row_Type:
+                compatibility_type = None
+                if name_type.return_type:
+                    compatibility_type = compatibility_for_single_operand(name_type.return_type, operator)
+                if name_type.type:
+                    compatibility_type = compatibility_for_single_operand(name_type.type, operator)
+                if not compatibility_type:
+                    print(f"{name_type} is not compatible with {operator}")
+                    return False
+                return compatibility_type
+            if type(name_type) == str:
+                compatibility_type = compatibility_for_single_operand(name_type, operator)
+                if not compatibility_type:
+                    print(f"{name_type} is not compatible with {operator}")
+                    return False
+                return compatibility_type
     return False
 
-def F2() -> bool:
+def F2(name: str, name_type: Function_Table_Row_Type | Data_Table_Row_Type, data_table: List[Data_Table_Row] | List[Function_Table_Row]) -> bool | str:
     if select_rule([DOT]):
+        if not name_type:
+            print("Function does not return a type")
+            return False
         if match_terminal(DOT):
-            if match_terminal(IDENTIFIER):
-                if F1():
-                    return True
-    elif select_rule([OPENING_BRACKET]):
+            if name_type in primitive_data_types:
+                print("cannot access primitives data types")
+                return False
+            if type(name_type) == str:    
+                main_table_row = lookup_main_table(name_type)
+                if not main_table_row:
+                    print(f"{name_type} does not exist")
+                    return False
+                Name = match_terminal(IDENTIFIER)
+                if Name:
+                    if not main_table_row.link:
+                        print("data table undefined")
+                        return False
+                    object_type = F1(Name, None, main_table_row.link, True)
+                    if object_type:
+                        return object_type
+    elif select_rule([OPENING_BRACKET]): # a()[]
         if match_terminal(OPENING_BRACKET):
-            if OE():
+            type_of_expression = OE()
+            if type_of_expression:
+                if type_of_expression != 'number':
+                    print("index must be of type number.")
+                    return False
                 if match_terminal(CLOSING_BRACKET):
-                    if F1():
-                        return True
+                    if not name_type.array_dimensions:
+                        print(f"${name_type} is not of Array type")
+                        return False
+                    if name_type.return_type not in primitive_data_types and name_type.return_type != 'void':
+                        # if data_table_row.type is an object list case
+                        if not name_type.return_type:
+                            print("type undefined")
+                            return False
+                        main_table_row = lookup_main_table(name_type.return_type)
+                        if not main_table_row:
+                            print(f"{name_type.type} does not exist")
+                            return False
+                        if not main_table_row.link:
+                            print("data table does not exist")
+                            return False
+                        data_type = F1(main_table_row.name, main_table_row.name ,main_table_row.link, True)
+                        if data_type:
+                            return data_type
+                    data_type = F1(name, name_type.return_type ,data_table, False)
+                    if data_type:
+                        return data_type
     elif select_rule(follow_of_F2):
-        return True
+        if not name_type.return_type:
+            print('return type not defined')
+            return False
+        return name_type.return_type
     return False
 
-def AL() -> bool:
+def AL() -> bool | List[str]:
+    argument_list:List[str] = [] 
     if select_rule(first_of_OE):
-        if arguement():
-            if next_arguement():
-                return True
+        if arguement(argument_list):
+            if next_arguement(argument_list):
+                return argument_list
     elif select_rule([CLOSING_PARENTHESIS]):
-        return True
+        return argument_list
     return False
 
-def const() -> bool:
+def const() -> bool | str:
     if select_rule([INTEGER_CONSTANT]):
         if match_terminal(INTEGER_CONSTANT):
-            return True
+            return 'number'
     elif select_rule([FLOAT_CONSTANT]):
         if match_terminal(FLOAT_CONSTANT):
-            return True
+            return 'number'
     elif select_rule([STRING_CONSTANT]):
         if match_terminal(STRING_CONSTANT):
-            return True
+            return 'string'
     elif select_rule([BOOL_CONSTANT]):
         if match_terminal(BOOL_CONSTANT):
-            return True
+            return 'boolean'
     return False
 
-def arguement() -> bool:
+def arguement(argument_list: List[str]) -> bool:
     if select_rule(first_of_OE):
-        if OE():
+        type_of_expression = OE()
+        if type_of_expression and type(type_of_expression) == str:
+            argument_list.append(type_of_expression)
             return True
     return False
 
-def next_arguement() -> bool:
+def next_arguement(argument_list: List[str]) -> bool:
     if select_rule([COMMA]):
         if match_terminal(COMMA):
-            if OE():
+            type_of_expression = OE()
+            if type_of_expression and type(type_of_expression) == str:
+                argument_list.append(type_of_expression)
                 return True
     elif select_rule([CLOSING_PARENTHESIS]):
         return True
     return False
+
