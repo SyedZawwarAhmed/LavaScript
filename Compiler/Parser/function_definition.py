@@ -20,7 +20,7 @@ def function_definition() -> bool:
                     if parameter_type_list:
                         if match_terminal(CLOSING_PARENTHESIS):
                             type_and_array_dimensions = return_type()
-                            if type_and_array_dimensions:
+                            if type_and_array_dimensions and type(type_and_array_dimensions) == Function_Table_Row_Type:
                                 return_type_name = type_and_array_dimensions.type
                                 if return_type_name:
                                     new_type.parameter_list = parameter_type_list
@@ -76,7 +76,7 @@ def return_type():
 
     return False
 
-def data_type_or_void():
+def data_type_or_void() -> Function_Table_Row_Type | bool:
     if select_rule([VOID]):
         name = match_terminal(VOID)
         if name:

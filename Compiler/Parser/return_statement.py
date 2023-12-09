@@ -6,11 +6,11 @@ from Parser.expression import first_of_OE
 from Semantic.function_table_row import Function_Table_Row_Type
 from Semantic.helpers import *
 
-def return_statement() -> bool:
+def return_statement():
     if select_rule([RETURN]):
         if match_terminal(RETURN):
             return_type = OE_or_null()
-            if return_type:
+            if return_type and type(return_type) == Function_Table_Row_Type:
                 current_function_table_row = search_function_in_function_table()
                 if not current_function_table_row:
                     print("Return statement must be inside a function")

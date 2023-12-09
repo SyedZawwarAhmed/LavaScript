@@ -285,7 +285,7 @@ def F1(name:str, name_type: str | Function_Table_Row_Type | Data_Table_Row_Type 
             data_table_row = lookup_attribute_data_table(name, data_table)
         else:
             data_table_row = lookup_funtion_table(name)
-        if not data_table_row:
+        if data_table_row == None:
             print(f"{name} does not exist")
             return False
         if match_terminal(OPENING_BRACKET):

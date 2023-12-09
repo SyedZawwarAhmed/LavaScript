@@ -28,9 +28,9 @@ dynamic a: boolean;
 dynamic c: string = "a" + "b";
 static d: string = "afdlkjfdl";
 
-proc abcd(): void {
+proc abcd(): number {
   dynamic a: number;
-  return;
+  return a;
 }
 
 until (a) {
@@ -38,11 +38,11 @@ until (a) {
 }
 
 class Car {
-
+  numberOfWheels: number;
 }
 
 dynamic newCar: Car;
-dynamic b: Car = newCar;
+?dynamic b: number = newCar.numberOfWheels;
 
 if (c > d) {  
   return;
