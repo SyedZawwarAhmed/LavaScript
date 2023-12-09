@@ -25,6 +25,7 @@ def function_definition() -> bool:
                                 if return_type_name:
                                     new_type.parameter_list = parameter_type_list
                                     new_type.return_type = return_type_name
+                                    new_type.array_dimensions = type_and_array_dimensions.array_dimensions
                                     if match_terminal(OPENING_BRACE, False):
                                         if parser.MST():
                                             if match_terminal(CLOSING_BRACE):
