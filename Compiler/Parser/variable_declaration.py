@@ -10,19 +10,19 @@ def var_declaration() -> bool:
         if match_terminal(DYNAMIC_STATIC):
             name = match_terminal(IDENTIFIER)
             if name:
-                type_and_array_dimensions = data_type()
+                type_and_array_dimensions = variable_type()
                 if type_and_array_dimensions:
-                    [variable_type, array_dimensions] = type_and_array_dimensions
-                    if variable_type:
-                        new_type = Function_Table_Row_Type(variable_type, [], None, array_dimensions)
-                        if not insert_function_table(name, new_type):
+                    variable_type_name = type_and_array_dimensions.type
+                    if variable_type_name:
+                        if not insert_function_table(name, type_and_array_dimensions):
                             print(f"{name} is already declared.")
                             return False
-                        if assignment_statement(variable_type):
+                        if assignment_statement(type_and_array_dimensions):
                             return True
     return False
 
-def data_type():
+
+def variable_type():
     if select_rule([COLON]):
         if match_terminal(COLON):
             type_of_variable = type_name()
@@ -30,7 +30,7 @@ def data_type():
                 dimensions = 0
                 new_dimenisons = array_def(dimensions)
                 if new_dimenisons >= 0 and type(new_dimenisons) == int:
-                    return [type_of_variable, new_dimenisons]
+                    return Function_Table_Row_Type(type_of_variable, [], None, new_dimenisons)
     return False
 
 def type_name():
@@ -51,7 +51,7 @@ def type_name():
             return type_of_object
     return False
 
-def array_def(dimensions: int):
+def array_def(dimensions: int = 0):
     if select_rule([OPENING_BRACKET]):
         if match_terminal(OPENING_BRACKET):
             if match_terminal(CLOSING_BRACKET):
@@ -62,7 +62,7 @@ def array_def(dimensions: int):
         return dimensions
     return False
 
-def assignment_statement(variable_type: str) -> bool:
+def assignment_statement(variable_type: Function_Table_Row_Type) -> bool:
     if select_rule([ASSIGNMENT_OPERATOR]):
         operator = match_terminal(ASSIGNMENT_OPERATOR)
         if operator:
@@ -76,11 +76,12 @@ def assignment_statement(variable_type: str) -> bool:
         return True
     return False
 
-def expression_array() -> bool:
+def expression_array():
     if select_rule(first_of_OE):
         type_of_expression = OE()
         if type_of_expression:
-            return type_of_expression
+            new_type = Function_Table_Row_Type(type_of_expression)
+            return new_type
     elif select_rule([OPENING_BRACKET]):
         if array():
             return True

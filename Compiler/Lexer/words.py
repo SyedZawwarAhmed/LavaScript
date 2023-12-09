@@ -10,7 +10,9 @@ valid_words = {
             "string",
             "number",
             "boolean",
-            "void"
+        ],
+        VOID: [
+          "void",
         ],
         ASSIGN: [
             "assign"

@@ -8,16 +8,23 @@ from Parser.variable_declaration import *
 def function_definition() -> bool:    
     if select_rule([PROC]):
         if match_terminal(PROC):
-            if match_terminal(IDENTIFIER):
+            name = match_terminal(IDENTIFIER)
+            if name:
+                new_type: Function_Table_Row_Type = Function_Table_Row_Type()
+                if not insert_function_table(name, new_type):
+                    print(f"{name} is already declared")
+                    return False
                 if match_terminal(OPENING_PARENTHESIS):
                     create_scope()
                     parameter_type_list = params()
                     if parameter_type_list:
                         if match_terminal(CLOSING_PARENTHESIS):
-                            type_and_array_dimensions = data_type()
+                            type_and_array_dimensions = return_type()
                             if type_and_array_dimensions:
-                                [return_type, array_dimensions] = type_and_array_dimensions
-                                if return_type:
+                                return_type_name = type_and_array_dimensions.type
+                                if return_type_name:
+                                    new_type.parameter_list = parameter_type_list
+                                    new_type.return_type = return_type_name
                                     if match_terminal(OPENING_BRACE, False):
                                         if parser.MST():
                                             if match_terminal(CLOSING_BRACE):
@@ -35,7 +42,7 @@ def params():
         return True
     return False
 
-def next_parameter(parameter_type_list: List[str]):
+def next_parameter(parameter_type_list: List[Function_Table_Row_Type]):
     if select_rule([COMMA]):
         if match_terminal(COMMA):
             if parameter(parameter_type_list):
@@ -44,18 +51,39 @@ def next_parameter(parameter_type_list: List[str]):
         return True
     return False
 
-def parameter(parameter_type_list: List[str]):
+def parameter(parameter_type_list: List[Function_Table_Row_Type]):
     if select_rule([IDENTIFIER]):
         parameter_name = match_terminal(IDENTIFIER)
         if parameter_name:
-            type_and_array_dimensions = data_type()
+            type_and_array_dimensions = variable_type()
             if type_and_array_dimensions:
-                [parameter_type, array_dimensions] = type_and_array_dimensions
+                parameter_type = type_and_array_dimensions.type
                 if parameter_type:
-                    new_type = Function_Table_Row_Type(parameter_type, [], None, array_dimensions)
-                    if not insert_function_table(parameter_name, new_type):
+                    if not insert_function_table(parameter_name, type_and_array_dimensions):
                         print(f"Parameter {parameter_name} is already declared.")
                         return False
-                parameter_type_list.append(parameter_type)
+                parameter_type_list.append(type_and_array_dimensions)
                 return True
+    return False
+
+def return_type():
+    if select_rule([COLON]):
+        if match_terminal(COLON):
+            dto = data_type_or_void()
+            if dto:
+                return dto
+
+    return False
+
+def data_type_or_void():
+    if select_rule([VOID]):
+        name = match_terminal(VOID)
+        if name:
+            return Function_Table_Row_Type(name)
+    elif select_rule([IDENTIFIER, DATA_TYPES]):
+        name = type_name()
+        if name:
+            array_dimensions = array_def()
+            if type(array_dimensions) == int:
+                return Function_Table_Row_Type(name, [], None, array_dimensions)
     return False

@@ -11,13 +11,27 @@
     method GetArea(c: string): number;
 }@
 
-@interface E {
-    method GetArea(): number;
-}@ 
+interface E {
+    method GetArea(): void;
+}
 
-proc abc(a: string, a: string): string {
+proc abc(a: string): void {
+  dynamic c: number[][];
+  return;
+}
+
+proc bc(): void {
   dynamic c: number[];
 }
 
-class C {}
-class D {}
+proc abcd(): void {
+  dynamic c: number[];
+  return;
+}
+
+dynamic a: string;
+
+
+@class C {
+  method abc(a: string): void {return;}
+}@
