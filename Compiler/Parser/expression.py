@@ -266,7 +266,7 @@ def F1(name:str, name_type: str | None, data_table: List[Data_Table_Row] | List[
                     if not function_data_table_row.type.return_type:
                         print("not a function")
                         return False
-                    return_type = F2(function_data_table_row.type.return_type)
+                    return_type = F2(function_data_table_row.type)
                     if return_type and type(return_type) == str:
                         if return_type not in primitive_data_types:
                             main_table_row = lookup_main_table(return_type)
@@ -315,6 +315,9 @@ def F1(name:str, name_type: str | None, data_table: List[Data_Table_Row] | List[
     elif select_rule([INCREMENT_DECREMENT]):
         operator = match_terminal(INCREMENT_DECREMENT)
         if operator:
+            if not name_type:
+                print("type undefined")
+                return False
             compatibility_type = compatibility_for_single_operand(name_type, operator)
             if not compatibility_type:
                 print(f"{name_type} is not compatible with {operator}")
@@ -322,7 +325,7 @@ def F1(name:str, name_type: str | None, data_table: List[Data_Table_Row] | List[
             return compatibility_type
     return False
 
-def F2(name_type: str | Function_Table_Row_Type) -> bool | str:
+def F2(name_type: Function_Table_Row_Type | Data_Table_Row_Type) -> bool | str:
     if select_rule([DOT]):
         if not name_type:
             print("Function does not return a type")
@@ -344,7 +347,7 @@ def F2(name_type: str | Function_Table_Row_Type) -> bool | str:
                     object_type = F1(Name, None, main_table_row.link, True)
                     if object_type:
                         return object_type
-    elif select_rule([OPENING_BRACKET]):
+    elif select_rule([OPENING_BRACKET]): # 
         if match_terminal(OPENING_BRACKET):
             type_of_expression = OE()
             if type_of_expression:
@@ -355,11 +358,17 @@ def F2(name_type: str | Function_Table_Row_Type) -> bool | str:
                     if not name_type.array_dimensions:
                         print(f"${name_type} is not of Array type")
                         return False
-                    if name_type.type not in primitive_data_types:
+                    if name_type.return_type not in primitive_data_types or name_type.return_type != 'void':
                         # if data_table_row.type is an object list case
-                        main_table_row = lookup_main_table(name_type.type)
+                        if not name_type.return_type:
+                            print("type undefined")
+                            return False
+                        main_table_row = lookup_main_table(name_type.return_type)
                         if not main_table_row:
                             print(f"{name_type.type} does not exist")
+                            return False
+                        if not main_table_row.link:
+                            print("data table does not exist")
                             return False
                         data_type = F1(main_table_row.name, main_table_row.name ,main_table_row.link, True)
                         if data_type:
