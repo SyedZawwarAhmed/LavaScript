@@ -24,13 +24,17 @@ proc bc(): void {
   dynamic c: number[];
 }
 
-dynamic a: number;
+dynamic a: boolean;
 dynamic c: string = "a" + "b";
-static d: number;
+static d: boolean = false;
 
 proc abcd(): void {
-  dynamic a: number;
+  ?dynamic a: number;
   return;
+}
+
+until (a) {
+
 }
 
 dynamic b: number = c + d;
