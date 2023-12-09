@@ -15,9 +15,9 @@ interface E {
     method GetArea(): void;
 }
 
-proc abc(a: string): void {
+proc abc(a: number): number {
   dynamic c: number[][];
-  return;
+  return a;
 }
 
 proc bc(): void {
@@ -28,16 +28,16 @@ dynamic a: boolean;
 dynamic c: string = "a" + "b";
 static d: string = "afdlkjfdl";
 
-proc abcd(): number {
+proc abcd(): void {
   dynamic a: number;
-  return a;
+  return;
 }
 
 until (a) {
 
 }
 
-class Car {
+class Cars {
   numberOfWheels: number;
 }
 
@@ -45,9 +45,14 @@ dynamic newCar: Car;
 ?dynamic b: number = newCar.numberOfWheels;
 
 if (c > d) {  
-  return;
+  ?return;
 }
 
 @class C {
   method abc(a: string): void {return;}
 }@
+
+proc func(): Car {
+  dynamic car: Car;
+  return car;
+}

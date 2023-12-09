@@ -15,7 +15,7 @@ def return_statement():
                 if not current_function_table_row:
                     print("Return statement must be inside a function")
                     return False
-                if return_type.type != current_function_table_row.type.return_type and return_type.array_dimensions != current_function_table_row.type.array_dimensions:
+                if return_type.type != current_function_table_row.type.return_type or return_type.array_dimensions != current_function_table_row.type.array_dimensions:
                     print("Return statement must return as function return type")
                     return False
 
