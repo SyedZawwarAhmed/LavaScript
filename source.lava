@@ -24,13 +24,17 @@ proc bc(): void {
   dynamic c: number[];
 }
 
+dynamic a: number;
+
 proc abcd(): void {
-  dynamic c: number[];
   return;
 }
 
-dynamic a: string;
+dynamic b: string = a;
 
+@if (a > 3) {  
+  return;
+}@
 
 @class C {
   method abc(a: string): void {return;}

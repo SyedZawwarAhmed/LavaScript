@@ -201,7 +201,7 @@ def F() -> bool | str:
                     else:
                         main_table_row = lookup_main_table(function_table_row.type.type)
                         if not main_table_row:
-                            print(f"{function_table_row.type} is not defined")
+                            print(f"Type {function_table_row.type.type} is not defined")
                             return False
                         if not main_table_row.link:
                             print("data table not found")

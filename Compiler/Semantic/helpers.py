@@ -59,16 +59,16 @@ def lookup_function_data_table(name: str, parameter_list: List[str], data_table:
             return row
 
 def lookup_funtion_table(name: str):
-    for i in range(len(scope_stack), -1, -1):
+    for i in range(len(scope_stack) - 1 , -1, -1):
         scope = scope_stack[i]
         for row in function_table:
             if row.name == name and row.scope == scope:
                 return row
 
 def search_function_in_function_table():
-    for i in range(len(scope_stack)-2, -1, -1):
-        scope = scope_stack[i]
-        for j in range(len(scope_stack)-1, -1, -1):
+    for i in range(len(scope_stack) - 2, -1, -1):
+        scope = scope_stack[i] 
+        for j in range(len(scope_stack) - 1, -1, -1):
             row = function_table[j]
             if row.scope == scope and row.type.return_type:
                 return row
