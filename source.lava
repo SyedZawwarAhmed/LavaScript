@@ -26,10 +26,10 @@ proc bc(): void {
 
 dynamic a: boolean;
 dynamic c: string = "a" + "b";
-static d: boolean = false;
+static d: string = "afdlkjfdl";
 
 proc abcd(): void {
-  ?dynamic a: number;
+  dynamic a: number;
   return;
 }
 
@@ -37,7 +37,12 @@ until (a) {
 
 }
 
-dynamic b: number = c + d;
+class Car {
+
+}
+
+dynamic newCar: Car;
+dynamic b: Car = newCar;
 
 if (c > d) {  
   return;

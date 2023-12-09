@@ -204,10 +204,10 @@ def F() -> bool | str:
                         if not main_table_row:
                             print(f"Type {function_table_row.type.type} is not defined")
                             return False
-                        if not main_table_row.link:
+                        if main_table_row.link == None:
                             print("data table not found")
                             return False
-                        data_type = F1(name, main_table_row.name ,main_table_row.link, True)
+                        data_type = F1(name, main_table_row.name, main_table_row.link, True)
                         if data_type:
                             return data_type
                     

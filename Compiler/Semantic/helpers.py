@@ -9,7 +9,7 @@ def create_data_table() -> List[Data_Table_Row]:
     new_table: List[Data_Table_Row] = []
     return new_table
 
-def insert_main_table(name: str, type: Main_Table_Type, access_modifier: Main_Table_Access_Modifier, category: Main_Table_Category, parent: List[str], link: List[Data_Table_Row] | None) -> bool:
+def insert_main_table(name: str, type: Main_Table_Type, access_modifier: Main_Table_Access_Modifier, category: Main_Table_Category, parent: List[str], link: List[Data_Table_Row]) -> bool:
     for row in main_table:
         if row.name == name:
             return False
@@ -113,6 +113,9 @@ def compatibility_for_two_operands(left_operand_type_and_dimensions: Function_Ta
             return
 
     if operator in compatibility_rules:
+        if operator == '=':
+            if left_operand_type == right_operand_type:
+                return left_operand_type
         if left_operand_type == right_operand_type and left_operand_type in compatibility_rules[operator] and right_operand_type in compatibility_rules[operator]:
             if operator in relational_operators:
                 return 'boolean'
