@@ -256,6 +256,9 @@ def P() -> bool | str:
 def F1(name:str, name_type: str | Function_Table_Row_Type | Data_Table_Row_Type | None, data_table: List[Data_Table_Row] | List[Function_Table_Row], is_object: bool) -> bool | str:
     if select_rule(follow_of_F1):
         if type(name_type) == str:
+            if len(data_table) == 0:
+                print(f"{name} is empty")
+                return False
             if is_object and type(data_table[0]) == Data_Table_Row:
                 data_table_row = lookup_attribute_data_table(name, data_table)
                 if not data_table_row:
@@ -286,7 +289,10 @@ def F1(name:str, name_type: str | Function_Table_Row_Type | Data_Table_Row_Type 
     elif select_rule([OPENING_BRACKET]): # suppose type of array is stored like this int[][]
         if not name_type:
             data_table_row = None
-            if is_object and type(data_table) == Data_Table_Row:
+            if len(data_table) == 0:
+                print(f"{name} is empty")
+                return False
+            if is_object and type(data_table[0]) == Data_Table_Row:
                 data_table_row = lookup_attribute_data_table(name, data_table)
             else:
                 data_table_row = lookup_funtion_table(name, None)
@@ -331,6 +337,7 @@ def F1(name:str, name_type: str | Function_Table_Row_Type | Data_Table_Row_Type 
     elif select_rule([OPENING_PARENTHESIS]):
         if match_terminal(OPENING_PARENTHESIS):
             argument_list = AL()
+            print(argument_list)
             if argument_list != None and type(argument_list) == list:
                 if match_terminal(CLOSING_PARENTHESIS):
                     if type(name_type) != str:
@@ -338,9 +345,13 @@ def F1(name:str, name_type: str | Function_Table_Row_Type | Data_Table_Row_Type 
                             print('wrong Dimension')
                             return False
                     function_data_table_row = None
-                    if is_object and type(data_table) == Data_Table_Row:
+                    if len(data_table) == 0:
+                        print(f"{name} does not exist")
+                        return False
+                    if is_object and type(data_table[0]) == Data_Table_Row:
                         function_data_table_row = lookup_function_data_table(name, argument_list, data_table)
                     else:
+                        print(name, argument_list)
                         function_data_table_row = lookup_funtion_table(name, argument_list)
                     if not function_data_table_row:
                         print(f"{name} method does not exist")
@@ -512,6 +523,7 @@ def const() -> bool | str:
 def arguement(argument_list: List[str]) -> bool:
     if select_rule(first_of_OE):
         type_of_expression = OE()
+        print(type_of_expression)
         if type_of_expression:
             if type(type_of_expression.type) == str:
                 argument_list.append(type_of_expression.type)
