@@ -40,7 +40,7 @@ proc abcd(): void {
   return;
 }
 
-until (a) {
+until (fun() != 4) {
 
 }
 
