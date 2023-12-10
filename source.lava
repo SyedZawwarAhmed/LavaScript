@@ -1,7 +1,7 @@
-proc abcd (a: number): number {
+proc abcd (a: number, c: string): number {
   return 5;
 }
  
-dynamic b: number = abcd(1);
+dynamic b: number = abcd(1, "abc", 3);
 
 
