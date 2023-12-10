@@ -1,8 +1,24 @@
 
 dynamic a: number = 3 / 5 - 4;
+class Car {
+
+  method ad(): void {
+    if (1==2) {
+      static b: number = 4;
+    } else {
+      return;
+      skip;
+      exit;
+    }
+  }
+}
 
 proc fun (): number {
-
+  until (1==1) {
+    skip;
+    exit;
+    return 2;
+  }
 }
 
 dynamic n: number = 4.8 + 5;
@@ -36,11 +52,6 @@ proc bc(): void {
 dynamic c: string = "a" + "b";
 static d: string = "afdlkjfdl";
 
-proc abcd(p1: string): number {
-  dynamic a: number;
-  return a;
-}
-
 until (fun() != 4) {
 
 }
@@ -57,9 +68,6 @@ class Wheel {
   spokes: number;
 }
 
-class Car {
-  wheel: Wheel;
-}
 
 proc func(): Car {
   dynamic car: Car;
@@ -72,3 +80,9 @@ dynamic b: number = newCar.wheel.spokes;
 dynamic n1: number = abcd();
 
 dynamic car1: Car = init Car();
+dynamic b: number = abcd();
+
+until (1==2) {
+  skip;
+  exit;
+}

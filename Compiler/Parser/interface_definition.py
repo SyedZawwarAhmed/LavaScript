@@ -13,7 +13,7 @@ def interface_defintion() -> bool:
             name = match_terminal(IDENTIFIER)
             type = Main_Table_Type.INTERFACE
             if name:
-                if match_terminal(OPENING_BRACE):
+                if match_terminal(OPENING_BRACE, True, Scope_Type.INTERFACE):
                     if interface_body():
                         new_data_table = create_data_table()
                         if not insert_main_table(name, type, access_modifier, category, parent, new_data_table):
