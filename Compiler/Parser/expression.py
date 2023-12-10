@@ -260,7 +260,7 @@ def F1(name:str, name_type: str | Function_Table_Row_Type | Data_Table_Row_Type 
                 data_table_row = lookup_attribute_data_table(name, data_table)
                 if data_table_row:
                     if data_table_row.access_modifier == Data_Table_Access_Modifier.PRIVATE:
-                        print(f"Can not Access ${name}")
+                        print(f"Can not Access {name}")
                         return False
                     name_type = data_table_row.type.type
             else:
@@ -355,7 +355,7 @@ def F1(name:str, name_type: str | Function_Table_Row_Type | Data_Table_Row_Type 
             if is_object and type(data_table) == Data_Table_Row:
                 data_table_row = lookup_attribute_data_table(name, data_table)
                 if data_table_row and data_table_row.access_modifier == Data_Table_Access_Modifier.PRIVATE:
-                    print(f"Can not Access ${name}")
+                    print(f"Can not Access {name}")
                     return False     
             else:
                 data_table_row = lookup_funtion_table(name)
