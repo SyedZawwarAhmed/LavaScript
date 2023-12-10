@@ -183,7 +183,7 @@ def F() -> bool | str:
             else:
                 name = match_terminal(IDENTIFIER) #a
                 if name:
-                    function_table_row = lookup_funtion_table(name)
+                    function_table_row = lookup_funtion_table(name, None)
                     if not function_table_row:
                         print(f"{name} is not defined")
                         return False
@@ -258,13 +258,16 @@ def F1(name:str, name_type: str | Function_Table_Row_Type | Data_Table_Row_Type 
         if type(name_type) == str:
             if is_object and type(data_table[0]) == Data_Table_Row:
                 data_table_row = lookup_attribute_data_table(name, data_table)
+                if not data_table_row:
+                    print(f"{name} does not exist")
+                    return False
                 if data_table_row:
                     if data_table_row.access_modifier == Data_Table_Access_Modifier.PRIVATE:
                         print(f"Can not Access {name}")
                         return False
                     name_type = data_table_row.type.type
             else:
-                function_table_row = lookup_funtion_table(name)
+                function_table_row = lookup_funtion_table(name, None)
                 if not function_table_row:
                     print(f"{name} does not exist")
                     return False
@@ -282,7 +285,7 @@ def F1(name:str, name_type: str | Function_Table_Row_Type | Data_Table_Row_Type 
             if is_object and type(data_table) == Data_Table_Row:
                 data_table_row = lookup_attribute_data_table(name, data_table)
             else:
-                data_table_row = lookup_funtion_table(name)
+                data_table_row = lookup_funtion_table(name, None)
             if data_table_row == None:
                 print(f"{name} does not exist")
                 return False
@@ -331,7 +334,7 @@ def F1(name:str, name_type: str | Function_Table_Row_Type | Data_Table_Row_Type 
                     if is_object and type(data_table) == Data_Table_Row:
                         function_data_table_row = lookup_function_data_table(name, argument_list, data_table)
                     else:
-                        function_data_table_row = lookup_funtion_table(name)
+                        function_data_table_row = lookup_funtion_table(name, argument_list)
                     if not function_data_table_row:
                         print(f"{name} method does not exist")
                         return False
@@ -356,7 +359,7 @@ def F1(name:str, name_type: str | Function_Table_Row_Type | Data_Table_Row_Type 
                     print(f"Can not Access {name}")
                     return False     
             else:
-                data_table_row = lookup_funtion_table(name)
+                data_table_row = lookup_funtion_table(name, None)
             if not data_table_row:
                 print(f"{name} does not exist")
                 return False
