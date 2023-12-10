@@ -4,6 +4,7 @@ from Semantic.main_table_row import Main_Table_Row
 from Semantic.function_table_row import *
 from Semantic.data_table_row import *
 from Semantic.enums import *
+import Utils.config as config
 
 def create_data_table() -> List[Data_Table_Row]:
     new_table: List[Data_Table_Row] = []
@@ -79,6 +80,11 @@ def search_function_in_function_table():
             row = function_table[j]
             if row.scope == scope and row.type.return_type:
                 return row
+
+def search_method_in_data_table():
+    global config
+    if config.current_class_data_table:
+        return config.current_class_data_table[-1]
             
 def compatibility_for_two_operands(left_operand_type_and_dimensions: Function_Table_Row_Type, right_operand_type_and_dimensions: Function_Table_Row_Type, operator: str):
     left_operand_type = left_operand_type_and_dimensions.type

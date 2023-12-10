@@ -3,8 +3,11 @@ from Utils.select_rule import select_rule
 from Utils.match_terminal import match_terminal
 from Lexer.constants import *
 from Semantic.helpers import *
+import Utils.config as config
+# from Parser.parser import *
 
 def interface_defintion() -> bool:
+    global config
     if select_rule([INTERFACE]):
         access_modifier = Main_Table_Access_Modifier.GENERAL
         parent = []
@@ -14,11 +17,11 @@ def interface_defintion() -> bool:
             type = Main_Table_Type.INTERFACE
             if name:
                 if match_terminal(OPENING_BRACE, True, Scope_Type.INTERFACE):
+                    config.current_class_data_table = create_data_table()
+                    if not insert_main_table(name, type, access_modifier, category, parent, config.current_class_data_table):
+                        print(f"Interface {name} is already defined")
+                        return False
                     if interface_body():
-                        new_data_table = create_data_table()
-                        if not insert_main_table(name, type, access_modifier, category, parent, new_data_table):
-                            print(f"Interface {name} is already defined")
-                            return False
                         if match_terminal(CLOSING_BRACE):
                             return True
     return False

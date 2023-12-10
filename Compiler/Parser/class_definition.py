@@ -1,17 +1,16 @@
 from Parser.expression import OE
 from Parser.function_definition import params
-import Parser.parser as parser
 from Parser.variable_declaration import assignment_statement
 from Utils.select_rule import select_rule
 from Utils.match_terminal import match_terminal
 from Lexer.constants import *
 from Parser.variable_declaration import *
 from Parser.function_definition import *
-
 from Semantic.helpers import *
+import Utils.config as config
 
 def class_definition() -> bool:
-    global current_class_data_table
+    global config
     if select_rule([SEALED, CLASS]):
         access_modifier = Main_Table_Access_Modifier.GENERAL
         parent = []
@@ -22,14 +21,13 @@ def class_definition() -> bool:
                 name = match_terminal(IDENTIFIER)
                 if inheritable_class():
                     if name:
-                        new_data_table = create_data_table()
-                        current_class_data_table = new_data_table
-                        if not insert_main_table(name, type, access_modifier, category, parent, current_class_data_table):
+                        config.current_class_data_table = create_data_table()
+                        if not insert_main_table(name, type, access_modifier, category, parent, config.current_class_data_table):
                             print(f"Class {name} is already declared.")
                             return False
                         if match_terminal(OPENING_BRACE, True, Scope_Type.CLASS):
                             if class_body():
-                                current_class_data_table = None
+                                config.current_class_data_table = None
                                 if match_terminal(CLOSING_BRACE):
                                     return True
     return False
@@ -141,6 +139,7 @@ def class_single_statement() -> bool:
     return False
 
 def attribute() -> bool:
+    global config
     if select_rule([IDENTIFIER]):
         name = match_terminal(IDENTIFIER)
         if name:
@@ -150,7 +149,7 @@ def attribute() -> bool:
                 array_dimensions = type_and_array_dimensions.array_dimensions
                 if attribute_type:
                     new_data_type = Data_Table_Row_Type(attribute_type, [], None, array_dimensions)
-                    if not insert_data_table(name, new_data_type, Data_Table_Access_Modifier.PUBLIC, '', current_class_data_table):
+                    if not insert_data_table(name, new_data_type, Data_Table_Access_Modifier.PUBLIC, '', config.current_class_data_table ):
                         print(f"Attribute {name} is already declared.")
                         return False
                     if assignment_statement(type_and_array_dimensions):
@@ -165,7 +164,7 @@ def attribute() -> bool:
                     array_dimensions = type_and_array_dimensions.array_dimensions
                     if attribute_type:
                         new_data_type = Data_Table_Row_Type(attribute_type, [], None, array_dimensions)
-                        if not insert_data_table(name, new_data_type, Data_Table_Access_Modifier.PRIVATE, '', current_class_data_table):
+                        if not insert_data_table(name, new_data_type, Data_Table_Access_Modifier.PRIVATE, '', config.current_class_data_table ):
                             print(f"Attribute {name} is already declared.")
                             return False
                         if assignment_statement(type_and_array_dimensions):
@@ -177,19 +176,19 @@ def method() -> bool:
         if method_header():
             if match_terminal(OPENING_BRACE, False):
                 if parser.MST():
-                    destroy_scope()
                     if match_terminal(CLOSING_BRACE):
                         return True
     return False
 
 def method_header() -> bool:
+    global config
     if select_rule([METHOD]):
         if match_terminal(METHOD):
             name_and_access_modifier = method_next()
             if name_and_access_modifier:
                 name, access_modifier = name_and_access_modifier
                 if match_terminal(OPENING_PARENTHESIS):
-                    create_scope(Scope_Type.PROCEDURE)
+                    create_scope(Scope_Type.METHOD)
                     parameter_type_list = params()
                     if parameter_type_list:
                         if match_terminal(CLOSING_PARENTHESIS):
@@ -205,9 +204,10 @@ def method_header() -> bool:
                                     new_type.parameter_list = t
                                     new_type.return_type = return_type_name
                                     new_type.array_dimensions = type_and_array_dimensions.array_dimensions
-                                    if not insert_data_table(name, new_type, access_modifier, '', current_class_data_table):
+                                    if not insert_data_table(name, new_type, access_modifier, '', config.current_class_data_table):
                                         print(f"Method {name} is already declared.")
                                         return False
+                                    return True
     return False
 
 def method_next():

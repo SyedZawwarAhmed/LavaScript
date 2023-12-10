@@ -1,14 +1,12 @@
 
 dynamic a: number = 3 / 5 - 4;
-class Car {
 
-  method ad(): void {
+class Car {
+  method ad(): number {
     if (1==2) {
       static b: number = 4;
     } else {
-      return;
-      skip;
-      exit;
+      return a;
     }
   }
 }
@@ -75,7 +73,7 @@ proc func(): Car {
 }
 
 dynamic newCar: Car;
-dynamic b: number = abcd();
+?dynamic b: number = abcd();
 
 until (1==2) {
   skip;
