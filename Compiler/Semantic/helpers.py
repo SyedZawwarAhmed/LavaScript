@@ -19,9 +19,9 @@ def insert_main_table(name: str, type: Main_Table_Type, access_modifier: Main_Ta
 
 def insert_function_table(name: str, type: Function_Table_Row_Type):
     for row in function_table:
-        if row.name == name and row.scope == scope_stack[-1]:
+        if row.name == name and row.scope == scope_stack[-1].Scope_Number:
             return False
-    new_row = Function_Table_Row(name, type, scope_stack[-1])
+    new_row = Function_Table_Row(name, type, scope_stack[-1].Scope_Number)
     function_table.append(new_row)
     return new_row
 
@@ -60,14 +60,14 @@ def lookup_function_data_table(name: str, parameter_list: List[str], data_table:
 
 def lookup_funtion_table(name: str):
     for i in range(len(scope_stack) - 1 , -1, -1):
-        scope = scope_stack[i]
+        scope = scope_stack[i].Scope_Number
         for row in function_table:
             if row.name == name and row.scope == scope:
                 return row
 
 def search_function_in_function_table():
     for i in range(len(scope_stack) - 2, -1, -1):
-        scope = scope_stack[i] 
+        scope = scope_stack[i].Scope_Number
         for j in range(len(function_table) - 1, -1, -1):
             row = function_table[j]
             if row.scope == scope and row.type.return_type:
@@ -137,10 +137,10 @@ def compatibility_for_single_operand(operand_type: str, operator: str):
             return
 
 
-def create_scope():
+def create_scope(scope_type: Scope_Type):
     global current_scope
     current_scope += 1
-    scope_stack.append(current_scope)
+    scope_stack.append(Scope(current_scope, scope_type))
 
 def destroy_scope():
     scope_stack.pop()

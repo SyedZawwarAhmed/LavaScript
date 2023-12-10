@@ -186,7 +186,7 @@ def method_header() -> bool:
         if match_terminal(METHOD):
             if method_next():
                 if match_terminal(OPENING_PARENTHESIS):
-                    create_scope()
+                    create_scope(Scope_Type.METHOD)
                     if params():
                         destroy_scope()
                         if match_terminal(CLOSING_PARENTHESIS):
