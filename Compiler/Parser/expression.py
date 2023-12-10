@@ -512,9 +512,10 @@ def const() -> bool | str:
 def arguement(argument_list: List[str]) -> bool:
     if select_rule(first_of_OE):
         type_of_expression = OE()
-        if type_of_expression and type(type_of_expression) == str:
-            argument_list.append(type_of_expression)
-            return True
+        if type_of_expression:
+            if type(type_of_expression.type) == str:
+                argument_list.append(type_of_expression.type)
+                return True
     return False
 
 def next_arguement(argument_list: List[str]) -> bool:

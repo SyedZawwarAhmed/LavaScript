@@ -66,7 +66,7 @@ def assignment_statement(variable_type: Function_Table_Row_Type) -> bool:
     if select_rule([ASSIGNMENT_OPERATOR]):
         operator = match_terminal(ASSIGNMENT_OPERATOR)
         if operator:
-            type_of_expression_array = expression_array()
+            type_of_expression_array = expression_array_object()
             if type_of_expression_array and type(type_of_expression_array) == Function_Table_Row_Type:
                 if not compatibility_for_two_operands(variable_type, type_of_expression_array, operator):
                     print(f"expression of type {type_of_expression_array.type} cannot be assigned to variable of type {variable_type.type}")
@@ -76,7 +76,7 @@ def assignment_statement(variable_type: Function_Table_Row_Type) -> bool:
         return True
     return False
 
-def expression_array() -> Function_Table_Row_Type | bool:
+def expression_array_object() -> Function_Table_Row_Type | bool:
     if select_rule(first_of_OE):
         type_of_expression = OE()
         if type_of_expression:
@@ -85,6 +85,19 @@ def expression_array() -> Function_Table_Row_Type | bool:
     elif select_rule([OPENING_BRACKET]):
         if array():
             return True
+    elif select_rule([INIT]):
+        if match_terminal(INIT):
+            name = match_terminal(IDENTIFIER)
+            if name:
+                if match_terminal(OPENING_PARENTHESIS):
+                    arguement_list = AL()
+                    if type(arguement_list) == list:
+                        if match_terminal(CLOSING_PARENTHESIS):
+                            main_table_row = lookup_main_table(name)
+                            if not main_table_row:
+                                print(f"Class {name} does not exist")
+                                return False
+                            return Function_Table_Row_Type(name)
     return False
 
 def array() -> bool:
@@ -99,7 +112,7 @@ def array_element() -> bool:
     if select_rule([CLOSING_BRACKET]):
         return True
     elif select_rule([THIS, IDENTIFIER, INTEGER_CONSTANT, FLOAT_CONSTANT, STRING_CONSTANT, BOOL_CONSTANT, NOT, OPENING_BRACKET]):
-        if expression_array():
+        if expression_array_object():
             if next_element():
                 return True
     return False
@@ -107,7 +120,7 @@ def array_element() -> bool:
 def next_element() -> bool:
     if select_rule([COMMA]):
         if match_terminal(COMMA):
-            if expression_array():
+            if expression_array_object():
                 if next_element():
                     return True
     elif select_rule([CLOSING_BRACKET]):

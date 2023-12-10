@@ -2,7 +2,7 @@
 dynamic a: number = 3 / 5 - 4;
 class Car {
 
-  method ad(): void {
+  @method ad(): void {
     if (1==2) {
       static b: number = 4;
     } else {
@@ -10,7 +10,7 @@ class Car {
       skip;
       exit;
     }
-  }
+  }@
 }
 
 proc fun (): number {
@@ -36,9 +36,9 @@ if (a > 3) {
     method GetArea(c: string): number;
 }@
 
-interface E {
+@interface E {
     method GetArea(): void;
-}
+}@
 
 proc abc(a: number): number {
   dynamic c: number[][];
@@ -74,8 +74,17 @@ proc func(): Car {
   return car;
 }
 
+proc abcd (): number {
+
+}
+
 dynamic newCar: Car;
-dynamic b: number = abcd();
+dynamic b: number = a;
+
+dynamic n1: number = abcd();
+
+dynamic car1: Car = init Car(a);
+?dynamic b: number = abcd();
 
 until (1==2) {
   skip;
