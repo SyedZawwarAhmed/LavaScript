@@ -151,3 +151,10 @@ def create_scope(scope_type: Scope_Type):
 
 def destroy_scope():
     scope_stack.pop()
+
+def check_scope(scope_type: Scope_Type) -> bool:
+    for i in range(len(scope_stack) - 1, -1, -1):
+        if scope_stack[i].Scope_Type == scope_type:
+            return True
+    
+    return False

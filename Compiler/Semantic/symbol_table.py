@@ -9,4 +9,3 @@ function_table: List[Function_Table_Row] = []
 current_scope = 0
 scope_stack: List[Scope] = [Scope(0, Scope_Type.GLOBAL)]
 current_class_data_table: List[Data_Table_Row] | None = None
-
