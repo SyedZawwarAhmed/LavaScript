@@ -17,7 +17,7 @@ def if_statement() -> bool:
                         print("If condition must be of type boolean.")
                         return False
                     if match_terminal(CLOSING_PARENTHESIS):
-                        if match_terminal(OPENING_BRACE):
+                        if match_terminal(OPENING_BRACE, True, Scope_Type.IF):
                             if parser.MST():
                                 if match_terminal(CLOSING_BRACE):
                                     if next():
@@ -27,7 +27,7 @@ def if_statement() -> bool:
 def next() -> bool:
     if select_rule([ELSE]):
         if match_terminal(ELSE):
-            if match_terminal(OPENING_BRACE):
+            if match_terminal(OPENING_BRACE, True, Scope_Type.IF):
                 if parser.MST():
                     if match_terminal(CLOSING_BRACE):
                         return True

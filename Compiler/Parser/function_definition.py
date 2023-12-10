@@ -1,3 +1,4 @@
+from typing import Literal
 from Parser.expression import OE
 import Parser.parser as parser
 from Utils.select_rule import select_rule
@@ -15,7 +16,7 @@ def function_definition() -> bool:
                     print(f"{name} is already declared")
                     return False
                 if match_terminal(OPENING_PARENTHESIS):
-                    create_scope()
+                    create_scope(Scope_Type.PROCEDURE)
                     parameter_type_list = params()
                     if parameter_type_list:
                         if match_terminal(CLOSING_PARENTHESIS):
@@ -32,7 +33,7 @@ def function_definition() -> bool:
                                                 return True
     return False
 
-def params():
+def params() -> List[Function_Table_Row_Type] | bool:
     parameter_type_list = []
     if select_rule([IDENTIFIER]):
         if parameter(parameter_type_list):
@@ -76,7 +77,7 @@ def return_type():
 
     return False
 
-def data_type_or_void() -> Function_Table_Row_Type | bool:
+def data_type_or_void() -> Function_Table_Row_Type | Literal[False]:
     if select_rule([VOID]):
         name = match_terminal(VOID)
         if name:

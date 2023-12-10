@@ -9,6 +9,9 @@ from Semantic.helpers import *
 def return_statement():
     if select_rule([RETURN]):
         if match_terminal(RETURN):
+            if not check_scope(Scope_Type.PROCEDURE):
+                print("Return statement must be inside a function or a class method")
+                return False
             return_type = OE_or_null()
             if return_type and type(return_type) == Function_Table_Row_Type:
                 current_function_table_row = search_function_in_function_table()

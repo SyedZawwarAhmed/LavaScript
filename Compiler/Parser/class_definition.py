@@ -27,7 +27,7 @@ def class_definition() -> bool:
                         if not insert_main_table(name, type, access_modifier, category, parent, current_class_data_table):
                             print(f"Class {name} is already declared.")
                             return False
-                        if match_terminal(OPENING_BRACE):
+                        if match_terminal(OPENING_BRACE, True, Scope_Type.CLASS):
                             if class_body():
                                 current_class_data_table = None
                                 if match_terminal(CLOSING_BRACE):
@@ -177,6 +177,7 @@ def method() -> bool:
         if method_header():
             if match_terminal(OPENING_BRACE, False):
                 if parser.MST():
+                    destroy_scope()
                     if match_terminal(CLOSING_BRACE):
                         return True
     return False
@@ -184,25 +185,41 @@ def method() -> bool:
 def method_header() -> bool:
     if select_rule([METHOD]):
         if match_terminal(METHOD):
-            if method_next():
+            name_and_access_modifier = method_next()
+            if name_and_access_modifier:
+                name, access_modifier = name_and_access_modifier
                 if match_terminal(OPENING_PARENTHESIS):
-                    create_scope()
-                    if params():
-                        destroy_scope()
+                    create_scope(Scope_Type.PROCEDURE)
+                    parameter_type_list = params()
+                    if parameter_type_list:
                         if match_terminal(CLOSING_PARENTHESIS):
-                            if return_type():
-                                return True
+                            type_and_array_dimensions = return_type()
+                            if type_and_array_dimensions and type(type_and_array_dimensions) == Function_Table_Row_Type:
+                                return_type_name = type_and_array_dimensions.type
+                                if return_type_name:
+                                    new_type = Data_Table_Row_Type()
+                                    t = []
+                                    if type(parameter_type_list) == List[Function_Table_Row_Type]:
+                                        for pt in parameter_type_list:
+                                            t.append(Data_Table_Row_Type(pt.type, None, None, pt.array_dimensions))
+                                    new_type.parameter_list = t
+                                    new_type.return_type = return_type_name
+                                    new_type.array_dimensions = type_and_array_dimensions.array_dimensions
+                                    if not insert_data_table(name, new_type, access_modifier, '', current_class_data_table):
+                                        print(f"Method {name} is already declared.")
+                                        return False
     return False
 
-def method_next() -> bool:
+def method_next():
     if select_rule([IDENTIFIER]):
         name = match_terminal(IDENTIFIER)
         if name:
-            return True
+            return name, Data_Table_Access_Modifier.PUBLIC
     elif select_rule([HASH]):
         if match_terminal(HASH):
-            if match_terminal(IDENTIFIER):
-                return True
+            name = match_terminal(IDENTIFIER)
+            if name:
+                return name, Data_Table_Access_Modifier.PRIVATE
     return False
 
 def constructor() -> bool:
@@ -211,7 +228,7 @@ def constructor() -> bool:
             if match_terminal(OPENING_PARENTHESIS):
                 if params():
                     if match_terminal(CLOSING_PARENTHESIS):
-                        if match_terminal(OPENING_BRACE):
+                        if match_terminal(OPENING_BRACE, True, Scope_Type.CONSTRUCTOR):
                             if parser.MST():
                                 if match_terminal(CLOSING_BRACE):
                                     return True
