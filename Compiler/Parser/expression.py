@@ -207,7 +207,7 @@ def F() -> bool | str:
                         if main_table_row.link == None:
                             print("data table not found")
                             return False
-                        data_type = F1(name, main_table_row.name, main_table_row.link, True)
+                        data_type = F1(name, function_table_row.type, main_table_row.link, True)
                         if data_type:
                             return data_type
                     
