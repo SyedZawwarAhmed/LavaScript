@@ -177,7 +177,7 @@ def F() -> bool | str:
                     if not current_class_data_table:
                         print("this must be used inside a class")
                         return False
-                    data_type = F1(name, None, current_class_data_table, True)
+                    data_type = F1(name, name, current_class_data_table, True)
                     if data_type:
                         return data_type
             else:
@@ -255,7 +255,7 @@ def P() -> bool | str:
 
 def F1(name:str, name_type: str | Function_Table_Row_Type | Data_Table_Row_Type | None, data_table: List[Data_Table_Row] | List[Function_Table_Row], is_object: bool) -> bool | str:
     if select_rule(follow_of_F1):
-        if not name_type:
+        if type(name_type) == str:
             if is_object and type(data_table[0]) == Data_Table_Row:
                 data_table_row = lookup_attribute_data_table(name, data_table)
                 if data_table_row:
@@ -269,9 +269,6 @@ def F1(name:str, name_type: str | Function_Table_Row_Type | Data_Table_Row_Type 
                     print(f"{name} does not exist")
                     return False
                 name_type = function_table_row.type.type
-            if not name_type: 
-                print(f"{name} does not exist")
-                return False
         if type(name_type) == Function_Table_Row_Type or type(name_type) == Data_Table_Row_Type:
             if not name_type.type and name_type.return_type:
                 return name_type.return_type
@@ -326,16 +323,17 @@ def F1(name:str, name_type: str | Function_Table_Row_Type | Data_Table_Row_Type 
             argument_list = AL()
             if argument_list != None and type(argument_list) == list:
                 if match_terminal(CLOSING_PARENTHESIS):
-                    if name_type.array_dimensions:
-                        print('wrong Dimension')
-                        return False
+                    if type(name_type) != str:
+                        if name_type.array_dimensions:
+                            print('wrong Dimension')
+                            return False
                     function_data_table_row = None
                     if is_object and type(data_table) == Data_Table_Row:
                         function_data_table_row = lookup_function_data_table(name, argument_list, data_table)
                     else:
                         function_data_table_row = lookup_funtion_table(name)
                     if not function_data_table_row:
-                        print(f"{name} does not exist")
+                        print(f"{name} method does not exist")
                         return False
                     if not function_data_table_row.type.return_type:
                         print("not a function")
@@ -351,8 +349,8 @@ def F1(name:str, name_type: str | Function_Table_Row_Type | Data_Table_Row_Type 
                         return return_type
     elif select_rule([DOT]):
         data_table_row = None
-        if not name_type:
-            if is_object and type(data_table) == Data_Table_Row:
+        if not name_type or type(name_type) == str:
+            if is_object and type(data_table[0]) == Data_Table_Row:
                 data_table_row = lookup_attribute_data_table(name, data_table)
                 if data_table_row and data_table_row.access_modifier == Data_Table_Access_Modifier.PRIVATE:
                     print(f"Can not Access ${name}")
@@ -363,32 +361,33 @@ def F1(name:str, name_type: str | Function_Table_Row_Type | Data_Table_Row_Type 
                 print(f"{name} does not exist")
                 return False
         if match_terminal(DOT):
-            if not name_type:
-                if not data_table_row:
-                    print(f"{name} does not exist")
-                    return False
-                if not data_table_row.type.type:
-                    print("type undefined")
-                    return False
+            if type(name_type) == str:
                 main_table_row = lookup_main_table(data_table_row.type.type)
                 if not main_table_row:
-                    print(f"${data_table_row.type.type} does not exist")
+                    print(f"can not access properties of {data_table_row.type.type}")
                     return False
                 if not main_table_row.link:
                     print("data table undefined")
                     return False
                 data_table = main_table_row.link
-            if name_type.array_dimensions:
-                print("wrong Dimension")
-                return False
-            if name_type.type in primitive_data_types:
-                print("cannot access primitives data types")
-                return False
+                name_type = main_table_row.name
+            if type(name_type) != str:
+                if name_type.array_dimensions:
+                    print("wrong Dimension")
+                    return False
+                if name_type.type in primitive_data_types:
+                    print("cannot access primitives data types")
+                    return False
             Name = match_terminal(IDENTIFIER)
             if Name:
-                object_type = F1(Name, None, data_table, True)
-                if object_type:
-                    return object_type
+                if type(name_type) == str:
+                    object_type = F1(Name, name_type, data_table, True)
+                    if object_type:
+                        return object_type
+                if type(name_type) != str:
+                    object_type = F1(Name, name_type.type, data_table, True)
+                    if object_type:
+                        return object_type
     elif select_rule([INCREMENT_DECREMENT]):
         operator = match_terminal(INCREMENT_DECREMENT)
         if operator:
@@ -415,9 +414,6 @@ def F1(name:str, name_type: str | Function_Table_Row_Type | Data_Table_Row_Type 
 
 def F2(name: str, name_type: Function_Table_Row_Type | Data_Table_Row_Type, data_table: List[Data_Table_Row] | List[Function_Table_Row]) -> bool | str:
     if select_rule([DOT]):
-        if not name_type:
-            print("Function does not return a type")
-            return False
         if match_terminal(DOT):
             if name_type.return_type in primitive_data_types:
                 print("cannot access primitives data types")
@@ -426,12 +422,12 @@ def F2(name: str, name_type: Function_Table_Row_Type | Data_Table_Row_Type, data
             if not main_table_row:
                 print(f"{name_type.return_type} does not exist")
                 return False
+            if not main_table_row.link:
+                print("data table undefined")
+                return False
             Name = match_terminal(IDENTIFIER)
             if Name:
-                if not main_table_row.link:
-                    print("data table undefined")
-                    return False
-                object_type = F1(Name, None, main_table_row.link, True)
+                object_type = F1(Name, name_type.return_type, main_table_row.link, True)
                 if object_type:
                     return object_type
     elif select_rule([OPENING_BRACKET]): # a()[]
