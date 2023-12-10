@@ -320,7 +320,7 @@ def F1(name:str, name_type: str | Function_Table_Row_Type | Data_Table_Row_Type 
                             print(f"{name_type.type} does not exist")
                             return False
                         if not main_table_row.link:
-                            print("data table undefined")
+                            print(f"{main_table_row.name} class is empty")
                             return False
                         data_type = F1(main_table_row.name, return_new_type(name_type) ,main_table_row.link, True)
                         if data_type:
@@ -380,7 +380,7 @@ def F1(name:str, name_type: str | Function_Table_Row_Type | Data_Table_Row_Type 
                     print(f"can not access properties of {data_table_row.type.type}")
                     return False
                 if not main_table_row.link:
-                    print("data table undefined")
+                    print(f"{main_table_row.name} class is empty")
                     return False
                 data_table = main_table_row.link
                 name_type = main_table_row.name
@@ -436,7 +436,7 @@ def F2(name: str, name_type: Function_Table_Row_Type | Data_Table_Row_Type, data
                 print(f"{name_type.return_type} does not exist")
                 return False
             if not main_table_row.link:
-                print("data table undefined")
+                print(f"{main_table_row.name} class is empty")
                 return False
             Name = match_terminal(IDENTIFIER)
             if Name:
