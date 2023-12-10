@@ -360,6 +360,9 @@ def F1(name:str, name_type: str | Function_Table_Row_Type | Data_Table_Row_Type 
     elif select_rule([DOT]):
         data_table_row = None
         if not name_type or type(name_type) == str:
+            if len(data_table) == 0:
+                print(f"{name} does not exist")
+                return False
             if is_object and type(data_table[0]) == Data_Table_Row:
                 data_table_row = lookup_attribute_data_table(name, data_table)
                 if data_table_row and data_table_row.access_modifier == Data_Table_Access_Modifier.PRIVATE:
