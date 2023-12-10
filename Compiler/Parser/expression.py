@@ -207,7 +207,7 @@ def F() -> bool | str:
                         if main_table_row.link == None:
                             print("data table not found")
                             return False
-                        data_type = F1(name, main_table_row.name, main_table_row.link, True)
+                        data_type = F1(name, function_table_row.type, main_table_row.link, True)
                         if data_type:
                             return data_type
                     
@@ -280,14 +280,16 @@ def F1(name:str, name_type: str | Function_Table_Row_Type | Data_Table_Row_Type 
         if type(name_type) == str:
             return name_type
     elif select_rule([OPENING_BRACKET]): # suppose type of array is stored like this int[][]
-        data_table_row = None
-        if is_object and type(data_table) == Data_Table_Row:
-            data_table_row = lookup_attribute_data_table(name, data_table)
-        else:
-            data_table_row = lookup_funtion_table(name)
-        if data_table_row == None:
-            print(f"{name} does not exist")
-            return False
+        if not name_type:
+            data_table_row = None
+            if is_object and type(data_table) == Data_Table_Row:
+                data_table_row = lookup_attribute_data_table(name, data_table)
+            else:
+                data_table_row = lookup_funtion_table(name)
+            if data_table_row == None:
+                print(f"{name} does not exist")
+                return False
+            name_type = data_table_row.type
         if match_terminal(OPENING_BRACKET):
             # if !(name_type contains []):
                 # print("Dimension Error")
@@ -297,28 +299,26 @@ def F1(name:str, name_type: str | Function_Table_Row_Type | Data_Table_Row_Type 
                     print("index must be of type number.")
                     return False
                 if match_terminal(CLOSING_BRACKET):
-                    data_table_row = data_table_row
                     # if data_table_row.type is type list, case is missing
-                    
-                    if not data_table_row.type.array_dimensions:
-                        print(f"${name} is not of Array type")
+                    if not name_type.array_dimensions:
+                        print(f"${name} is not of Array type or Dimension is incorrect")
                         return False
-                    if data_table_row.type.type not in primitive_data_types:
+                    if name_type.type not in primitive_data_types:
                         # if data_table_row.type is an object list case
-                        if not data_table_row.type.type:
+                        if not name_type.type:
                             print("type is undefined")
                             return False
-                        main_table_row = lookup_main_table(data_table_row.type.type)
+                        main_table_row = lookup_main_table(name_type.type)
                         if not main_table_row:
-                            print(f"{data_table_row.type} does not exist")
+                            print(f"{name_type.type} does not exist")
                             return False
                         if not main_table_row.link:
                             print("data table undefined")
                             return False
-                        data_type = F1(main_table_row.name, data_table_row.type.type ,main_table_row.link, True)
+                        data_type = F1(main_table_row.name, return_new_type(name_type) ,main_table_row.link, True)
                         if data_type:
                             return data_type
-                    data_type = F1(data_table_row.name, data_table_row.type.type ,data_table, False)
+                    data_type = F1(data_table_row.name, return_new_type(name_type) ,data_table, False)
                     if data_type:
                         return data_type
     elif select_rule([OPENING_PARENTHESIS]):
@@ -326,6 +326,9 @@ def F1(name:str, name_type: str | Function_Table_Row_Type | Data_Table_Row_Type 
             argument_list = AL()
             if argument_list != None and type(argument_list) == list:
                 if match_terminal(CLOSING_PARENTHESIS):
+                    if name_type.array_dimensions:
+                        print('wrong Dimension')
+                        return False
                     function_data_table_row = None
                     if is_object and type(data_table) == Data_Table_Row:
                         function_data_table_row = lookup_function_data_table(name, argument_list, data_table)
@@ -375,7 +378,10 @@ def F1(name:str, name_type: str | Function_Table_Row_Type | Data_Table_Row_Type 
                     print("data table undefined")
                     return False
                 data_table = main_table_row.link
-            if name_type in primitive_data_types:
+            if name_type.array_dimensions:
+                print("wrong Dimension")
+                return False
+            if name_type.type in primitive_data_types:
                 print("cannot access primitives data types")
                 return False
             Name = match_terminal(IDENTIFIER)
@@ -413,22 +419,21 @@ def F2(name: str, name_type: Function_Table_Row_Type | Data_Table_Row_Type, data
             print("Function does not return a type")
             return False
         if match_terminal(DOT):
-            if name_type in primitive_data_types:
+            if name_type.return_type in primitive_data_types:
                 print("cannot access primitives data types")
+                return False 
+            main_table_row = lookup_main_table(name_type.return_type)
+            if not main_table_row:
+                print(f"{name_type.return_type} does not exist")
                 return False
-            if type(name_type) == str:    
-                main_table_row = lookup_main_table(name_type)
-                if not main_table_row:
-                    print(f"{name_type} does not exist")
+            Name = match_terminal(IDENTIFIER)
+            if Name:
+                if not main_table_row.link:
+                    print("data table undefined")
                     return False
-                Name = match_terminal(IDENTIFIER)
-                if Name:
-                    if not main_table_row.link:
-                        print("data table undefined")
-                        return False
-                    object_type = F1(Name, None, main_table_row.link, True)
-                    if object_type:
-                        return object_type
+                object_type = F1(Name, None, main_table_row.link, True)
+                if object_type:
+                    return object_type
     elif select_rule([OPENING_BRACKET]): # a()[]
         if match_terminal(OPENING_BRACKET):
             type_of_expression = OE()
@@ -452,10 +457,10 @@ def F2(name: str, name_type: Function_Table_Row_Type | Data_Table_Row_Type, data
                         if not main_table_row.link:
                             print("data table does not exist")
                             return False
-                        data_type = F1(main_table_row.name, main_table_row.name ,main_table_row.link, True)
+                        data_type = F1(main_table_row.name, return_new_type(name_type) ,main_table_row.link, True)
                         if data_type:
                             return data_type
-                    data_type = F1(name, name_type.return_type ,data_table, False)
+                    data_type = F1(name, return_new_type(name_type) ,data_table, False)
                     if data_type:
                         return data_type
     elif select_rule(follow_of_F2):
@@ -508,4 +513,13 @@ def next_arguement(argument_list: List[str]) -> bool:
     elif select_rule([CLOSING_PARENTHESIS]):
         return True
     return False
+
+def return_new_type(old_typ: Function_Table_Row_Type | Data_Table_Row_Type) -> Function_Table_Row_Type | Data_Table_Row_Type:
+    if old_typ.return_type:
+        old_typ.type = old_typ.return_type
+        old_typ.return_type = None
+    if type(old_typ) == Function_Table_Row_Type:
+        return Function_Table_Row_Type(old_typ.type, old_typ.parameter_list, old_typ.return_type, old_typ.array_dimensions - 1)
+    if type(old_typ) == Data_Table_Row_Type:
+        return Data_Table_Row_Type(old_typ.type, old_typ.parameter_list, old_typ.return_type, old_typ.array_dimensions - 1)
 
