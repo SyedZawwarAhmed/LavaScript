@@ -65,7 +65,7 @@ if (c > d) {
 }@
 
 class Wheel {
-  spokes: number;
+  
 }
 
 
