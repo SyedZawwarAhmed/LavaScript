@@ -1,3 +1,4 @@
+
 dynamic a: number = 3 / 5 - 4;
 
 proc fun (): number {
@@ -35,21 +36,14 @@ proc bc(): void {
 dynamic c: string = "a" + "b";
 static d: string = "afdlkjfdl";
 
-proc abcd(): void {
+proc abcd(p1: string): number {
   dynamic a: number;
-  return;
+  return a;
 }
 
 until (fun() != 4) {
 
 }
-
-class Car {
-  numberOfWheels: number;
-}
-
-dynamic newCar: Car;
-dynamic b: number = newCar.numberOfWheels;
 
 if (c > d) {  
   ?return;
@@ -59,7 +53,18 @@ if (c > d) {
   method abc(a: string): void {return;}
 }@
 
+class Wheel {
+  spokes: number;
+}
+
+class Car {
+  wheel: Wheel;
+}
+
 proc func(): Car {
   dynamic car: Car;
   return car;
 }
+
+dynamic newCar: Car;
+dynamic b: number = abcd();
