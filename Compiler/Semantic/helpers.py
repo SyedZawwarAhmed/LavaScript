@@ -55,14 +55,21 @@ def lookup_function_data_table(name: str, parameter_list: List[str], data_table:
                     if parameter_list[i] != row.type.parameter_list[i]:
                         return
                 else:
-                    return
+                    return row
             return row
 
-def lookup_funtion_table(name: str):
+def lookup_funtion_table(name: str, parameter_list: List[str] | None = None):
     for i in range(len(scope_stack) - 1 , -1, -1):
         scope = scope_stack[i]
         for row in function_table:
             if row.name == name and row.scope == scope:
+                if row.type.return_type and type(parameter_list) == list:
+                    for i in range(len(parameter_list)):
+                        if row.type.parameter_list:
+                            if parameter_list[i] != row.type.parameter_list[i]:
+                                return
+                        else:
+                            return row
                 return row
 
 def search_function_in_function_table():
