@@ -256,7 +256,7 @@ def P() -> bool | str:
 def F1(name:str, name_type: str | Function_Table_Row_Type | Data_Table_Row_Type | None, data_table: List[Data_Table_Row] | List[Function_Table_Row], is_object: bool) -> bool | str:
     if select_rule(follow_of_F1):
         if not name_type:
-            if is_object and type(data_table) == Data_Table_Row:
+            if is_object and type(data_table[0]) == Data_Table_Row:
                 data_table_row = lookup_attribute_data_table(name, data_table)
                 if data_table_row:
                     if data_table_row.access_modifier == Data_Table_Access_Modifier.PRIVATE:
