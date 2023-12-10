@@ -67,4 +67,8 @@ proc func(): Car {
 }
 
 dynamic newCar: Car;
-dynamic b: number = abcd();
+dynamic b: number = newCar.wheel.spokes;
+
+dynamic n1: number = abcd();
+
+dynamic car1: Car = init Car();
