@@ -1,14 +1,16 @@
 
 dynamic a: number = 3 / 5 - 4;
-class Car {
 
-  @method ad(): void {
+interface E {
+    method GetArea(): void;
+}
+
+class Car implements E {
+  method ad(): number {
     if (1==2) {
       static b: number = 4;
     } else {
-      return;
-      skip;
-      exit;
+      return a;
     }
   }@
 }
@@ -35,6 +37,7 @@ if (a > 3) {
 @interface B {
     method GetArea(c: string): number;
 }@
+
 
 @interface E {
     method GetArea(): void;
