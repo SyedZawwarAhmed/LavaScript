@@ -19,7 +19,7 @@ def class_definition() -> bool:
             if match_terminal(CLASS):
                 type = Main_Table_Type.CLASS
                 name = match_terminal(IDENTIFIER)
-                if inheritable_class():
+                if inheritable_class(parent):
                     if name:
                         config.current_class_data_table = create_data_table()
                         if not insert_main_table(name, type, access_modifier, category, parent, config.current_class_data_table):
@@ -27,6 +27,8 @@ def class_definition() -> bool:
                             return False
                         if match_terminal(OPENING_BRACE, True, Scope_Type.CLASS):
                             if class_body():
+                                if not check_interface_implementation():
+                                    return False
                                 config.current_class_data_table = None
                                 if match_terminal(CLOSING_BRACE):
                                     return True
@@ -40,17 +42,17 @@ def class_category():
         return Main_Table_Category.DEFAULT
     return False
 
-def inheritable_class() -> bool:
+def inheritable_class(parent: List[str]) -> bool:
     if select_rule([EXTENDS, IMPLEMENTS]):
         # if match_terminal(CLASS):
         #     if match_terminal(IDENTIFIER):
-        if inheritance():
+        if inheritance(parent):
             return True
     elif select_rule([OPENING_BRACE]):
         return True
     return False
 
-def inheritance() -> bool:
+def inheritance(parent: List[str]) -> bool:
     if select_rule([EXTENDS]):
         if match_terminal(EXTENDS):
             name = match_terminal(IDENTIFIER)
@@ -66,7 +68,7 @@ def inheritance() -> bool:
                     if row.category == Main_Table_Category.SEALED:
                         print(f"{name} cannot extend a Sealed Class")
                         return False
-                    row.parent.append(name)
+                    parent.append(name)
                     return True
                 else:
                     print(f"{name} Class not found")
@@ -81,8 +83,8 @@ def inheritance() -> bool:
                     if row.type == Main_Table_Type.CLASS:
                         print(f"{name} cannot implement a Class")
                         return False
-                    row.parent.append(name)
-                    if inheritance_next():
+                    parent.append(name)
+                    if inheritance_next(parent):
                         return True
                 else:
                     print(f"Interface {name} not found")
@@ -93,7 +95,7 @@ def inheritance() -> bool:
 
     return False
 
-def inheritance_next() -> bool:
+def inheritance_next(parent: List[str]) -> bool:
     if select_rule([COMMA]):
         if match_terminal(COMMA):
             name = match_terminal(IDENTIFIER)
@@ -106,8 +108,9 @@ def inheritance_next() -> bool:
                     if name in row.parent:
                         print(f"Interface {name} already implemented")
                         return False
-                    if inheritance_next():
+                    if inheritance_next(parent):
                         return True
+                    parent.append(name)
                 else:
                     print(f"Interface {name} definition not found")
                     return False

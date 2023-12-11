@@ -1,7 +1,11 @@
 
 dynamic a: number = 3 / 5 - 4;
 
-class Car {
+interface E {
+    method GetArea(): void;
+}
+
+class Car implements E {
   method ad(): number {
     if (1==2) {
       static b: number = 4;
@@ -34,9 +38,7 @@ if (a > 3) {
     method GetArea(c: string): number;
 }@
 
-interface E {
-    method GetArea(): void;
-}
+
 
 proc abc(a: number): number {
   dynamic c: number[][];

@@ -164,3 +164,17 @@ def check_scope(scope_type: Scope_Type) -> bool:
             return True
     
     return False
+
+def check_interface_implementation():
+    current_class = main_table[-1]
+    method_list = [data_table_row.name for data_table_row in current_class.link]
+    for parent in current_class.parent:
+        row = lookup_main_table(parent)
+        if row and row.type == Main_Table_Type.INTERFACE:
+            interface_methods = [data_table_row.name for data_table_row in row.link]
+            for method in interface_methods:
+                if method not in method_list:
+                    print(f"Method {method} is not implemented in class {current_class.name}")
+                    return False
+                
+    return True
