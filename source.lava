@@ -38,13 +38,10 @@ if (a > 3) {
     method GetArea(c: string): number;
 }@
 
-<<<<<<< HEAD
 
-=======
 @interface E {
     method GetArea(): void;
 }@
->>>>>>> b64f501e6be20e795bef60bdaf442cf551b0e912
 
 proc abc(a: number): number {
   dynamic c: number[][];
@@ -85,14 +82,11 @@ proc abcd (): number {
 }
 
 dynamic newCar: Car;
-<<<<<<< HEAD
-=======
 dynamic b: number = a;
 
 dynamic n1: number = abcd();
 
 dynamic car1: Car = init Car(a);
->>>>>>> b64f501e6be20e795bef60bdaf442cf551b0e912
 ?dynamic b: number = abcd();
 
 until (1==2) {
