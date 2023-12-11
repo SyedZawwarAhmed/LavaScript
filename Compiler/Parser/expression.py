@@ -185,7 +185,7 @@ def F() -> bool | str:
             else:
                 name = match_terminal(IDENTIFIER) #a
                 if name:
-                    function_table_row = lookup_funtion_table(name)
+                    function_table_row = lookup_funtion_table(name, None)
                     if not function_table_row:
                         print(f"{name} is not defined")
                         return False
@@ -260,20 +260,27 @@ def F1(name:str, name_type: str | Function_Table_Row_Type | Data_Table_Row_Type 
         if type(name_type) == str:
             if is_object and type(data_table[0]) == Data_Table_Row:
                 data_table_row = lookup_attribute_data_table(name, data_table)
+                if not data_table_row:
+                    print(f"{name} does not exist")
+                    return False
                 if data_table_row:
                     if data_table_row.access_modifier == Data_Table_Access_Modifier.PRIVATE:
                         print(f"Can not Access {name}")
                         return False
                     name_type = data_table_row.type.type
             else:
-                function_table_row = lookup_funtion_table(name)
+                function_table_row = lookup_funtion_table(name, None)
                 if not function_table_row:
                     print(f"{name} does not exist")
                     return False
                 name_type = function_table_row.type.type
         if type(name_type) == Function_Table_Row_Type or type(name_type) == Data_Table_Row_Type:
-            if not name_type.type and name_type.return_type:
-                return name_type.return_type
+            if name_type.array_dimensions < 0:
+                print(f"{name} dimension not valid")
+                return False
+            if name_type.return_type:
+                print(f"{name} is a function")
+                return False
             if name_type.type:
                 return name_type.type
         if type(name_type) == str:
@@ -284,12 +291,15 @@ def F1(name:str, name_type: str | Function_Table_Row_Type | Data_Table_Row_Type 
             if is_object and type(data_table) == Data_Table_Row:
                 data_table_row = lookup_attribute_data_table(name, data_table)
             else:
-                data_table_row = lookup_funtion_table(name)
+                data_table_row = lookup_funtion_table(name, None)
             if data_table_row == None:
                 print(f"{name} does not exist")
                 return False
             name_type = data_table_row.type
         if match_terminal(OPENING_BRACKET):
+            if not name_type.array_dimensions:
+                print(f"{name} not an Array")
+                return False
             # if !(name_type contains []):
                 # print("Dimension Error")
             type_of_expression = OE()
@@ -333,7 +343,7 @@ def F1(name:str, name_type: str | Function_Table_Row_Type | Data_Table_Row_Type 
                     if is_object and type(data_table) == Data_Table_Row:
                         function_data_table_row = lookup_function_data_table(name, argument_list, data_table)
                     else:
-                        function_data_table_row = lookup_funtion_table(name)
+                        function_data_table_row = lookup_funtion_table(name, argument_list)
                     if not function_data_table_row:
                         print(f"{name} method does not exist")
                         return False
@@ -352,13 +362,16 @@ def F1(name:str, name_type: str | Function_Table_Row_Type | Data_Table_Row_Type 
     elif select_rule([DOT]):
         data_table_row = None
         if not name_type or type(name_type) == str:
+            if len(data_table) == 0:
+                print(f"{name} does not exist")
+                return False
             if is_object and type(data_table[0]) == Data_Table_Row:
                 data_table_row = lookup_attribute_data_table(name, data_table)
                 if data_table_row and data_table_row.access_modifier == Data_Table_Access_Modifier.PRIVATE:
                     print(f"Can not Access {name}")
                     return False     
             else:
-                data_table_row = lookup_funtion_table(name)
+                data_table_row = lookup_funtion_table(name, None)
             if not data_table_row:
                 print(f"{name} does not exist")
                 return False
@@ -433,34 +446,39 @@ def F2(name: str, name_type: Function_Table_Row_Type | Data_Table_Row_Type, data
                 if object_type:
                     return object_type
     elif select_rule([OPENING_BRACKET]): # a()[]
+        if not name_type.array_dimensions:
+            print(f"{name} does not return an array")
+            return False
         if match_terminal(OPENING_BRACKET):
             type_of_expression = OE()
-            if type_of_expression:
-                if type_of_expression != 'number':
-                    print("index must be of type number.")
+            if not type_of_expression:
+                print('index not given')
+                return False
+            if type_of_expression != 'number':
+                print("index must be of type number.")
+                return False
+            if match_terminal(CLOSING_BRACKET):
+                if not name_type.array_dimensions:
+                    print(f"${name_type} is not of Array type")
                     return False
-                if match_terminal(CLOSING_BRACKET):
-                    if not name_type.array_dimensions:
-                        print(f"${name_type} is not of Array type")
+                if name_type.return_type not in primitive_data_types and name_type.return_type != 'void':
+                    # if data_table_row.type is an object list case
+                    if not name_type.return_type:
+                        print("type undefined")
                         return False
-                    if name_type.return_type not in primitive_data_types and name_type.return_type != 'void':
-                        # if data_table_row.type is an object list case
-                        if not name_type.return_type:
-                            print("type undefined")
-                            return False
-                        main_table_row = lookup_main_table(name_type.return_type)
-                        if not main_table_row:
-                            print(f"{name_type.type} does not exist")
-                            return False
-                        if not main_table_row.link:
-                            print("data table does not exist")
-                            return False
-                        data_type = F1(main_table_row.name, return_new_type(name_type) ,main_table_row.link, True)
-                        if data_type:
-                            return data_type
-                    data_type = F1(name, return_new_type(name_type) ,data_table, False)
+                    main_table_row = lookup_main_table(name_type.return_type)
+                    if not main_table_row:
+                        print(f"{name_type.type} does not exist")
+                        return False
+                    if not main_table_row.link:
+                        print("data table does not exist")
+                        return False
+                    data_type = F1(main_table_row.name, return_new_type(name_type) ,main_table_row.link, True)
                     if data_type:
                         return data_type
+                data_type = F1(name, return_new_type(name_type) ,data_table, False)
+                if data_type:
+                    return data_type
     elif select_rule(follow_of_F2):
         if not name_type.return_type:
             print('return type not defined')
@@ -496,9 +514,10 @@ def const() -> bool | str:
 def arguement(argument_list: List[str]) -> bool:
     if select_rule(first_of_OE):
         type_of_expression = OE()
-        if type_of_expression and type(type_of_expression) == str:
-            argument_list.append(type_of_expression)
-            return True
+        if type_of_expression:
+            if type(type_of_expression.type) == str:
+                argument_list.append(type_of_expression.type)
+                return True
     return False
 
 def next_arguement(argument_list: List[str]) -> bool:
