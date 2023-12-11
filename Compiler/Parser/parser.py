@@ -1,3 +1,4 @@
+from typing import List
 from Lexer.constants import *
 from Utils.select_rule import select_rule
 from Utils.match_terminal import match_terminal
@@ -21,7 +22,7 @@ def check_is_syntax_valid():
         if tokens[i].token_type == END_MARKER:
             print("Syntax is Valid")
             return True
-    print(f'Error at line number {tokens[i].line}, | class: {tokens[i].token_type} value: {tokens[i].lexeme}')
+    print(f'Error at line number {tokens[i].line}')
     return False
 
 def S() -> bool:
@@ -46,7 +47,7 @@ def MST() -> bool:
         if SST():
             if MST():
                 return True
-    elif select_rule([CLOSING_BRACE, END_MARKER]):
+    elif select_rule([CLOSING_BRACE, END_MARKER, CLASS, SEALED, INTERFACE]):
         return True
     return False
 

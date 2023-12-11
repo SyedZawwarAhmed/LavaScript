@@ -5,13 +5,19 @@ from Utils.match_terminal import match_terminal
 from Lexer.constants import *
 from Parser.expression import *
 
+from Semantic.helpers import *
+
 def if_statement() -> bool:    
     if select_rule([IF]):
         if match_terminal(IF):
             if match_terminal(OPENING_PARENTHESIS):
-                if OE():
+                type_of_expression = OE()
+                if type_of_expression and type(type_of_expression) == Function_Table_Row_Type:
+                    if type_of_expression.type != 'boolean':
+                        print("If condition must be of type boolean.")
+                        return False
                     if match_terminal(CLOSING_PARENTHESIS):
-                        if match_terminal(OPENING_BRACE):
+                        if match_terminal(OPENING_BRACE, True, Scope_Type.IF):
                             if parser.MST():
                                 if match_terminal(CLOSING_BRACE):
                                     if next():
@@ -21,7 +27,7 @@ def if_statement() -> bool:
 def next() -> bool:
     if select_rule([ELSE]):
         if match_terminal(ELSE):
-            if match_terminal(OPENING_BRACE):
+            if match_terminal(OPENING_BRACE, True, Scope_Type.IF):
                 if parser.MST():
                     if match_terminal(CLOSING_BRACE):
                         return True

@@ -1,9 +1,95 @@
-if (a>3) {
-  until(fun()) {
-    if (n*n == fun()) {
+
+dynamic a: number = 3 / 5 - 4;
+
+interface E {
+    method GetArea(): void;
+}
+
+class Car implements E {
+  method ad(): number {
+    if (1==2) {
+      static b: number = 4;
+    } else {
+      return a;
+    }
+  }@
+}
+
+proc fun (): number {
+  until (1==1) {
+    skip;
+    exit;
+    return 2;
+  }
+}
+
+dynamic n: number = 4.8 + 5;
+
+if (a > 3) {
+  until(n*n == fun()) {
+    if (a < 5 + 9) {
     
     }
   }
+} 
+
+
+@interface B {
+    method GetArea(c: string): number;
+}@
+
+
+@interface E {
+    method GetArea(): void;
+}@
+
+proc abc(a: number): number {
+  dynamic c: number[][];
+  return a;
 }
-class A extends B {
+
+proc bc(): void {
+  dynamic c: number[];
+}
+
+dynamic c: string = "a" + "b";
+static d: string = "afdlkjfdl";
+
+until (fun() != 4) {
+
+}
+
+if (c > d) {  
+  ?return;
+}
+
+@class C {
+  method abc(a: string): void {return;}
+}@
+
+class Wheel {
+  
+}
+
+
+proc func(): Car {
+  dynamic car: Car;
+  return car;
+}
+
+proc abcd (): number {
+
+}
+
+dynamic newCar: Car;
+dynamic b: number = a;
+
+dynamic n1: number = abcd();
+
+dynamic car1: Car = init Car(a);
+?dynamic b: number = abcd();
+
+until (1==2) {
+  skip;
+  exit;
 }

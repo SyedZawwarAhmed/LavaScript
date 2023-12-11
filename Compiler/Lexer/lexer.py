@@ -1,5 +1,5 @@
 import re
-
+from typing import List
 from Lexer.breakers import breakers
 from Lexer.constants import *
 from Lexer.words import *
@@ -176,7 +176,7 @@ def check_is_float_constant(word):
         return False
 
 
-def get_tokens(words):
+def get_tokens(words) -> List[Token]:
     tokens = []
     i = 0
     line_number = 1
