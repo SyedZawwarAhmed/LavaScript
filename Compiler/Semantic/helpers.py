@@ -4,6 +4,7 @@ from Semantic.main_table_row import Main_Table_Row
 from Semantic.function_table_row import *
 from Semantic.data_table_row import *
 from Semantic.enums import *
+import Utils.config as config
 
 def create_data_table() -> List[Data_Table_Row]:
     new_table: List[Data_Table_Row] = []
@@ -79,6 +80,11 @@ def search_function_in_function_table():
             row = function_table[j]
             if row.scope == scope and row.type.return_type:
                 return row
+
+def search_method_in_data_table():
+    global config
+    if config.current_class_data_table:
+        return config.current_class_data_table[-1]
             
 def compatibility_for_two_operands(left_operand_type_and_dimensions: Function_Table_Row_Type, right_operand_type_and_dimensions: Function_Table_Row_Type, operator: str):
     left_operand_type = left_operand_type_and_dimensions.type
@@ -158,3 +164,17 @@ def check_scope(scope_type: Scope_Type) -> bool:
             return True
     
     return False
+
+def check_interface_implementation():
+    current_class = main_table[-1]
+    method_list = [data_table_row.name for data_table_row in current_class.link]
+    for parent in current_class.parent:
+        row = lookup_main_table(parent)
+        if row and row.type == Main_Table_Type.INTERFACE:
+            interface_methods = [data_table_row.name for data_table_row in row.link]
+            for method in interface_methods:
+                if method not in method_list:
+                    print(f"Method {method} is not implemented in class {current_class.name}")
+                    return False
+                
+    return True

@@ -22,7 +22,8 @@ class Scope_Type(Enum):
     IF = "IF"
     LOOP = "LOOP"
     CLASS = "CLASS"
-    PROCEDURE = "PROCEDURE"
+    FUNCTION = "FUNCTION"
+    METHOD = "METHOD"
     INTERFACE = "INTERFACE"
     CONSTRUCTOR = "CONSTRUCTOR"
 

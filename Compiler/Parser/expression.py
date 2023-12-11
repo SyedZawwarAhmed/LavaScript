@@ -3,6 +3,7 @@ from Utils.match_terminal import match_terminal
 from Lexer.constants import *
 from Semantic.symbol_table import *
 from Semantic.helpers import *
+import Utils.config as config
 
 def merge_two_lists(first_list, second_list):
     return first_list + list(set(second_list) - set(first_list))
@@ -168,6 +169,7 @@ def T1(first_operand_type: str) -> bool | str:
     return False
 
 def F() -> bool | str:
+    global config
     if select_rule([THIS, IDENTIFIER]):
         this_check = P()
         if this_check:

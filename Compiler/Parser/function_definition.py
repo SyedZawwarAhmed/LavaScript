@@ -16,7 +16,7 @@ def function_definition() -> bool:
                     print(f"{name} is already declared")
                     return False
                 if match_terminal(OPENING_PARENTHESIS):
-                    create_scope(Scope_Type.PROCEDURE)
+                    create_scope(Scope_Type.FUNCTION)
                     parameter_type_list = params()
                     if parameter_type_list:
                         if match_terminal(CLOSING_PARENTHESIS):
