@@ -9,6 +9,7 @@ interface E {
 }
 
 class Car implements E {
+  wheel: number;
   method ad(): number {
     if (1==2) {
       static b: number = 4;
@@ -46,6 +47,8 @@ proc fun(): number {
 until (fun() != 4) {
 
 }
+
+fun(a);
 
 if (c > d) {  
   ?return;

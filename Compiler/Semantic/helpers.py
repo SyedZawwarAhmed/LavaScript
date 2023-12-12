@@ -59,14 +59,14 @@ def lookup_function_data_table(name: str, parameter_list: List[str], data_table:
                     return row
             return row
 
-def lookup_funtion_table(name: str, parameter_list: List[str] | None):
+def lookup_function_table(name: str, parameter_list: List[str] | None):
     for i in range(len(scope_stack) - 1 , -1, -1):
         scope = scope_stack[i].Scope_Number
         for row in function_table:
             if row.name == name and row.scope == scope:
                 if row.type.return_type and type(parameter_list) == list:
                     for i in range(len(parameter_list)):
-                        if row.type.parameter_list:
+                        if type(row.type.parameter_list) == list:
                             if parameter_list[i] != row.type.parameter_list[i]:
                                 break
                         else:
