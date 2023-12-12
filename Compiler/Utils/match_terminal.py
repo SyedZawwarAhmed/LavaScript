@@ -7,7 +7,7 @@ def match_terminal(terminal: str, should_create_scope = True, scope_type = None)
     from tokenset import tokens
     if tokens[parser.i].token_type == terminal:
         name = get_name()
-        if tokens[parser.i].token_type == OPENING_BRACE and should_create_scope:
+        if tokens[parser.i].token_type == OPENING_BRACE and should_create_scope and scope_type:
             create_scope(scope_type)
         if tokens[parser.i].token_type == CLOSING_BRACE:
             destroy_scope()
