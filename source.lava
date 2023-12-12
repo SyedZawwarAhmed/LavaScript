@@ -1,3 +1,5 @@
+proc abcd (a: number, c: string): number {
+  return 5;
 
 dynamic a: number = 3 / 5 - 4;
 
@@ -15,24 +17,8 @@ class Car implements E {
   }
   method GetArea(): void {}
 }
-
-proc fun (): number {
-  until (1==1) {
-    skip;
-    exit;
-    return 2;
-  }
-}
-
-dynamic n: number = 4.8 + 5;
-
-if (a > 3) {
-  until(n*n == fun()) {
-    if (a < 5 + 9) {
-    
-    }
-  }
-} 
+ 
+dynamic b: number = abcd(1, "abc", 3);
 
 
 interface B {
