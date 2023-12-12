@@ -7,19 +7,15 @@
 <table>
   <tr>
     <th>Name</th>
-    <th>Seat Number</th>
   </tr>
   <tr>
     <td>Sheikh Abdullah</td>
-    <td>B20102146</td>
   </tr>
   <tr>
     <td>Syed Zawwar Ahmed</td>
-    <td>B20102173</td>
   </tr>
   <tr>
     <td>Muhammad Annas Baig</td>
-    <td>B20102078</td>
   </tr>
 </table>
 
@@ -63,6 +59,7 @@ dynamic variables are changeable while static variable is unchangeable like <cod
   static foo = "I'm a Ubitian";
   log foo;
 ```
+
 <h3>Conditionals</h3>
 <p>LavaScript supports if-else construct, <code>if</code> block will execute if condition is <code>true</code>, <code>else</code> block will execute if the above conditions is <code>false</code>. if-else blocks can be nested.
 
@@ -81,7 +78,6 @@ dynamic variables are changeable while static variable is unchangeable like <cod
 
 <h3>Loops</h3>
 <p>Statements inside <code>until</code> blocks are executed as long as a specified condition evaluates to true. If the condition becomes <code>false</code>, statement within the loop stops executing and control passes to the statement following the loop. Use <code>exit</code> to break the loop and <code className="language-cpp">skip</code> to continue within loop.</p>
-
 
 ```
   dynamic i = 0;
@@ -111,6 +107,7 @@ dynamic variables are changeable while static variable is unchangeable like <cod
 
   log isEven(23);
 ```
+
 <h3>Comments</h3>
 <p>While code is for computer to understand, the comments are for humans. LavaScript supports two types of comments i.e single-line comment, starts with <code>?</code> and multi-line comment, wrapped by <code>@...@</code>.</p>
 
@@ -137,9 +134,9 @@ dynamic myArray = [1, 3.8, "Hello"];
 
 dynamic multiArray = [
   [
-    ['a', 'b', 'c'], 
+    ['a', 'b', 'c'],
     ['A', 'B', 'C']
-  ], 
+  ],
   [1, 2, 3]
 ];
 ```
@@ -163,6 +160,7 @@ class Employee {
   #SSN;
 }
 ```
+
 <p>In the above code block, the Employee class has two attributes, <code>name</code> is a public attribute, <code>SSN</code> is a private attribute.</p>
 
 <p>A constructor is a function which is called at the time of creation of an object of the class. The constructor method can be added by using the <code>constructor</code> keyword.</p>
@@ -176,13 +174,12 @@ class Employee {
     this.name = name;
     this.SSN = SSN;
   }
-} 
+}
 ```
 
 <p>The <code>this</code> keyword refers to the current instace of the class.</p>
 
 <p>Furthermore, simple methods can also be introduced by defining a function in the class definition with the <code>method</code> keyword. Again, class methods can also be made private by adding a # before the identifier.</p>
-
 
 ```
 class Employee {
@@ -207,7 +204,7 @@ class Employee {
       this.fire();
     }
   }
-} 
+}
 ```
 
 <p>In this example, <code>evaluate</code> is a public method while <code>fire</code> is a private method. Note that private methods can only be called inside of a class.</p>
@@ -218,6 +215,7 @@ class Employee {
 ```
 dynamic employee1 = init Employee("Sheikh Abdullah", 123456789, 250000);
 ```
+
 <p>In the above line of code,  an instance of the class Employee is created and then assigned to a dynamic variable employee 1.</p>
 
 The object attributes and methods can be accessed using the <code>dot(.)</code> operator.
@@ -225,11 +223,13 @@ The object attributes and methods can be accessed using the <code>dot(.)</code> 
 ```
 log employee1.name;
 ```
+
 This line of code will dislay the name of the <code>employee1</code> object in the terminal, in this case "Sheikh Abdullah".
 
 ```
 employee1.evaluate("good");
 ```
+
 This will call the <code>evaluate</code> method of the <code>Employee</code> class for this object.
 
 <h4>Inheritance</h4>
@@ -246,9 +246,10 @@ class SoftwareEngineer extends Employee {
   }
 }
 
-static emp = init SoftwareEngineer(3, "Sheikh Abdullah", 123456789, 74000); 
+static emp = init SoftwareEngineer(3, "Sheikh Abdullah", 123456789, 74000);
 log emp.name; // prints: Sheikh Abdullah
 ```
+
 <p>The <code>super</code> keyword is a reference variable which is used to refer immediate parent class object.</p>
 <p>If you don't want a class to be extended, you can mark it with <code>sealed</code> keyword.</p>
 
@@ -276,6 +277,7 @@ class Rectangle implements IShape {
     }
 }
 ```
+
 <p>Multi-Inheritance is supported in LavaScript through the use of interfaces.</p>
 
 ```
