@@ -6,9 +6,6 @@
 <h3>Group Members:</h3>
 <table>
   <tr>
-    <th>Name</th>
-  </tr>
-  <tr>
     <td>Sheikh Abdullah</td>
   </tr>
   <tr>
