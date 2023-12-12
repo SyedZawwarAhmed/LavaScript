@@ -176,10 +176,10 @@ def F() -> bool | str:
             if(this_check == "this"):
                 name = match_terminal(IDENTIFIER)
                 if name:
-                    if not current_class_data_table:
+                    if not config.current_class_data_table:
                         print("this must be used inside a class")
                         return False
-                    data_type = F1(name, name, current_class_data_table, True)
+                    data_type = F1(name, name, config.current_class_data_table, True)
                     if data_type:
                         return data_type
             else:

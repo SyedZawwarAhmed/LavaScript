@@ -12,7 +12,8 @@ class Car implements E {
     } else {
       return a;
     }
-  }@
+  }
+  method GetArea(): void {}
 }
 
 proc fun (): number {
@@ -34,14 +35,10 @@ if (a > 3) {
 } 
 
 
-@interface B {
+interface B {
     method GetArea(c: string): number;
-}@
+}
 
-
-@interface E {
-    method GetArea(): void;
-}@
 
 proc abc(a: number): number {
   dynamic c: number[][];
@@ -63,9 +60,9 @@ if (c > d) {
   ?return;
 }
 
-@class C {
+class C {
   method abc(a: string): void {return;}
-}@
+}
 
 class Wheel {
   
