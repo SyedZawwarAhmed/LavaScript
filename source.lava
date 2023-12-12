@@ -1,5 +1,6 @@
 proc abcd (a: number, c: string): number {
   return 5;
+}
 
 dynamic a: number = 3 / 5 - 4;
 
@@ -37,6 +38,10 @@ proc bc(): void {
 
 dynamic c: string = "a" + "b";
 static d: string = "afdlkjfdl";
+
+proc fun(): number {
+
+}
 
 until (fun() != 4) {
 
